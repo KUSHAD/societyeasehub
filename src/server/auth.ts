@@ -61,10 +61,17 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  debug: env.NODE_ENV === "development",
+
   session: {
     strategy: "jwt",
   },
   secret: env.NEXTAUTH_SECRET,
+  theme: {
+    colorScheme: "auto",
+    logo: "/favicon.ico",
+    brandColor: "#18181b",
+  },
 };
 
 /**
