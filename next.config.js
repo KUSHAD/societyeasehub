@@ -9,6 +9,19 @@ const config = {
   experimental: {
     ppr: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: "lh3.googleusercontent.com",
+        protocol: "https",
+      },
+      {
+        hostname: "res.cloudinary.com",
+        protocol: "https",
+        pathname: "/dst2pmia1/image/upload/**",
+      },
+    ],
+  },
 };
 
 export default config;
