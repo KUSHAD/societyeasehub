@@ -2,6 +2,7 @@ import { stripe } from "~/lib/stripe";
 import { headers } from "next/headers";
 import type Stripe from "stripe";
 import { db } from "~/server/db";
+import { env } from "~/env";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -13,9 +14,12 @@ export async function POST(request: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET ?? "",
+      env.STRIPE_WEBHOOK_SECRET ?? "",
     );
   } catch (err) {
+    console.log(
+      `Webhook Error: ${err instanceof Error ? err.message : "Unknown Error"}`,
+    );
     return new Response(
       `Webhook Error: ${err instanceof Error ? err.message : "Unknown Error"}`,
       { status: 400 },
