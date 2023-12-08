@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 "use client";
 import React from "react";
-import { z } from "zod";
+import { type z } from "zod";
 import { Form } from "../form";
-import { DefaultValues, useForm } from "react-hook-form";
+import { type DefaultValues, useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../button";
 import { cn } from "~/lib/utils";
 
-import { FieldConfig } from "./types";
+import { type FieldConfig } from "./types";
 import {
-  ZodObjectOrWrapped,
+  type ZodObjectOrWrapped,
   getDefaultValues,
   getObjectFormSchema,
 } from "./utils";

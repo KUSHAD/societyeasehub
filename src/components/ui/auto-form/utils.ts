@@ -1,5 +1,11 @@
-import { DefaultValues } from "react-hook-form";
-import { z } from "zod";
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-enum-comparison */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { type DefaultValues } from "react-hook-form";
+import { type z } from "zod";
 
 // TODO: This should support recursive ZodEffects but TypeScript doesn't allow circular type definitions.
 export type ZodObjectOrWrapped =
@@ -27,7 +33,7 @@ export function getBaseSchema<
     return getBaseSchema(schema._def.innerType as ChildType);
   }
   if ("schema" in schema._def) {
-    return getBaseSchema(schema._def.schema as ChildType);
+    return getBaseSchema(schema._def.schema);
   }
   return schema as ChildType;
 }

@@ -1,6 +1,10 @@
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { FieldConfig, FieldConfigItem } from "../types";
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type * as z from "zod";
+import { type useForm } from "react-hook-form";
+import { type FieldConfig, type FieldConfigItem } from "../types";
 import {
   Accordion,
   AccordionContent,
@@ -78,8 +82,8 @@ export default function AutoFormObject<
         const fieldConfigItem: FieldConfigItem = fieldConfig?.[name] ?? {};
         const zodInputProps = zodToHtmlInputProps(item);
         const isRequired =
-          zodInputProps.required ||
-          fieldConfigItem.inputProps?.required ||
+          zodInputProps.required ??
+          fieldConfigItem.inputProps?.required ??
           false;
 
         return (

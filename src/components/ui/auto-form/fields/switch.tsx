@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import { FormControl, FormDescription, FormItem, FormLabel } from "../../form";
 import { Switch } from "../../switch";
 import { AutoFormInputComponentProps } from "../types";

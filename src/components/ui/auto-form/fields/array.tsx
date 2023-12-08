@@ -1,5 +1,6 @@
-import { useFieldArray, useForm } from "react-hook-form";
-import * as z from "zod";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useFieldArray, type useForm } from "react-hook-form";
+import type * as z from "zod";
 import { beautifyObjectName } from "../utils";
 import {
   AccordionContent,
@@ -58,7 +59,7 @@ export default function AutoFormArray({
           onClick={() => append({})}
           className="flex items-center"
         >
-          <PlusIcon className="mr-2" size={16} />
+          <PlusIcon className="mr-2" fontSize={16} />
           Add
         </Button>
       </AccordionContent>
