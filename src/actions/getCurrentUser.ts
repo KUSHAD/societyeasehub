@@ -12,10 +12,14 @@ export async function getCurrentUser() {
       email: session.user.email,
     },
     select: {
-      email: true,
       id: true,
       name: true,
+      email: true,
       image: true,
+      stripeCustomerId: true,
+      stripeSubscriptionId: true,
+      stripePriceId: true,
+      stripeCurrentPeriodEnd: true,
     },
   });
 

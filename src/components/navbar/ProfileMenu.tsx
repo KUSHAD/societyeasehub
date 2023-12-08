@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import Link from "next/link";
 
 interface ProfileMenuProps {
   currentUser: SafeUser | null;
@@ -20,7 +21,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
   return currentUser ? (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="my-2">
+        <Avatar className="my-2 cursor-pointer">
           <AvatarImage
             src={
               currentUser.image ??
@@ -34,11 +35,22 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="absolute right-0">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>My Invites</DropdownMenuItem>
-        <DropdownMenuItem>Notifications</DropdownMenuItem>
+        <Link href="/profile">
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+        </Link>
+        <Link href="/subscription">
+          <DropdownMenuItem>Subscription</DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>New Society</DropdownMenuItem>
+        <Link href="/invite">
+          <DropdownMenuItem>My Invites</DropdownMenuItem>
+        </Link>
+        <Link href="/notifications">
+          <DropdownMenuItem>Notifications</DropdownMenuItem>
+        </Link>
+        <Link href="/society/new">
+          <DropdownMenuItem>New Society</DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>Logout</DropdownMenuItem>
       </DropdownMenuContent>

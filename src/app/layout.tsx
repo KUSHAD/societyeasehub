@@ -7,6 +7,9 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import Navbar from "~/components/navbar";
 import Tab from "~/components/navbar/Tab";
+import { getUserSubscriptionPlan } from "~/actions/getUserSubscription";
+import ClientOnly from "~/components/ClientOnly";
+import PaymentModal from "~/components/PaymentModal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,11 +22,12 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const subscription = await getUserSubscriptionPlan();
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -34,9 +38,17 @@ export default function RootLayout({
       >
         <div className="m-auto w-full max-w-screen-lg">
           <TRPCReactProvider cookies={cookies().toString()}>
-            <Navbar />
-            <div className="min-h-screen">{children}</div>
-            <Tab />
+            {subscription.isSubscribed ? (
+              <>
+                <Navbar />
+                <div className="min-h-screen">{children}</div>
+                <Tab />
+              </>
+            ) : (
+              <ClientOnly>
+                <PaymentModal />
+              </ClientOnly>
+            )}
           </TRPCReactProvider>
         </div>
       </body>
