@@ -1,3 +1,4 @@
+import { getCurrentUser } from "~/actions/getCurrentUser";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { getUserSubscriptionPlan } from "~/actions/getUserSubscription";
@@ -8,9 +9,10 @@ import { absoluteUrl } from "~/lib/utils";
 export const userRouter = createTRPCRouter({
   createStripeSession: protectedProcedure.mutation(
     async ({ ctx: { db, session } }) => {
+      const currentUser = await getCurrentUser();
       const billingUrl = absoluteUrl("/subscription");
 
-      if (!session.user) throw new TRPCError({ code: "UNAUTHORIZED" });
+      if (!currentUser) throw new TRPCError({ code: "UNAUTHORIZED" });
 
       const dbUser = await db.user.findFirst({
         where: {
