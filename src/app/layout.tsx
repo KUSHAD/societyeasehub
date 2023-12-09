@@ -10,6 +10,7 @@ import Tab from "~/components/navbar/Tab";
 import { getUserSubscriptionPlan } from "~/actions/getUserSubscription";
 import ClientOnly from "~/components/ClientOnly";
 import PaymentModal from "~/components/PaymentModal";
+import { Toaster } from "~/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -49,6 +50,7 @@ export default async function RootLayout({
                 <PaymentModal />
               </ClientOnly>
             )}
+            <Toaster />
           </TRPCReactProvider>
         </div>
       </body>

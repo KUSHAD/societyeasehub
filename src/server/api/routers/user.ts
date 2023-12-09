@@ -55,4 +55,34 @@ export const userRouter = createTRPCRouter({
       return { url: stripeSession.url };
     },
   ),
+  createBillingPortal: protectedProcedure.mutation(
+    async ({ ctx: { db, session } }) => {
+      const currentUser = await getCurrentUser();
+      const billingUrl = absoluteUrl("/subscription");
+
+      if (!currentUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+
+      const dbUser = await db.user.findFirst({
+        where: {
+          email: session.user.email,
+        },
+      });
+
+      if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+
+      const subscriptionPlan = await getUserSubscriptionPlan();
+
+      if (!subscriptionPlan.isSubscribed || !dbUser.stripeCustomerId)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
+      const stripeSession = await stripe.billingPortal.sessions.create({
+        customer: dbUser.stripeCustomerId,
+        return_url: billingUrl,
+      });
+
+      return { url: stripeSession.url };
+    },
+  ),
 });
