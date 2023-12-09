@@ -47,8 +47,9 @@ export const userRouter = createTRPCRouter({
           },
         ],
         metadata: {
-          userId: session.user.id,
+          userId: currentUser.id,
         },
+        client_reference_id: currentUser.id,
       });
 
       return { url: stripeSession.url };
