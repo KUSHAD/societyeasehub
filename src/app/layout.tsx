@@ -14,6 +14,7 @@ import { Toaster } from "~/components/ui/toaster";
 import { ourFileRouter } from "~/server/storage";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
+import { NextAuthReactProvider } from "~/next-auth/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,27 +43,31 @@ export default async function RootLayout({
       >
         <div className="m-auto w-full max-w-screen-lg">
           <TRPCReactProvider cookies={cookies().toString()}>
-            <NextSSRPlugin
-              /**
-               * The `extractRouterConfig` will extract **only** the route configs
-               * from the router to prevent additional information from being
-               * leaked to the client. The data passed to the client is the same
-               * as if you were to fetch `/api/uploadthing` directly.
-               */
-              routerConfig={extractRouterConfig(ourFileRouter)}
-            />
-            {subscription.isSubscribed ? (
-              <>
-                <Navbar />
-                <div className="min-h-screen">{children}</div>
-                <Tab />
-              </>
-            ) : (
-              <ClientOnly>
-                <PaymentModal />
-              </ClientOnly>
-            )}
-            <Toaster />
+            <NextAuthReactProvider>
+              <NextSSRPlugin
+                /**
+                 * The `extractRouterConfig` will extract **only** the route configs
+                 * from the router to prevent additional information from being
+                 * leaked to the client. The data passed to the client is the same
+                 * as if you were to fetch `/api/uploadthing` directly.
+                 */
+                routerConfig={extractRouterConfig(ourFileRouter)}
+              />
+              {subscription.isSubscribed ? (
+                <>
+                  <Navbar />
+                  <div className="min-h-screen">
+                    <div className="px-2">{children}</div>
+                  </div>
+                  <Tab />
+                </>
+              ) : (
+                <ClientOnly>
+                  <PaymentModal />
+                </ClientOnly>
+              )}
+              <Toaster />
+            </NextAuthReactProvider>
           </TRPCReactProvider>
         </div>
       </body>

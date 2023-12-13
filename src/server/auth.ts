@@ -5,6 +5,7 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import Google from "next-auth/providers/google";
+import Discord from "next-auth/providers/discord";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -41,6 +42,10 @@ export const authOptions: NextAuthOptions = {
     Google({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
+    Discord({
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
     /**
      * ...add more providers here.

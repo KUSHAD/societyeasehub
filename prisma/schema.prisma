@@ -40,4 +40,33 @@ model User {
     stripePriceId          String?   @map(name: "stripe_price_id")
     stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
     accounts               Account[]
+    societies              Society[]
+    memberShips            Member[]
+}
+
+model Society {
+    id            String   @id @default(cuid())
+    name          String   @db.VarChar(100)
+    streetAddress String   @db.VarChar(255)
+    addressLine2  String?  @default("") @db.VarChar(150)
+    city          String   @db.VarChar(255)
+    province      String   @db.VarChar(255)
+    zipCode       String   @db.VarChar(15)
+    country       String   @db.VarChar(255)
+    password      String   @db.Text
+    ownerEmail    String
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+    owner         User     @relation(fields: [ownerEmail], references: [email], onDelete: Restrict, onUpdate: Cascade)
+    members       Member[]
+}
+
+model Member {
+    id        String   @id @default(cuid())
+    societyId String
+    userEmail String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    society   Society  @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    user      User     @relation(fields: [userEmail], references: [email], onDelete: Restrict, onUpdate: Cascade)
 }

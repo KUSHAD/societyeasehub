@@ -10,8 +10,10 @@ import {
 } from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
+import { signOut, useSession } from "next-auth/react";
 
 export default function PaymentModal() {
+  const { data } = useSession();
   const { mutate: createStripeSession, isLoading } =
     api.user.createStripeSession.useMutation({
       onSuccess: ({ url }) => {
@@ -43,11 +45,28 @@ export default function PaymentModal() {
         </AlertDialogHeader>
         <Button
           disabled={isLoading}
-          className="w-full"
+          className="my-2 w-full"
           onClick={() => createStripeSession()}
         >
           Checkout to Payment
         </Button>
+        <Button
+          variant="outline"
+          onClick={() => signOut()}
+          disabled={isLoading}
+          className="w-full"
+        >
+          Use a Different Account
+        </Button>
+        <p className="text-center text-neutral-500">
+          Current Logged in as{" "}
+          <span
+            onClick={() => signOut()}
+            className="cursor-pointer hover:underline"
+          >
+            {data?.user.email}
+          </span>
+        </p>
       </AlertDialogContent>
     </AlertDialog>
   );

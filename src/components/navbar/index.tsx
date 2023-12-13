@@ -7,7 +7,7 @@ import ProfileContent from "./ProfileContent";
 
 export default function Navbar() {
   return (
-    <div className="sticky left-0 top-0 z-10  bg-background shadow-md">
+    <nav className="sticky left-0 top-0 z-10  bg-background shadow-md">
       <div className="flex flex-row px-2 py-3">
         <Logo />
         <ClientOnly>
@@ -21,6 +21,6 @@ export default function Navbar() {
           <ProfileContent />
         </Suspense>
       </div>
-    </div>
+    </nav>
   );
 }
