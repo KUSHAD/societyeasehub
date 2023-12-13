@@ -9,8 +9,10 @@ export default async function SubscriptionExpiryDate() {
   return (
     <>
       <CardDescription>
-        Your Subscription ends on
-        {format(subscription.stripeCurrentPeriodEnd!, "dd.MM.yyyy")}{" "}
+        Your Subscription ends on{" "}
+        <strong>
+          {format(subscription.stripeCurrentPeriodEnd!, "dd MMM yyyy")}
+        </strong>
       </CardDescription>
       <ClientOnly>
         <ShowBillingButton />

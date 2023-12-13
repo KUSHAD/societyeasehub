@@ -17,8 +17,20 @@ import {
 } from "./utils";
 import AutoFormObject from "./fields/object";
 
-export function AutoFormSubmit({ children }: { children?: React.ReactNode }) {
-  return <Button type="submit">{children ?? "Submit"}</Button>;
+export function AutoFormSubmit({
+  children,
+  className,
+  disabled,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+}) {
+  return (
+    <Button disabled={disabled} className={cn(className)} type="submit">
+      {children ?? "Submit"}
+    </Button>
+  );
 }
 
 function AutoForm<SchemaType extends ZodObjectOrWrapped>({
@@ -48,6 +60,7 @@ function AutoForm<SchemaType extends ZodObjectOrWrapped>({
     resolver: zodResolver(formSchema),
     defaultValues,
     values: valuesProp,
+    mode: "all",
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {

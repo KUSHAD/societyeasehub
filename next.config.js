@@ -20,6 +20,11 @@ const config = {
         protocol: "https",
         pathname: "/dst2pmia1/image/upload/**",
       },
+      {
+        hostname: "utfs.io",
+        protocol: "https",
+        pathname: "/f/**",
+      },
     ],
   },
 };

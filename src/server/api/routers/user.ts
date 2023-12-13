@@ -5,6 +5,8 @@ import { getUserSubscriptionPlan } from "~/actions/getUserSubscription";
 import { env } from "~/env";
 import { stripe } from "~/lib/stripe";
 import { absoluteUrl } from "~/lib/utils";
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 export const userRouter = createTRPCRouter({
   createStripeSession: protectedProcedure.mutation(
@@ -57,10 +59,7 @@ export const userRouter = createTRPCRouter({
   ),
   createBillingPortal: protectedProcedure.mutation(
     async ({ ctx: { db, session } }) => {
-      const currentUser = await getCurrentUser();
       const billingUrl = absoluteUrl("/subscription");
-
-      if (!currentUser) throw new TRPCError({ code: "UNAUTHORIZED" });
 
       const dbUser = await db.user.findFirst({
         where: {
@@ -85,4 +84,34 @@ export const userRouter = createTRPCRouter({
       return { url: stripeSession.url };
     },
   ),
+  updateName: protectedProcedure
+    .input(
+      z.object({
+        name: z
+          .string({
+            required_error: "Name is required",
+          })
+          .max(25, "Maximum 25 Characters")
+          .min(1, "Required"),
+      }),
+    )
+    .mutation(async ({ ctx: { db, session }, input: { name } }) => {
+      const updatedName = await db.user.update({
+        where: {
+          email: session.user.email!,
+        },
+        data: {
+          name: name,
+        },
+        select: {
+          name: true,
+        },
+      });
+      revalidatePath("/profile", "page");
+      return { updatedName: updatedName.name! };
+    }),
 });
+
+/**
+ *
+ */

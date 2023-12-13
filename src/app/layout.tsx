@@ -11,6 +11,9 @@ import { getUserSubscriptionPlan } from "~/actions/getUserSubscription";
 import ClientOnly from "~/components/ClientOnly";
 import PaymentModal from "~/components/PaymentModal";
 import { Toaster } from "~/components/ui/toaster";
+import { ourFileRouter } from "~/server/storage";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,6 +42,15 @@ export default async function RootLayout({
       >
         <div className="m-auto w-full max-w-screen-lg">
           <TRPCReactProvider cookies={cookies().toString()}>
+            <NextSSRPlugin
+              /**
+               * The `extractRouterConfig` will extract **only** the route configs
+               * from the router to prevent additional information from being
+               * leaked to the client. The data passed to the client is the same
+               * as if you were to fetch `/api/uploadthing` directly.
+               */
+              routerConfig={extractRouterConfig(ourFileRouter)}
+            />
             {subscription.isSubscribed ? (
               <>
                 <Navbar />
