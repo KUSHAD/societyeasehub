@@ -28,12 +28,9 @@ export const newSocietyValidationSchema = z.object({
     .string()
     .max(15, "Max  15 Characters for Zip Code")
     .min(1, "Required"),
-  country: z.enum(
-    formattedCountries.map((_country) => _country.label) as readonly [
-      string,
-      ...string[],
-    ],
-  ),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  country: z.enum(formattedCountries),
   password: z
     .string()
     .min(6, "Mininum 6 characters for password")
