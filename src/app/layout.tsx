@@ -1,4 +1,5 @@
 import "~/styles/globals.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
@@ -57,7 +58,7 @@ export default async function RootLayout({
                 <>
                   <Navbar />
                   <div className="min-h-screen">
-                    <div className="px-2">{children}</div>
+                    <main className="mt-4 px-2">{children}</main>
                   </div>
                   <Tab />
                 </>

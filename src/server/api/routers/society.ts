@@ -23,4 +23,36 @@ export const societyRouter = createTRPCRouter({
 
       return newSociety;
     }),
+  getUserMemberships: protectedProcedure.query(
+    async ({ ctx: { db, session } }) => {
+      const societies = await db.society.findMany({
+        where: {
+          members: {
+            every: {
+              userEmail: session.user.email!,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        select: {
+          id: true,
+          name: true,
+          ownerEmail: true,
+          owner: {
+            select: {
+              name: true,
+            },
+          },
+          _count: {
+            select: {
+              members: true,
+            },
+          },
+        },
+      });
+      return societies;
+    },
+  ),
 });
