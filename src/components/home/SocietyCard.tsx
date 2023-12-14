@@ -3,19 +3,10 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import { type PartialSafeSociety } from "~/lib/types";
 
 interface SocietyCardProps {
-  society: {
-    id: string;
-    name: string;
-    _count: {
-      members: number;
-    };
-    ownerEmail: string;
-    owner: {
-      name: string | null;
-    };
-  };
+  society: PartialSafeSociety;
 }
 
 const SocietyCard: React.FC<SocietyCardProps> = ({ society }) => {

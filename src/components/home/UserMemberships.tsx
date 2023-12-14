@@ -1,14 +1,20 @@
 import Skeleton from "react-loading-skeleton";
-import { api } from "~/trpc/server";
 import { Ghost } from "lucide-react";
 import { EnvelopeOpenIcon, PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
 import SocietyCard from "./SocietyCard";
 import ClientOnly from "../ClientOnly";
+import React from "react";
+import { type PartialSafeSociety } from "~/lib/types";
 
-export default async function UserMemberships() {
-  const userMemberShips = await api.society.getUserMemberships.query();
+interface UserMembershipsProps {
+  userMemberShips: PartialSafeSociety[];
+}
+
+const UserMemberships: React.FC<UserMembershipsProps> = ({
+  userMemberShips,
+}) => {
   return userMemberShips && userMemberShips.length !== 0 ? (
     userMemberShips.map((_membership) => (
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -39,7 +45,9 @@ export default async function UserMemberships() {
       </Link>
     </div>
   );
-}
+};
+
+export default UserMemberships;
 
 export function UserMembershipsSkeleton() {
   return <Skeleton height={75} className="my-2" count={10} />;
