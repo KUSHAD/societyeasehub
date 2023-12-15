@@ -30,7 +30,7 @@ export const newSocietyValidationSchema = z.object({
     .min(1, "Required"),
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  country: z.enum(formattedCountries),
+  country: z.enum(formattedCountries.map((_country) => _country.label)),
   password: z
     .string()
     .min(6, "Mininum 6 characters for password")
