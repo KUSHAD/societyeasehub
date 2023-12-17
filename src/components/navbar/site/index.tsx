@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import ClientOnly from "../ClientOnly";
-import { Skeleton } from "../ui/skeleton";
+import ClientOnly from "../../ClientOnly";
+import { Skeleton } from "../../ui/skeleton";
 import NavContent from "./Contents";
 import Logo from "./Logo";
 import ProfileContent from "./ProfileContent";

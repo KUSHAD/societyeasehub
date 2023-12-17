@@ -8,6 +8,7 @@ await import("./src/env.js");
 const config = {
   experimental: {
     ppr: true,
+    typedRoutes: true,
   },
   images: {
     remotePatterns: [
@@ -25,6 +26,7 @@ const config = {
         protocol: "https",
         pathname: "/f/**",
       },
+      { hostname: "cdn.discordapp.com", protocol: "https" },
     ],
   },
 };

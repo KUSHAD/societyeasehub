@@ -1,6 +1,8 @@
 import { newSocietyValidationSchema } from "~/lib/validators/newSociety";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import bcrypt from "bcrypt";
+import { z } from "zod";
+import { notFound } from "next/navigation";
 
 export const societyRouter = createTRPCRouter({
   create: protectedProcedure
@@ -55,4 +57,26 @@ export const societyRouter = createTRPCRouter({
       return societies;
     },
   ),
+  getSocietyName: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx: { db }, input: { id } }) => {
+      const dbSociety = await db.society.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          name: true,
+        },
+      });
+
+      if (!dbSociety) {
+        notFound();
+      }
+
+      return dbSociety.name;
+    }),
 });

@@ -3,29 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "~/lib/utils";
-import {
-  BellIcon,
-  EnvelopeOpenIcon,
-  HomeIcon,
-  PlusIcon,
-} from "@radix-ui/react-icons";
+import { EnvelopeOpenIcon, HomeIcon, PlusIcon } from "@radix-ui/react-icons";
+import { type UrlObject } from "url";
 
 export const navLinks = [
   {
-    href: "/",
+    href: "/" as UrlObject | string,
     icon: <HomeIcon className="h-[24px] w-[24px]" />,
   },
   {
-    href: "/society/new",
+    href: "/society/new" as UrlObject | string,
     icon: <PlusIcon className="h-[24px] w-[24px]" />,
   },
   {
-    href: "/invite",
+    href: "/invite" as UrlObject | string,
     icon: <EnvelopeOpenIcon className="h-[24px] w-[24px]" />,
-  },
-  {
-    href: "/notifications",
-    icon: <BellIcon className="h-[24px] w-[24px]" />,
   },
 ];
 
@@ -33,13 +25,13 @@ export default function NavContent() {
   const pathname = usePathname();
   return navLinks.map((_navLink) => (
     <div
-      key={_navLink.href}
+      key={_navLink.href as string}
       className={cn(
         "mx-4 my-4 hidden sm:block",
         pathname === _navLink.href ? "opacity-100" : "opacity-20",
       )}
     >
-      <Link href={_navLink.href}>{_navLink.icon}</Link>
+      <Link href={_navLink.href as UrlObject}>{_navLink.icon}</Link>
     </div>
   ));
 }

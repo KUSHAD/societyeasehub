@@ -1,4 +1,4 @@
-import ClientOnly from "../ClientOnly";
+import ClientOnly from "../../ClientOnly";
 import ProfileMenu from "./ProfileMenu";
 import { getCurrentUser } from "~/actions/getCurrentUser";
 

@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Logo() {
+export default function Logo({ isPublic }: { isPublic?: boolean }) {
   return (
-    <Link href="/" passHref className="mr-auto">
+    <Link href={isPublic ? "/" : "/dashboard"} passHref className="mr-auto">
       <Image
         alt="App Logo"
         src={"/favicon.ico"}
