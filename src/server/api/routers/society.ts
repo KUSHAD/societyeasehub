@@ -79,4 +79,32 @@ export const societyRouter = createTRPCRouter({
 
       return dbSociety.name;
     }),
+  getInfo: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx: { db }, input: { id } }) => {
+      const dbSociety = await db.society.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          name: true,
+          streetAddress: true,
+          addressLine2: true,
+          city: true,
+          province: true,
+          zipCode: true,
+          country: true,
+        },
+      });
+
+      if (!dbSociety) {
+        notFound();
+      }
+
+      return dbSociety;
+    }),
 });

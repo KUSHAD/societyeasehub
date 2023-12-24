@@ -18,3 +18,6 @@ export function absoluteUrl(path: string) {
 export const formattedCountries = countries.map((country) => ({
   label: country.name.common,
 }));
+
+export const uploaderClassName =
+  "ut-allowed-content:ut-uploading:text-danger bg-transparent ut-label:text-lg ut-label:text-primary ut-button:ut-uploading:bg-primary/70 ut-button:ut-uploading:after:bg-primary";

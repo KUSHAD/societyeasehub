@@ -31,19 +31,6 @@ export default function UpdateProfileName({ name }: { name: string }) {
       setIsOpen(false);
       router.refresh();
     },
-    onError(error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-    retry(failureCount) {
-      if (failureCount > 3) return true;
-
-      return false;
-    },
-    retryDelay: 500,
   });
 
   return (

@@ -15,6 +15,7 @@ import { toast } from "../ui/use-toast";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { cn, uploaderClassName } from "~/lib/utils";
 
 export default function UpdateProfileImage() {
   const [open, setIsOpen] = useState(false);
@@ -37,6 +38,7 @@ export default function UpdateProfileImage() {
           <AlertDialogTitle>Update Profile Image</AlertDialogTitle>
         </AlertDialogHeader>
         <UploadDropzone
+          className={cn(uploaderClassName)}
           config={{
             appendOnPaste: true,
             mode: "auto",

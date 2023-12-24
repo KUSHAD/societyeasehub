@@ -47,10 +47,10 @@ export default function Contents() {
         <span className="hidden md:block">Roadmap</span>
       </Link>
       <Link
-        href={`/society/${id}/settings`}
+        href={`/society/${id}/settings/general`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname === `/society/${id}/settings`
+          pathname.includes(`/society/${id}/settings`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}

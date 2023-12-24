@@ -8,7 +8,7 @@ import { type UrlObject } from "url";
 
 export const navLinks = [
   {
-    href: "/" as UrlObject | string,
+    href: "/dashboard" as UrlObject | string,
     icon: <HomeIcon className="h-[24px] w-[24px]" />,
   },
   {
