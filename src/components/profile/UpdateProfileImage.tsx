@@ -57,7 +57,12 @@ export default function UpdateProfileImage() {
             setIsOpen(false);
             router.refresh();
           }}
-          onUploadError={() => {
+          onUploadError={(error) => {
+            toast({
+              title: "Error",
+              description: error.message,
+              variant: "destructive",
+            });
             setIsUploading(false);
           }}
         />

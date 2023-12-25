@@ -13,3 +13,8 @@ export type PartialSafeSociety = {
     name: string | null;
   };
 };
+
+export type SafeMedia = {
+  id: string;
+  uri: string;
+};

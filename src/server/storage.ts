@@ -4,8 +4,17 @@ import { UTApi } from "uploadthing/server";
 import { getCurrentUser } from "~/actions/getCurrentUser";
 import { getUserSubscriptionPlan } from "~/actions/getUserSubscription";
 import { db } from "./db";
+import { z } from "zod";
 
-const f = createUploadthing();
+const f = createUploadthing({
+  errorFormatter: (err) => {
+    console.log("error", err);
+    console.log("cause", err.cause);
+    return {
+      message: err.message,
+    };
+  },
+});
 export const utapi = new UTApi();
 
 export const ourFileRouter = {
@@ -44,6 +53,57 @@ export const ourFileRouter = {
         profileURL: updatedUserImage.image!,
         userId: metadata.userId,
       };
+    }),
+  societyMedia: f({
+    image: { maxFileCount: 5, maxFileSize: "4MB" },
+  })
+    .input(
+      z.object({
+        societyId: z.string({
+          required_error: "Society ID Required",
+        }),
+      }),
+    )
+    .middleware(async ({ input: { societyId } }) => {
+      const currentUser = await getCurrentUser();
+
+      const subscription = await getUserSubscriptionPlan();
+
+      if (!currentUser || !subscription.isSubscribed)
+        throw new Error("Unauthorized");
+
+      const dbSociety = await db.society.findUnique({
+        where: {
+          id: societyId,
+        },
+        select: {
+          _count: {
+            select: {
+              images: true,
+            },
+          },
+        },
+      });
+
+      if (!dbSociety) throw new Error("No Society Found");
+
+      if (dbSociety._count.images >= 5) throw new Error("Max Images Uploaded ");
+
+      return {
+        societyId,
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      const newMedia = await db.societyMedia.create({
+        data: {
+          uri: file.url,
+          societyId: metadata.societyId,
+        },
+      });
+
+      revalidatePath(`/society/${metadata.societyId}/settings/general`, "page");
+
+      return newMedia;
     }),
 } satisfies FileRouter;
 

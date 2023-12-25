@@ -1,10 +1,14 @@
 import ClientOnly from "~/components/ClientOnly";
-import UpdateDetails from "~/components/society/UpdateDetails";
+import SocietyMedias from "~/components/society/settings/SocietyMedias";
+import UpdateDetails from "~/components/society/settings/UpdateDetails";
 
 export default function Page() {
   return (
-    <ClientOnly>
-      <UpdateDetails />
-    </ClientOnly>
+    <>
+      <ClientOnly>
+        <UpdateDetails />
+        <SocietyMedias />
+      </ClientOnly>
+    </>
   );
 }
