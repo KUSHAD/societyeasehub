@@ -99,11 +99,13 @@ export const ourFileRouter = {
           uri: file.url,
           societyId: metadata.societyId,
         },
+        select: {
+          id: true,
+          uri: true,
+        },
       });
-
       revalidatePath(`/society/${metadata.societyId}/settings/general`, "page");
-
-      return newMedia;
+      return { id: newMedia.id, uri: newMedia.uri };
     }),
 } satisfies FileRouter;
 
