@@ -18,7 +18,9 @@ export default async function AccountLayout({
       <div className="min-h-screen">
         <main className="mt-4 px-2">{children}</main>
       </div>
-      <Tab />
+      <ClientOnly>
+        <Tab />
+      </ClientOnly>
     </>
   ) : (
     <ClientOnly>

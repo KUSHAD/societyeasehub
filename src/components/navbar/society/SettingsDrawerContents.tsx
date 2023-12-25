@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { UserCog, Cog, AlertCircle } from "lucide-react";
-import { cn } from "~/lib/utils";
+import { buttonVariants } from "~/components/ui/button";
 export default function SettingsDrawerContents() {
   const { id } = useParams<{ id: string }>();
   const pathname = usePathname();
@@ -11,38 +11,36 @@ export default function SettingsDrawerContents() {
     <>
       <Link
         href={`/society/${id}/settings/general`}
-        className={cn(
-          "flex flex-row  px-4 py-2 transition ease-in-out",
-          pathname === `/society/${id}/settings/general`
-            ? "bg-primary/25"
-            : "bg-muted hover:underline",
-        )}
+        className={buttonVariants({
+          className: "my-2",
+          variant:
+            pathname === `/society/${id}/settings/general` ? "outline" : "link",
+        })}
       >
-        <Cog className="mx-2 my-1" /> General
+        <Cog className="mx-2 my-1" />
+        <span className="hidden md:block">General</span>
       </Link>
       <Link
         href={`/society/${id}/settings/role`}
-        className={cn(
-          "flex flex-row  px-4 py-2 transition ease-in-out",
-          pathname === `/society/${id}/settings/role`
-            ? "bg-primary/25"
-            : "bg-muted hover:underline",
-        )}
+        className={buttonVariants({
+          className: "my-2",
+          variant:
+            pathname === `/society/${id}/settings/role` ? "outline" : "link",
+        })}
       >
         <UserCog className="mx-2 my-1" />
-        Roles
+        <span className="hidden md:block">Roles</span>
       </Link>
       <Link
         href={`/society/${id}/settings/danger`}
-        className={cn(
-          "flex flex-row  px-4 py-2 text-destructive transition ease-in-out",
-          pathname === `/society/${id}/settings/danger`
-            ? "bg-destructive/25"
-            : "bg-destructive/10 hover:underline",
-        )}
+        className={buttonVariants({
+          className: "my-2 text-destructive",
+          variant:
+            pathname === `/society/${id}/settings/danger` ? "outline" : "link",
+        })}
       >
         <AlertCircle className="mx-2 my-1" />
-        Danger
+        <span className="hidden md:block">Danger</span>
       </Link>
     </>
   );

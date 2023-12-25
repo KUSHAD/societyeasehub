@@ -9,7 +9,7 @@ export default function SettingsLayout({
   return (
     <div className="flex flex-row">
       <SettingsDrawer />
-      <div className="flex flex-col"> {children}</div>
+      <div className="flex w-full flex-col"> {children}</div>
     </div>
   );
 }

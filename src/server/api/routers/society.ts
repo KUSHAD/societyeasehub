@@ -2,7 +2,8 @@ import { newSocietyValidationSchema } from "~/lib/validators/newSociety";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import bcrypt from "bcrypt";
 import { z } from "zod";
-import { notFound } from "next/navigation";
+import { editSocietyValidationSchema } from "~/lib/validators/editSociety";
+import { TRPCError } from "@trpc/server";
 
 export const societyRouter = createTRPCRouter({
   create: protectedProcedure
@@ -73,9 +74,7 @@ export const societyRouter = createTRPCRouter({
         },
       });
 
-      if (!dbSociety) {
-        notFound();
-      }
+      if (!dbSociety) throw new TRPCError({ code: "NOT_FOUND" });
 
       return dbSociety.name;
     }),
@@ -101,10 +100,32 @@ export const societyRouter = createTRPCRouter({
         },
       });
 
-      if (!dbSociety) {
-        notFound();
-      }
+      if (!dbSociety) throw new TRPCError({ code: "NOT_FOUND" });
 
       return dbSociety;
+    }),
+  updateDetails: protectedProcedure
+    .input(
+      editSocietyValidationSchema.extend({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input }) => {
+      const dbSociety = await db.society.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!dbSociety) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const updatedValue = await db.society.update({
+        where: {
+          id: input.id,
+        },
+        data: input,
+      });
+
+      return updatedValue;
     }),
 });
