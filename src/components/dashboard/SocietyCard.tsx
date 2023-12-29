@@ -20,7 +20,7 @@ const SocietyCard: React.FC<SocietyCardProps> = ({ society }) => {
         <strong>{society.name}</strong>
         <em>
           Owned by{" "}
-          {data?.user.email === society.ownerEmail ? "Me" : society.owner.name}
+          {data?.user.email === society.owner.email ? "Me" : society.owner.name}
         </em>
         <p>{society._count.members} Members</p>
       </div>

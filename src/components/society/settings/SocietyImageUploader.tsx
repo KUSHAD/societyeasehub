@@ -43,13 +43,14 @@ export default function SocietyImageUploader() {
             return files;
           }}
           className={cn(uploaderClassName)}
-          onUploadError={(error) =>
+          onUploadError={(error) => {
             toast({
               title: "Error",
               description: error.message,
               variant: "destructive",
-            })
-          }
+            });
+            setIsUploading(false);
+          }}
           onClientUploadComplete={async () => {
             await utils.societyMedia.getSocietyMedia.invalidate();
             setIsUploading(false);

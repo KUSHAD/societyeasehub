@@ -54,10 +54,10 @@ model Society {
     zipCode       String         @db.VarChar(15)
     country       String         @db.VarChar(255)
     password      String         @db.Text
-    ownerEmail    String
+    ownerId       String
     createdAt     DateTime       @default(now())
     updatedAt     DateTime       @updatedAt
-    owner         User           @relation(fields: [ownerEmail], references: [email], onDelete: Restrict, onUpdate: Cascade)
+    owner         User           @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     members       Member[]
     images        SocietyMedia[]
 }
@@ -72,11 +72,12 @@ model SocietyMedia {
 }
 
 model Member {
-    id        String   @id @default(cuid())
     societyId String
-    userEmail String
+    userId    String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     society   Society  @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-    user      User     @relation(fields: [userEmail], references: [email], onDelete: Restrict, onUpdate: Cascade)
+    user      User     @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+    @@id([societyId, userId])
 }

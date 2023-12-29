@@ -7,12 +7,28 @@ import { api } from "~/trpc/react";
 import CarouselPlayer, { CarouselPlayerSkeleton } from "../CarouselPlayer";
 import { Ghost } from "lucide-react";
 import SocietyImageUploader from "./SocietyImageUploader";
+import { toast } from "~/components/ui/use-toast";
 
 export default function SocietyMedias() {
   const { id } = useParams<{ id: string }>();
   const { data: medias, isLoading } = api.societyMedia.getSocietyMedia.useQuery(
     {
       societyId: id,
+    },
+    {
+      onError(error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
+      retry(failureCount) {
+        if (failureCount >= 3) return true;
+
+        return false;
+      },
+      retryDelay: 500,
     },
   );
   return (
@@ -25,7 +41,7 @@ export default function SocietyMedias() {
         {isLoading ? (
           <CarouselPlayerSkeleton />
         ) : medias && medias.length !== 0 ? (
-          <CarouselPlayer medias={medias} />
+          <CarouselPlayer isDelete medias={medias} />
         ) : (
           <div className="flex flex-col items-center gap-2">
             <Ghost className="h-8 w-8 text-zinc-800" />

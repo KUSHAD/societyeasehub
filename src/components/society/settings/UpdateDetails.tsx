@@ -71,6 +71,7 @@ export default function UpdateDetails() {
 
         return false;
       },
+
       retryDelay: 500,
     },
   );

@@ -18,10 +18,22 @@ import {
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 import ShowSocietyDetail from "~/components/society/ShowSocietyDetail";
+import { toast } from "~/components/ui/use-toast";
 
 export default function BackBar() {
   const params = useParams<{ id: string }>();
-  const { data: name, isLoading } = api.society.getSocietyName.useQuery(params);
+  const { data: name, isLoading } = api.society.getSocietyName.useQuery(
+    params,
+    {
+      onError(err) {
+        toast({
+          title: "Error",
+          description: err.message,
+          variant: "destructive",
+        });
+      },
+    },
+  );
   return (
     <div className="flex flex-row border-y px-2 py-4">
       <Link
@@ -56,7 +68,7 @@ export default function BackBar() {
               <p>Get Info</p>
             </TooltipContent>
           </Tooltip>
-          <AlertDialogContent>
+          <AlertDialogContent className="max-h-screen overflow-y-scroll">
             <ShowSocietyDetail />
           </AlertDialogContent>
         </AlertDialog>

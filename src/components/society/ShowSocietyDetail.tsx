@@ -10,9 +10,32 @@ import { useParams } from "next/navigation";
 import { toast } from "../ui/use-toast";
 import Skeleton from "react-loading-skeleton";
 import { beautifyObjectName } from "../ui/auto-form/utils";
+import CarouselPlayer, { CarouselPlayerSkeleton } from "./CarouselPlayer";
 
 export default function ShowSocietyDetail() {
   const { id } = useParams<{ id: string }>();
+  const { data: medias, isLoading: mediaLoading } =
+    api.societyMedia.getSocietyMedia.useQuery(
+      {
+        societyId: id,
+      },
+      {
+        onError(error) {
+          toast({
+            title: "Error",
+            description: error.message,
+            variant: "destructive",
+          });
+        },
+        retry(failureCount) {
+          if (failureCount >= 3) return true;
+
+          return false;
+        },
+        retryDelay: 500,
+      },
+    );
+
   const { data: societyDetails, isLoading } = api.society.getInfo.useQuery(
     {
       id,
@@ -66,8 +89,15 @@ export default function ShowSocietyDetail() {
           )}
         </div>
       </div>
+      {mediaLoading ? (
+        <CarouselPlayerSkeleton />
+      ) : (
+        medias && medias.length !== 0 && <CarouselPlayer medias={medias} />
+      )}
       <AlertDialogFooter>
-        <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+        <AlertDialogCancel disabled={isLoading || mediaLoading}>
+          Close
+        </AlertDialogCancel>
       </AlertDialogFooter>
     </>
   );

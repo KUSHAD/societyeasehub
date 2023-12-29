@@ -8,9 +8,10 @@ export type PartialSafeSociety = {
   _count: {
     members: number;
   };
-  ownerEmail: string;
+  ownerId: string;
   owner: {
     name: string | null;
+    email: string | null;
   };
 };
 

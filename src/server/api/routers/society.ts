@@ -15,10 +15,10 @@ export const societyRouter = createTRPCRouter({
         data: {
           ...input,
           password: passwordHash,
-          ownerEmail: session.user.email!,
+          ownerId: session.user.id,
           members: {
             create: {
-              userEmail: session.user.email!,
+              userId: session.user.id,
             },
           },
         },
@@ -32,7 +32,7 @@ export const societyRouter = createTRPCRouter({
         where: {
           members: {
             every: {
-              userEmail: session.user.email!,
+              userId: session.user.id,
             },
           },
         },
@@ -42,10 +42,11 @@ export const societyRouter = createTRPCRouter({
         select: {
           id: true,
           name: true,
-          ownerEmail: true,
+          ownerId: true,
           owner: {
             select: {
               name: true,
+              email: true,
             },
           },
           _count: {
@@ -100,9 +101,9 @@ export const societyRouter = createTRPCRouter({
         },
       });
 
-      if (!dbSociety) throw new TRPCError({ code: "NOT_FOUND" });
+      if (!dbSociety) return null;
 
-      return dbSociety;
+      return { ...dbSociety };
     }),
   updateDetails: protectedProcedure
     .input(
