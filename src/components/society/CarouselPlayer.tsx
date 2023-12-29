@@ -62,7 +62,7 @@ export default function CarouselPlayer({
           <CarouselItem key={_media.id}>
             <Card>
               <CardContent className="flex aspect-square flex-col items-center justify-center p-6">
-                <AspectRatio ratio={1 / 1} className="w-full max-w-fit">
+                <AspectRatio ratio={1 / 1} className="w-full max-w-full">
                   <Image
                     src={_media.uri}
                     fill

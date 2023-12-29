@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { api } from "~/trpc/server";
+import { checkSocietyExists } from "~/actions/checkSocietyExists";
 
 interface PageProps {
   params: {
@@ -7,10 +7,10 @@ interface PageProps {
   };
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function Page({ params: { id } }: PageProps) {
-  const society = await api.society.getInfo.query({
-    id,
-  });
+  const society = await checkSocietyExists(id);
 
   if (!society) redirect("/dashboard");
   return <div>Page</div>;
