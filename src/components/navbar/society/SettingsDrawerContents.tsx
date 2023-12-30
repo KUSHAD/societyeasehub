@@ -14,33 +14,37 @@ export default function SettingsDrawerContents() {
         className={buttonVariants({
           className: "my-2",
           variant:
-            pathname === `/society/${id}/settings/general` ? "outline" : "link",
+            pathname === `/society/${id}/settings/general`
+              ? "default"
+              : "ghost",
         })}
       >
         <Cog className="mx-2 my-1" />
-        <span className="hidden md:block">General</span>
+        General
       </Link>
       <Link
         href={`/society/${id}/settings/role`}
         className={buttonVariants({
           className: "my-2",
           variant:
-            pathname === `/society/${id}/settings/role` ? "outline" : "link",
+            pathname === `/society/${id}/settings/role` ? "default" : "ghost",
         })}
       >
         <UserCog className="mx-2 my-1" />
-        <span className="hidden md:block">Roles</span>
+        Roles
       </Link>
       <Link
         href={`/society/${id}/settings/danger`}
         className={buttonVariants({
-          className: "my-2 text-destructive",
+          className: "my-2",
           variant:
-            pathname === `/society/${id}/settings/danger` ? "outline" : "link",
+            pathname === `/society/${id}/settings/danger`
+              ? "destructive"
+              : "ghost",
         })}
       >
         <AlertCircle className="mx-2 my-1" />
-        <span className="hidden md:block">Danger</span>
+        Danger
       </Link>
     </>
   );

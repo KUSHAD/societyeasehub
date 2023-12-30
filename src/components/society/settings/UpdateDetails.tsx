@@ -25,6 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import SocietyMedias from "./SocietyMedias";
 
 export default function UpdateDetails() {
   const { id } = useParams<{ id: string }>();
@@ -82,7 +83,7 @@ export default function UpdateDetails() {
         {isLoading ? (
           <Skeleton className="h-[16px] w-full" count={7} />
         ) : (
-          <Card className="flex flex-col">
+          <Card className="my-2 flex flex-col">
             <CardHeader className="flex flex-row">
               <CardTitle>Details</CardTitle>
             </CardHeader>
@@ -103,6 +104,7 @@ export default function UpdateDetails() {
             </CardFooter>
           </Card>
         )}
+        <SocietyMedias />
       </div>
       <AlertDialog open={open} onOpenChange={(_state) => setOpen(_state)}>
         <AlertDialogContent className="max-h-screen overflow-y-scroll lg:max-w-screen-lg">

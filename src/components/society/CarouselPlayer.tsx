@@ -74,7 +74,7 @@ export default function CarouselPlayer({
                   <Button
                     disabled={isLoading}
                     onClick={() => deleteMedia({ id: _media.id })}
-                    className="w-full"
+                    className="my-2 w-full"
                     variant="destructive"
                   >
                     {currentlyDeletingFile === _media.id ? (

@@ -3,7 +3,7 @@ import SettingsDrawerContents from "./SettingsDrawerContents";
 
 export default function SettingsDrawer() {
   return (
-    <div className="flex min-h-screen flex-col overflow-hidden border-r">
+    <div className="flex flex-col">
       <ClientOnly>
         <SettingsDrawerContents />
       </ClientOnly>

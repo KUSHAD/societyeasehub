@@ -11,6 +11,7 @@ datasource db {
     directUrl = env("DIRECT_URL")
 }
 
+// Necessary for Next Auth
 model Account {
     id                String  @id @default(cuid())
     userId            String
@@ -24,7 +25,8 @@ model Account {
     scope             String?
     id_token          String? // @db.Text
     session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
 }
@@ -39,27 +41,32 @@ model User {
     stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
     stripePriceId          String?   @map(name: "stripe_price_id")
     stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
-    accounts               Account[]
-    societies              Society[]
-    memberShips            Member[]
+
+    accounts    Account[]
+    societies   Society[]
+    memberShips Member[]
 }
 
+// App Models
+
 model Society {
-    id            String         @id @default(cuid())
-    name          String         @db.VarChar(100)
-    streetAddress String         @db.VarChar(255)
-    addressLine2  String?        @default("") @db.VarChar(150)
-    city          String         @db.VarChar(255)
-    province      String         @db.VarChar(255)
-    zipCode       String         @db.VarChar(15)
-    country       String         @db.VarChar(255)
-    password      String         @db.Text
+    id            String   @id @default(cuid())
+    name          String   @db.VarChar(100)
+    streetAddress String   @db.VarChar(255)
+    addressLine2  String?  @default("") @db.VarChar(150)
+    city          String   @db.VarChar(255)
+    province      String   @db.VarChar(255)
+    zipCode       String   @db.VarChar(15)
+    country       String   @db.VarChar(255)
+    password      String   @db.Text
     ownerId       String
-    createdAt     DateTime       @default(now())
-    updatedAt     DateTime       @updatedAt
-    owner         User           @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-    members       Member[]
-    images        SocietyMedia[]
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    owner   User           @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    members Member[]
+    images  SocietyMedia[]
+    roles   Role[]
 }
 
 model SocietyMedia {
@@ -68,7 +75,8 @@ model SocietyMedia {
     societyId String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    society   Society  @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
 model Member {
@@ -80,4 +88,18 @@ model Member {
     user      User     @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
     @@id([societyId, userId])
+}
+
+model Role {
+    id            String   @id @default(cuid())
+    name          String   @db.VarChar(255)
+    accessGeneral Boolean  @default(false) // Access General Settings
+    accessRole    Boolean  @default(false) // Access Role Settings
+    accessDanger  Boolean  @default(false) // Access Danger Settings
+    createInvite  Boolean  @default(false) // Create and Send Invites
+    societyId     String
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
