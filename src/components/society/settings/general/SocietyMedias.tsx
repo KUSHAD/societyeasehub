@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 import { api } from "~/trpc/react";
-import CarouselPlayer, { CarouselPlayerSkeleton } from "../CarouselPlayer";
+import CarouselPlayer, { CarouselPlayerSkeleton } from "../../CarouselPlayer";
 import { Ghost } from "lucide-react";
 import SocietyImageUploader from "./SocietyImageUploader";
 import { toast } from "~/components/ui/use-toast";

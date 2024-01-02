@@ -2,7 +2,7 @@
 
 import { UploadDropzone } from "~/lib/uploadthing";
 import { cn, uploaderClassName } from "~/lib/utils";
-import { toast } from "../../ui/use-toast";
+import { toast } from "../../../ui/use-toast";
 import { useParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import {

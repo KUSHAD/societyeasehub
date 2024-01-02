@@ -111,7 +111,3 @@ export const userRouter = createTRPCRouter({
       return { updatedName: updatedName.name! };
     }),
 });
-
-/**
- *
- */

@@ -2,10 +2,10 @@
 "use client";
 
 import { editSocietyValidationSchema } from "~/lib/validators/editSociety";
-import AutoForm, { AutoFormSubmit } from "../../ui/auto-form";
+import AutoForm, { AutoFormSubmit } from "../../../ui/auto-form";
 import { useParams } from "next/navigation";
 import { api } from "~/trpc/react";
-import { toast } from "../../ui/use-toast";
+import { toast } from "../../../ui/use-toast";
 import { beautifyObjectName } from "~/components/ui/auto-form/utils";
 import Skeleton from "react-loading-skeleton";
 import { Button } from "~/components/ui/button";

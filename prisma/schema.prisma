@@ -82,10 +82,12 @@ model SocietyMedia {
 model Member {
     societyId String
     userId    String
+    roledId   String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     society   Society  @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     user      User     @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    role      Role?    @relation(fields: [roledId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
     @@id([societyId, userId])
 }
@@ -101,5 +103,6 @@ model Role {
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
-    society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    society Society  @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    members Member[]
 }
