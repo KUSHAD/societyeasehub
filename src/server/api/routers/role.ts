@@ -29,4 +29,45 @@ export const rolesRouter = createTRPCRouter({
 
       return newRole;
     }),
+  getSocietyRoles: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string(),
+      }),
+    )
+    .query(async ({ ctx: { db }, input }) => {
+      const societyExists = await db.society.findUnique({
+        where: { id: input.societyId },
+      });
+
+      if (!societyExists)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Society Not Found",
+        });
+
+      const societyRoles = await db.role.findMany({
+        where: {
+          societyId: input.societyId,
+        },
+        select: {
+          id: true,
+          name: true,
+          accessDanger: true,
+          accessGeneral: true,
+          accessRole: true,
+          createInvite: true,
+          _count: {
+            select: {
+              members: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+
+      return societyRoles;
+    }),
 });

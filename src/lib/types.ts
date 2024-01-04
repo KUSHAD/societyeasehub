@@ -1,4 +1,4 @@
-import { type User } from "@prisma/client";
+import type { Role, User } from "@prisma/client";
 
 export type SafeUser = Omit<User, "emailVerified">;
 
@@ -19,3 +19,5 @@ export type SafeMedia = {
   id: string;
   uri: string;
 };
+
+export type SafeRole = Omit<Role, "createdAt" | "updatedAt" | "societyId">;

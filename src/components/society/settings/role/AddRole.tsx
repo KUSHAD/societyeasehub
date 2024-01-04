@@ -21,6 +21,7 @@ import { api } from "~/trpc/react";
 export default function AddRole() {
   const [open, setOpen] = useState(false);
   const { id } = useParams<{ id: string }>();
+  const utils = api.useUtils();
   const { mutate, isLoading } = api.role.create.useMutation({
     onError(error) {
       toast({
@@ -35,7 +36,8 @@ export default function AddRole() {
       return false;
     },
 
-    onSuccess() {
+    onSuccess: async () => {
+      await utils.role.getSocietyRoles.invalidate();
       setOpen(false);
     },
 

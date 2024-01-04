@@ -1,5 +1,6 @@
 import ClientOnly from "~/components/ClientOnly";
 import AddRole from "~/components/society/settings/role/AddRole";
+import ViewRoles from "~/components/society/settings/role/ViewRoles";
 
 export default function Page() {
   return (
@@ -10,6 +11,10 @@ export default function Page() {
           <AddRole />
         </ClientOnly>
       </div>
+      <hr className="my-2" />
+      <ClientOnly>
+        <ViewRoles />
+      </ClientOnly>
     </>
   );
 }

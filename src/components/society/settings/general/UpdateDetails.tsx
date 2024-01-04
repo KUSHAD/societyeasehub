@@ -25,7 +25,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import SocietyMedias from "./SocietyMedias";
 
 export default function UpdateDetails() {
   const { id } = useParams<{ id: string }>();
@@ -79,33 +78,30 @@ export default function UpdateDetails() {
 
   return (
     <>
-      <div className="px-4 py-2">
-        {isLoading ? (
-          <Skeleton className="h-[16px] w-full" count={7} />
-        ) : (
-          <Card className="my-2 flex flex-col">
-            <CardHeader className="flex flex-row">
-              <CardTitle>Details</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {societyDetails &&
-                Object.keys(societyDetails).map((_key) => (
-                  <div className="my-1 flex-row" key={_key}>
-                    <strong>{beautifyObjectName(_key)} : </strong>
-                    {
-                      // @ts-ignore
-                      <em>{societyDetails[_key] ?? "N/A"}</em>
-                    }
-                  </div>
-                ))}
-            </CardContent>
-            <CardFooter>
-              <Button onClick={() => setOpen(true)}>Update Details</Button>
-            </CardFooter>
-          </Card>
-        )}
-        <SocietyMedias />
-      </div>
+      {isLoading ? (
+        <Skeleton className="h-[16px] w-full" count={7} />
+      ) : (
+        <Card className="my-2 flex flex-col">
+          <CardHeader className="flex flex-row">
+            <CardTitle>Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {societyDetails &&
+              Object.keys(societyDetails).map((_key) => (
+                <div className="my-1 flex-row" key={_key}>
+                  <strong>{beautifyObjectName(_key)} : </strong>
+                  {
+                    // @ts-ignore
+                    <em>{societyDetails[_key] ?? "N/A"}</em>
+                  }
+                </div>
+              ))}
+          </CardContent>
+          <CardFooter>
+            <Button onClick={() => setOpen(true)}>Update Details</Button>
+          </CardFooter>
+        </Card>
+      )}
       <AlertDialog open={open} onOpenChange={(_state) => setOpen(_state)}>
         <AlertDialogContent className="max-h-screen overflow-y-scroll lg:max-w-screen-lg">
           <AlertDialogHeader>
