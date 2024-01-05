@@ -15,7 +15,7 @@ import CarouselPlayer, { CarouselPlayerSkeleton } from "./CarouselPlayer";
 export default function ShowSocietyDetail() {
   const { id } = useParams<{ id: string }>();
   const { data: medias, isLoading: mediaLoading } =
-    api.societyMedia.getSocietyMedia.useQuery(
+    api.societyMedia.getBySociety.useQuery(
       {
         societyId: id,
       },

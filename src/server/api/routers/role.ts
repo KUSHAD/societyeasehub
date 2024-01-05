@@ -29,7 +29,7 @@ export const rolesRouter = createTRPCRouter({
 
       return newRole;
     }),
-  getSocietyRoles: protectedProcedure
+  getBySociety: protectedProcedure
     .input(
       z.object({
         societyId: z.string(),
@@ -69,5 +69,84 @@ export const rolesRouter = createTRPCRouter({
       });
 
       return societyRoles;
+    }),
+  getByID: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx: { db }, input: { id } }) => {
+      const dbRole = await db.role.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          name: true,
+          accessDanger: true,
+          accessGeneral: true,
+          accessRole: true,
+          createInvite: true,
+        },
+      });
+
+      if (!dbRole) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return dbRole;
+    }),
+  update: protectedProcedure
+    .input(
+      newRole.merge(
+        z.object({
+          id: z.string(),
+        }),
+      ),
+    )
+    .mutation(async ({ ctx: { db }, input }) => {
+      const dbRole = await db.role.findUnique({
+        where: {
+          id: input.id,
+        },
+        select: { id: true },
+      });
+
+      if (!dbRole) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const updatedRole = await db.role.update({
+        where: { id: input.id },
+        data: input,
+        select: {
+          id: true,
+          name: true,
+          accessDanger: true,
+          accessGeneral: true,
+          accessRole: true,
+          createInvite: true,
+        },
+      });
+      return updatedRole;
+    }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { id } }) => {
+      const dbRole = await db.role.findUnique({
+        where: {
+          id,
+        },
+        select: { id: true },
+      });
+
+      if (!dbRole) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const deletedRole = await db.role.delete({
+        where: {
+          id,
+        },
+      });
+      return deletedRole;
     }),
 });

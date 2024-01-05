@@ -52,7 +52,7 @@ export default function SocietyImageUploader() {
             setIsUploading(false);
           }}
           onClientUploadComplete={async () => {
-            await utils.societyMedia.getSocietyMedia.invalidate();
+            await utils.societyMedia.getBySociety.invalidate();
             setIsUploading(false);
             setIsOpen(false);
           }}

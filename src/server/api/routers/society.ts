@@ -59,7 +59,7 @@ export const societyRouter = createTRPCRouter({
       return societies;
     },
   ),
-  getSocietyName: protectedProcedure
+  getName: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -105,7 +105,7 @@ export const societyRouter = createTRPCRouter({
 
       return { ...dbSociety };
     }),
-  updateDetails: protectedProcedure
+  update: protectedProcedure
     .input(
       editSocietyValidationSchema.extend({
         id: z.string(),

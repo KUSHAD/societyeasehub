@@ -30,8 +30,8 @@ export default function UpdateDetails() {
   const { id } = useParams<{ id: string }>();
   const utils = api.useUtils();
   const [open, setOpen] = useState(false);
-  const { mutate: updateDetails, isLoading: updating } =
-    api.society.updateDetails.useMutation({
+  const { mutate: update, isLoading: updating } =
+    api.society.update.useMutation({
       onError(error) {
         toast({
           title: "Error",
@@ -113,7 +113,7 @@ export default function UpdateDetails() {
             societyDetails && (
               <AutoForm
                 onSubmit={(data) =>
-                  updateDetails({
+                  update({
                     ...data,
                     id,
                   })

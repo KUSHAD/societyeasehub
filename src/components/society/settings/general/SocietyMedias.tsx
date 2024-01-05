@@ -11,7 +11,7 @@ import { toast } from "~/components/ui/use-toast";
 
 export default function SocietyMedias() {
   const { id } = useParams<{ id: string }>();
-  const { data: medias, isLoading } = api.societyMedia.getSocietyMedia.useQuery(
+  const { data: medias, isLoading } = api.societyMedia.getBySociety.useQuery(
     {
       societyId: id,
     },

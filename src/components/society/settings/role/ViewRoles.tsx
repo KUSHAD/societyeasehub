@@ -9,7 +9,7 @@ import RoleViewer from "./RoleViewer";
 
 export default function ViewRoles() {
   const { id } = useParams<{ id: string }>();
-  const { isLoading, data: roles } = api.role.getSocietyRoles.useQuery(
+  const { isLoading, data: roles } = api.role.getBySociety.useQuery(
     {
       societyId: id,
     },

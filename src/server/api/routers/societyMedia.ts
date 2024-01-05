@@ -4,7 +4,7 @@ import { TRPCError } from "@trpc/server";
 import { utapi } from "~/server/storage";
 
 export const societyMediaRouter = createTRPCRouter({
-  getSocietyMedia: protectedProcedure
+  getBySociety: protectedProcedure
     .input(
       z.object({
         societyId: z.string(),

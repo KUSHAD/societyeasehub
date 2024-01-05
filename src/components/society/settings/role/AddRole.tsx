@@ -37,7 +37,7 @@ export default function AddRole() {
     },
 
     onSuccess: async () => {
-      await utils.role.getSocietyRoles.invalidate();
+      await utils.role.getBySociety.invalidate();
       setOpen(false);
     },
 

@@ -45,7 +45,7 @@ export default function CarouselPlayer({
       },
       retryDelay: 500,
       onSuccess: async () => {
-        await utils.societyMedia.getSocietyMedia.invalidate();
+        await utils.societyMedia.getBySociety.invalidate();
       },
       onMutate({ id }) {
         setCurrentlyDeletingFile(id);
