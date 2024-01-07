@@ -137,10 +137,21 @@ export const rolesRouter = createTRPCRouter({
         where: {
           id,
         },
-        select: { id: true },
+        select: {
+          id: true,
+          _count: {
+            select: { members: true },
+          },
+        },
       });
 
       if (!dbRole) throw new TRPCError({ code: "NOT_FOUND" });
+
+      if (dbRole._count.members !== 0)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "This role has assigned members",
+        });
 
       const deletedRole = await db.role.delete({
         where: {

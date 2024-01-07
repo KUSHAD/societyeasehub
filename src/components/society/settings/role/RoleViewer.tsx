@@ -53,7 +53,7 @@ export default function RoleViewer({ role }: RoleViewerProps) {
                   <Button
                     size="icon"
                     className="mx-2 rounded-full"
-                    variant="ghost"
+                    variant="outline"
                   >
                     <Info />
                   </Button>
@@ -99,7 +99,7 @@ export default function RoleViewer({ role }: RoleViewerProps) {
                 <Button
                   size="icon"
                   className="mx-2 rounded-full"
-                  variant="ghost"
+                  variant="outline"
                 >
                   <MoreVertical />
                 </Button>

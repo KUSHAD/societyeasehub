@@ -1,4 +1,8 @@
 import type { Role, User } from "@prisma/client";
+import { type inferRouterOutputs } from "@trpc/server";
+import { type AppRouter } from "~/server/api/root";
+
+type RouterOutput = inferRouterOutputs<AppRouter>;
 
 export type SafeUser = Omit<User, "emailVerified">;
 
@@ -21,3 +25,11 @@ export type SafeMedia = {
 };
 
 export type SafeRole = Omit<Role, "createdAt" | "updatedAt" | "societyId">;
+
+export type SocietyUsersOutput = RouterOutput["member"]["getBySociety"][0];
+
+export interface PageProps {
+  params: {
+    id: string;
+  };
+}

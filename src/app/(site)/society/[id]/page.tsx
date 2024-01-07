@@ -1,11 +1,6 @@
 import { redirect } from "next/navigation";
 import { checkSocietyExists } from "~/actions/checkSocietyExists";
-
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
+import type { PageProps } from "~/lib/types";
 
 export const dynamic = "force-dynamic";
 

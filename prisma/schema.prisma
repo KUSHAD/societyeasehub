@@ -45,6 +45,7 @@ model User {
     accounts    Account[]
     societies   Society[]
     memberShips Member[]
+    invites     Invite[]
 }
 
 // App Models
@@ -67,6 +68,7 @@ model Society {
     members Member[]
     images  SocietyMedia[]
     roles   Role[]
+    invites Invite[]
 }
 
 model SocietyMedia {
@@ -82,12 +84,12 @@ model SocietyMedia {
 model Member {
     societyId String
     userId    String
-    roledId   String?
+    roleId    String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     society   Society  @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     user      User     @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-    role      Role?    @relation(fields: [roledId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    role      Role?    @relation(fields: [roleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
     @@id([societyId, userId])
 }
@@ -105,4 +107,16 @@ model Role {
 
     society Society  @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     members Member[]
+}
+
+model Invite {
+    societyId String
+    userEmail String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    to      User    @relation(fields: [userEmail], references: [email], onDelete: Restrict, onUpdate: Cascade)
+
+    @@id([societyId, userEmail])
 }

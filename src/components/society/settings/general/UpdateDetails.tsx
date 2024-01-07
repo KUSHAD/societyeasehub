@@ -79,7 +79,14 @@ export default function UpdateDetails() {
   return (
     <>
       {isLoading ? (
-        <Skeleton className="h-[16px] w-full" count={7} />
+        <Card>
+          <CardHeader className="flex flex-row">
+            <CardTitle>Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Skeleton className="my-1 h-5 w-full" count={7} />
+          </CardContent>
+        </Card>
       ) : (
         <Card className="my-2 flex flex-col">
           <CardHeader className="flex flex-row">
@@ -108,7 +115,7 @@ export default function UpdateDetails() {
             <AlertDialogTitle>Update Details</AlertDialogTitle>
           </AlertDialogHeader>
           {isLoading ? (
-            <Skeleton className="h-[16px] w-full" count={7} />
+            <Skeleton className="my-4 h-5 w-full" count={7} />
           ) : (
             societyDetails && (
               <AutoForm

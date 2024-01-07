@@ -11,8 +11,10 @@ import { useRouter } from "next/navigation";
 export default function NewSocietyForm() {
   const [showPass, setShowPass] = useState(false);
   const router = useRouter();
+  const utils = api.useUtils();
   const { isLoading, mutate: create } = api.society.create.useMutation({
-    onSuccess(data) {
+    onSuccess: async (data) => {
+      await utils.society.getUserMemberships.invalidate();
       router.push(`/society/${data.id}`);
     },
     onError(error) {

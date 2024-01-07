@@ -13,6 +13,7 @@ export default function Template({ children }: { children: React.ReactNode }) {
       initial="hidden"
       animate="enter"
       transition={{ type: "linear" }}
+      exit="hidden"
     >
       {children}
     </motion.main>

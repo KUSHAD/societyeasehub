@@ -1,0 +1,35 @@
+import { MoreVertical } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
+import type { SocietyUsersOutput } from "~/lib/types";
+
+interface MemberCardProps {
+  member: SocietyUsersOutput;
+}
+
+export default function MemberCard({ member }: MemberCardProps) {
+  return (
+    <div className="my-2 w-full scale-95 rounded bg-accent shadow-md">
+      <div className="mx-4 flex flex-row justify-between py-2">
+        <div className="flex flex-row">
+          <Avatar className="mx-2">
+            <AvatarImage
+              src={
+                member.user.image ??
+                "https://res.cloudinary.com/dst2pmia1/image/upload/c_crop,h_300,w_300/default_profile_pic.jpg"
+              }
+            />
+            <AvatarFallback>
+              {member.user.name?.slice(0, 1) ?? "U"}
+            </AvatarFallback>
+          </Avatar>
+          <strong className="my-2">{member.user.name}</strong>
+        </div>
+        <em className="my-2">{member.role?.name ?? "Not Assigned"}</em>
+        <Button size="icon" variant="outline">
+          <MoreVertical />
+        </Button>
+      </div>
+    </div>
+  );
+}
