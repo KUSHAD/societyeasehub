@@ -2,8 +2,6 @@ import { redirect } from "next/navigation";
 import { checkSocietyExists } from "~/actions/checkSocietyExists";
 import type { PageProps } from "~/lib/types";
 
-export const dynamic = "force-dynamic";
-
 export default async function Page({ params: { id } }: PageProps) {
   const society = await checkSocietyExists(id);
 

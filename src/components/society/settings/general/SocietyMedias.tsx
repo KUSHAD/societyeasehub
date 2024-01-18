@@ -2,12 +2,11 @@
 
 import { useParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-
 import { api } from "~/trpc/react";
 import CarouselPlayer, { CarouselPlayerSkeleton } from "../../CarouselPlayer";
-import { Ghost } from "lucide-react";
 import SocietyImageUploader from "./SocietyImageUploader";
 import { toast } from "~/components/ui/use-toast";
+import NotFound from "~/components/NotFound";
 
 export default function SocietyMedias() {
   const { id } = useParams<{ id: string }>();
@@ -43,12 +42,7 @@ export default function SocietyMedias() {
         ) : medias && medias.length !== 0 ? (
           <CarouselPlayer isDelete medias={medias} />
         ) : (
-          <div className="flex flex-col items-center gap-2">
-            <Ghost className="h-8 w-8 text-zinc-800" />
-            <h3 className="text-xl font-semibold">
-              You have not uploaded any picture
-            </h3>
-          </div>
+          <NotFound message="You haven't uploaded any Picture" />
         )}
       </CardContent>
     </Card>

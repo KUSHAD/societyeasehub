@@ -1,11 +1,11 @@
 "use client";
 
-import { Ghost } from "lucide-react";
 import { useParams } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
 import { toast } from "~/components/ui/use-toast";
 import { api } from "~/trpc/react";
 import RoleViewer from "./RoleViewer";
+import NotFound from "~/components/NotFound";
 
 export default function ViewRoles() {
   const { id } = useParams<{ id: string }>();
@@ -35,13 +35,10 @@ export default function ViewRoles() {
   ) : roles && roles.length !== 0 ? (
     roles.map((_role) => <RoleViewer role={_role} key={_role.id} />)
   ) : (
-    <div className="flex flex-col items-center gap-2">
-      <Ghost className="h-8 w-8 text-zinc-800" />
-      <h3 className="text-xl font-semibold">You have not created any roles</h3>
-      <p>
-        Create a role with different access levels and assign it to users in
-        members page
-      </p>
-    </div>
+    <NotFound
+      message="You have not created any roles"
+      description="Create a role with different access levels and assign it to users in
+        members page"
+    />
   );
 }

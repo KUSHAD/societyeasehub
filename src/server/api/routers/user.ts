@@ -110,4 +110,53 @@ export const userRouter = createTRPCRouter({
       revalidatePath("/profile", "page");
       return { updatedName: updatedName.name! };
     }),
+  search: protectedProcedure
+    .input(
+      z.object({
+        searchString: z.string().toLowerCase(),
+        societyId: z.string(),
+      }),
+    )
+    .query(
+      async ({ ctx: { db, session }, input: { searchString, societyId } }) => {
+        const users = await db.user.findMany({
+          where: {
+            OR: [
+              {
+                name: {
+                  contains: searchString,
+                },
+              },
+              {
+                email: {
+                  contains: searchString,
+                },
+              },
+            ],
+            NOT: {
+              id: session.user.id,
+            },
+            memberShips: {
+              every: {
+                NOT: {
+                  societyId: societyId,
+                  userId: session.user.id,
+                },
+              },
+            },
+          },
+          orderBy: {
+            name: "asc",
+          },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        });
+
+        return users;
+      },
+    ),
 });

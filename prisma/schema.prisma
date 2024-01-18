@@ -111,12 +111,19 @@ model Role {
 
 model Invite {
     societyId String
-    userEmail String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    userId    String
+    status    INVITE_STATUS @default(PENDING)
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
 
     society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-    to      User    @relation(fields: [userEmail], references: [email], onDelete: Restrict, onUpdate: Cascade)
+    to      User    @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-    @@id([societyId, userEmail])
+    @@id([societyId, userId])
+}
+
+enum INVITE_STATUS {
+    PENDING
+    ACCEPTED
+    IGNORED
 }

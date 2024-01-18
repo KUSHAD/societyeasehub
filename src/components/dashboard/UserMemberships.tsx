@@ -1,7 +1,6 @@
 "use client";
 
 import Skeleton from "react-loading-skeleton";
-import { Ghost } from "lucide-react";
 import { EnvelopeOpenIcon, PlusIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { buttonVariants } from "../ui/button";
@@ -9,6 +8,7 @@ import SocietyCard from "./SocietyCard";
 import ClientOnly from "../ClientOnly";
 import React from "react";
 import { api } from "~/trpc/react";
+import NotFound from "../NotFound";
 
 export default function UserMemberships() {
   const { data: userMemberShips, isLoading } =
@@ -19,7 +19,10 @@ export default function UserMemberships() {
     <>
       <h1 className="mb-3 text-xl font-bold text-gray-900">My Societies</h1>
       {userMemberShips.map((_membership) => (
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div
+          key={_membership.id}
+          className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        >
           <ClientOnly>
             <SocietyCard key={_membership.id} society={_membership} />
           </ClientOnly>
@@ -27,12 +30,10 @@ export default function UserMemberships() {
       ))}
     </>
   ) : (
-    <div className="mt-16 flex flex-col items-center gap-2">
-      <Ghost className="h-8 w-8 text-zinc-800" />
-      <h3 className="text-xl font-semibold">
-        You have don&apos;t membership in any society
-      </h3>
-      <p>Create a new society or ask the owner to invite you</p>
+    <NotFound
+      message="You have don't membership in any society"
+      description="Create a new society or ask the owner to invite you"
+    >
       <Link className={buttonVariants()} href="/society/new">
         <PlusIcon className="mx-2" />
         Create a new Society
@@ -46,6 +47,6 @@ export default function UserMemberships() {
         <EnvelopeOpenIcon className="mx-2" />
         See Invites
       </Link>
-    </div>
+    </NotFound>
   );
 }

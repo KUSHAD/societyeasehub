@@ -4,8 +4,8 @@ import { useParams } from "next/navigation";
 import { toast } from "~/components/ui/use-toast";
 import { api } from "~/trpc/react";
 import Skeleton from "react-loading-skeleton";
-import { Ghost } from "lucide-react";
 import MemberCard from "./MemberCard";
+import NotFound from "~/components/NotFound";
 
 export default function Members() {
   const { id } = useParams<{ id: string }>();
@@ -33,9 +33,6 @@ export default function Members() {
   ) : members && members.length !== 0 ? (
     members.map((_member) => <MemberCard member={_member} />)
   ) : (
-    <div className="flex flex-col items-center gap-2">
-      <Ghost className="h-8 w-8 text-zinc-800" />
-      <h3 className="text-xl font-semibold">No Members</h3>
-    </div>
+    <NotFound message="No Members" />
   );
 }
