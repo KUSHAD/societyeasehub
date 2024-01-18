@@ -52,4 +52,16 @@ export const inviteRouter = createTRPCRouter({
 
       return newInvite;
     }),
+  getPendingCount: protectedProcedure.query(
+    async ({ ctx: { db, session } }) => {
+      const pendingCount = await db.invite.count({
+        where: {
+          userId: session.user.id,
+          status: "PENDING",
+        },
+      });
+
+      return pendingCount;
+    },
+  ),
 });
