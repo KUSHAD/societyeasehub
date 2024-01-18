@@ -24,7 +24,7 @@ export default function UserInviteCard({ user }: UserInviteCardProps) {
           </Avatar>
           <strong className="my-2">{user.name}</strong>
         </div>
-        <SendInviteButton userId={user.id} />
+        <SendInviteButton userId={user.id!} />
       </div>
     </div>
   );
