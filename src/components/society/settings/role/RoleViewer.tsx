@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil2Icon, TrashIcon, PersonIcon } from "@radix-ui/react-icons";
+import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import { Info, MoreVertical, User, Check, X } from "lucide-react";
 import { useState } from "react";
 import {
@@ -108,10 +108,7 @@ export default function RoleViewer({ role }: RoleViewerProps) {
                 <DropdownMenuItem onClick={() => setOpen("edit")}>
                   Edit <Pencil2Icon className="mx-2" />
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  Assign <PersonIcon className="mx-2" />
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive">
                   Delete <TrashIcon className="mx-2" />
                 </DropdownMenuItem>
               </DropdownMenuContent>
