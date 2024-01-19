@@ -11,6 +11,7 @@ import { ourFileRouter } from "~/server/storage";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { NextAuthReactProvider } from "~/next-auth/react";
+import { SupabaseRealtimeReactProvider } from "~/supabase-realtime/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,11 +40,13 @@ export default async function RootLayout({
         <div className="m-auto w-full max-w-screen-lg">
           <TRPCReactProvider cookies={cookies().toString()}>
             <NextAuthReactProvider>
-              <NextSSRPlugin
-                routerConfig={extractRouterConfig(ourFileRouter)}
-              />
-              {children}
-              <Toaster />
+              <SupabaseRealtimeReactProvider>
+                <NextSSRPlugin
+                  routerConfig={extractRouterConfig(ourFileRouter)}
+                />
+                {children}
+                <Toaster />
+              </SupabaseRealtimeReactProvider>
             </NextAuthReactProvider>
           </TRPCReactProvider>
         </div>

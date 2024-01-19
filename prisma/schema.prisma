@@ -91,7 +91,7 @@ model Member {
     user      User     @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     role      Role?    @relation(fields: [roleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-    @@id([societyId, userId])
+    @@id(name: "memberId", [societyId, userId])
 }
 
 model Role {
@@ -119,7 +119,7 @@ model Invite {
     society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     to      User    @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-    @@id([societyId, userId])
+    @@id(name: "inviteId", [societyId, userId])
 }
 
 enum INVITE_STATUS {

@@ -28,6 +28,7 @@ export default function Members() {
       retryDelay: 500,
     },
   );
+
   return isLoading ? (
     <Skeleton className="my-2 h-12 w-full scale-95" count={30} />
   ) : members && members.length !== 0 ? (

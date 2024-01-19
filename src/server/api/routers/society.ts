@@ -31,7 +31,7 @@ export const societyRouter = createTRPCRouter({
       const societies = await db.society.findMany({
         where: {
           members: {
-            every: {
+            some: {
               userId: session.user.id,
             },
           },

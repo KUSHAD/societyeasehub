@@ -140,7 +140,6 @@ export const userRouter = createTRPCRouter({
               every: {
                 NOT: {
                   societyId: societyId,
-                  userId: session.user.id,
                 },
               },
             },
