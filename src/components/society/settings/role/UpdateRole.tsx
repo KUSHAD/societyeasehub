@@ -11,13 +11,6 @@ export default function UpdateRole({ id }: { id: string }) {
   const { data: role, isLoading } = api.role.getByID.useQuery(
     { id },
     {
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
       retry(failureCount) {
         if (failureCount >= 3) return true;
 

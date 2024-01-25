@@ -26,13 +26,6 @@ export default function PaymentModal() {
           });
         }
       },
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
     });
   return (
     <AlertDialog open>

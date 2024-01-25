@@ -7,6 +7,8 @@ import { useState } from "react";
 
 import { type AppRouter } from "~/server/api/root";
 import { getUrl, transformer } from "./shared";
+import { toast } from "~/components/ui/use-toast";
+import { type TRPCClientErrorType } from "~/lib/types";
 
 export const api = createTRPCReact<AppRouter>();
 
@@ -14,7 +16,37 @@ export function TRPCReactProvider(props: {
   children: React.ReactNode;
   cookies: string;
 }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 5 * 1000,
+            refetchInterval: 5 * 1000,
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onError(err: TRPCClientErrorType) {
+              toast({
+                title: "Error",
+                description: err.message,
+                variant: "destructive",
+              });
+            },
+          },
+          mutations: {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            onError(err: TRPCClientErrorType) {
+              toast({
+                title: "Error",
+                description: err.message,
+                variant: "destructive",
+              });
+            },
+          },
+        },
+      }),
+  );
 
   const [trpcClient] = useState(() =>
     api.createClient({

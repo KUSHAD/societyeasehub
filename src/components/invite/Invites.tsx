@@ -1,7 +1,6 @@
 "use client";
 
 import { api } from "~/trpc/react";
-import { toast } from "../ui/use-toast";
 import Skeleton from "react-loading-skeleton";
 import NotFound from "../NotFound";
 import InviteCard from "./InviteCard";
@@ -9,13 +8,6 @@ import InviteCard from "./InviteCard";
 export default function Invites() {
   const { data: pendingInvites, isLoading } =
     api.invite.getUserPending.useQuery(undefined, {
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
       retry(failureCount) {
         if (failureCount >= 3) return true;
 

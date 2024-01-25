@@ -16,13 +16,6 @@ export default function InviteNavIcon({ className }: InviteNavIconProps) {
   const { data: pendingCount } = api.invite.getPendingCount.useQuery(
     undefined,
     {
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
       retry(failureCount) {
         if (failureCount >= 3) return true;
 

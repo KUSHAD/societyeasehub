@@ -32,13 +32,6 @@ export default function UpdateDetails() {
   const [open, setOpen] = useState(false);
   const { mutate: update, isLoading: updating } =
     api.society.update.useMutation({
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
       onSuccess: async () => {
         toast({
           title: "Message",
@@ -59,13 +52,6 @@ export default function UpdateDetails() {
       id,
     },
     {
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
       retry(failureCount) {
         if (failureCount >= 3) return true;
 

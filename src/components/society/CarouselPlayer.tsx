@@ -11,7 +11,6 @@ import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { api } from "~/trpc/react";
-import { toast } from "../ui/use-toast";
 import { useState } from "react";
 import { Loader2, Trash } from "lucide-react";
 type CarouselPlayerProps = {
@@ -31,13 +30,6 @@ export default function CarouselPlayer({
 
   const { mutate: deleteMedia, isLoading } =
     api.societyMedia.delete.useMutation({
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
       retry(failureCount) {
         if (failureCount >= 3) return true;
 

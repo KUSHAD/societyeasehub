@@ -41,13 +41,6 @@ export default function ShowSocietyDetail() {
       id,
     },
     {
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
       retry(failureCount) {
         if (failureCount >= 3) return true;
 

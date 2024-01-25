@@ -1,5 +1,6 @@
 import type { Role, User } from "@prisma/client";
-import { type inferRouterOutputs } from "@trpc/server";
+import { type TRPCClientErrorLike } from "@trpc/client";
+import { type BuildProcedure, type inferRouterOutputs } from "@trpc/server";
 import { type AppRouter } from "~/server/api/root";
 
 type RouterOutput = inferRouterOutputs<AppRouter>;
@@ -33,3 +34,9 @@ export interface PageProps {
     id: string;
   };
 }
+
+type TRPCClientErrorTypeParams = "query" | "mutation" | "subscription";
+
+export type TRPCClientErrorType = TRPCClientErrorLike<
+  BuildProcedure<TRPCClientErrorTypeParams, never, never>
+>;

@@ -3,7 +3,6 @@
 import { PersonIcon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import { api } from "~/trpc/react";
-import { toast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
 
 interface InviteCardProps {
@@ -23,13 +22,6 @@ export default function InviteCard({ invite: { society } }: InviteCardProps) {
   const router = useRouter();
   const { mutate: reject, isLoading: rejecting } =
     api.invite.reject.useMutation({
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
       retry(failureCount) {
         if (failureCount >= 3) return true;
 
@@ -44,13 +36,6 @@ export default function InviteCard({ invite: { society } }: InviteCardProps) {
 
   const { mutate: accept, isLoading: accepting } =
     api.invite.accept.useMutation({
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
       retry(failureCount) {
         if (failureCount >= 3) return true;
 
