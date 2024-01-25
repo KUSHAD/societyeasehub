@@ -10,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 export function absoluteUrl(path: string) {
   const url =
     env.NODE_ENV === "production"
-      ? "https://flat-management-system.vercel.app"
+      ? "https://societyeasehub.vercel.app"
       : "http://localhost:3000";
   return `${url}${path}`;
 }
