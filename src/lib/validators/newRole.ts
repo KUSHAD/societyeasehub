@@ -8,7 +8,9 @@ export const newRole = z.object({
     .min(1, "Required")
     .max(25, "Max 25 Characters"),
   accessGeneral: z.boolean().optional().default(false),
-  accessRole: z.boolean().optional().default(false),
   accessDanger: z.boolean().optional().default(false),
   createInvite: z.boolean().optional().default(false),
+  createRole: z.boolean().optional().default(false),
+  assignRole: z.boolean().optional().default(false),
+  kickUser: z.boolean().optional().default(false),
 });

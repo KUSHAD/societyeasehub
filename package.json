@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "homepage": "https://societyeasehub.vercel.app/",
+  "author": {
+    "email": "kushad.chakraborty@gmail.com",
+    "name": "Kushad Chakraborty",
+    "url": "https://twitter.com/__toxic_stan_"
+  },
   "scripts": {
     "build": "next build",
     "db:push": "prisma db push",

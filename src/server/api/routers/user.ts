@@ -114,7 +114,7 @@ export const userRouter = createTRPCRouter({
     .input(
       z.object({
         searchString: z.string().toLowerCase(),
-        societyId: z.string(),
+        societyId: z.string().cuid(),
       }),
     )
     .query(

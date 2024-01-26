@@ -21,8 +21,10 @@ export function TRPCReactProvider(props: {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 5 * 1000,
-            refetchInterval: 5 * 1000,
+            staleTime: 5 * 1000, // 5 seconds
+            refetchInterval: 5 * 1000, // 5 seconds
+            retry: (failureCount) => failureCount <= 3,
+            retryDelay: 500,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             onError(err: TRPCClientErrorType) {
@@ -34,6 +36,8 @@ export function TRPCReactProvider(props: {
             },
           },
           mutations: {
+            retry: (failureCount) => failureCount <= 3,
+            retryDelay: 500,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             onError(err: TRPCClientErrorType) {

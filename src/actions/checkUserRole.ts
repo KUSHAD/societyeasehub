@@ -23,7 +23,7 @@ export async function canCreateInvites(societyId: string) {
     },
   });
 
-  if (!dbSociety) throw new Error("No Society Found");
+  if (!dbSociety) redirect("/dashboard");
 
   if (dbSociety.ownerId === currentUser.id) return true;
 
@@ -53,7 +53,7 @@ export async function canAccessGeneral(societyId: string) {
     },
   });
 
-  if (!dbSociety) throw new Error("No Society Found");
+  if (!dbSociety) redirect("/");
 
   if (dbSociety.ownerId === currentUser.id) return true;
 
@@ -62,7 +62,7 @@ export async function canAccessGeneral(societyId: string) {
   return false;
 }
 
-export async function canAccessRole(societyId: string) {
+export async function canCreateRoles(societyId: string) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) redirect("/api/auth/signin");
@@ -78,12 +78,12 @@ export async function canAccessRole(societyId: string) {
       societyId,
       userId: currentUser.id,
       role: {
-        accessRole: true,
+        createRole: true,
       },
     },
   });
 
-  if (!dbSociety) throw new Error("No Society Found");
+  if (!dbSociety) redirect("/dashboard");
 
   if (dbSociety.ownerId === currentUser.id) return true;
 
@@ -113,7 +113,67 @@ export async function canAccessDanger(societyId: string) {
     },
   });
 
-  if (!dbSociety) throw new Error("No Society Found");
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
+  if (!dbMemberShip) return false;
+
+  return false;
+}
+
+export async function canAssignRoles(societyId: string) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) redirect("/api/auth/signin");
+
+  const dbSociety = await db.society.findUnique({
+    where: {
+      id: societyId,
+    },
+  });
+
+  const dbMemberShip = await db.member.findFirst({
+    where: {
+      societyId,
+      userId: currentUser.id,
+      role: {
+        assignRole: true,
+      },
+    },
+  });
+
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
+  if (!dbMemberShip) return false;
+
+  return false;
+}
+
+export async function canKickMember(societyId: string) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) redirect("/api/auth/signin");
+
+  const dbSociety = await db.society.findUnique({
+    where: {
+      id: societyId,
+    },
+  });
+
+  const dbMemberShip = await db.member.findFirst({
+    where: {
+      societyId,
+      userId: currentUser.id,
+      role: {
+        kickUser: true,
+      },
+    },
+  });
+
+  if (!dbSociety) redirect("/dashboard");
 
   if (dbSociety.ownerId === currentUser.id) return true;
 

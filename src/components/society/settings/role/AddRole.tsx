@@ -14,7 +14,6 @@ import {
 } from "~/components/ui/alert-dialog";
 import AutoForm, { AutoFormSubmit } from "~/components/ui/auto-form";
 import { Button } from "~/components/ui/button";
-import { toast } from "~/components/ui/use-toast";
 import { newRole } from "~/lib/validators/newRole";
 import { api } from "~/trpc/react";
 
@@ -23,25 +22,10 @@ export default function AddRole() {
   const { id } = useParams<{ id: string }>();
   const utils = api.useUtils();
   const { mutate, isLoading } = api.role.create.useMutation({
-    onError(error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-    retry(failureCount) {
-      if (failureCount >= 3) return true;
-
-      return false;
-    },
-
     onSuccess: async () => {
       await utils.role.getBySociety.invalidate();
       setOpen(false);
     },
-
-    retryDelay: 500,
   });
   return (
     <AlertDialog open={open} onOpenChange={(_state) => setOpen(_state)}>
@@ -73,13 +57,21 @@ export default function AddRole() {
               fieldType: "switch",
               description: "Access to General Settings Page",
             },
-            accessRole: {
+            createRole: {
               fieldType: "switch",
-              description: "Access to Role Settings Page",
+              description: "Access to Role Settings Page and Create Roles",
             },
             createInvite: {
               fieldType: "switch",
               description: "Can create Invites",
+            },
+            assignRole: {
+              fieldType: "switch",
+              description: "Assign Role to Members",
+            },
+            kickUser: {
+              fieldType: "switch",
+              description: "Remove users from society",
             },
           }}
         >

@@ -30,12 +30,6 @@ export default function CarouselPlayer({
 
   const { mutate: deleteMedia, isLoading } =
     api.societyMedia.delete.useMutation({
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-      retryDelay: 500,
       onSuccess: async () => {
         await utils.societyMedia.getBySociety.invalidate();
       },

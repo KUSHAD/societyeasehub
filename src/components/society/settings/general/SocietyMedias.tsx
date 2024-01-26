@@ -5,24 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { api } from "~/trpc/react";
 import CarouselPlayer, { CarouselPlayerSkeleton } from "../../CarouselPlayer";
 import SocietyImageUploader from "./SocietyImageUploader";
-import { toast } from "~/components/ui/use-toast";
 import NotFound from "~/components/NotFound";
 
 export default function SocietyMedias() {
   const { id } = useParams<{ id: string }>();
-  const { data: medias, isLoading } = api.societyMedia.getBySociety.useQuery(
-    {
-      societyId: id,
-    },
-    {
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-      retryDelay: 500,
-    },
-  );
+  const { data: medias, isLoading } = api.societyMedia.getBySociety.useQuery({
+    societyId: id,
+  });
   return (
     <Card>
       <CardHeader className="flex flex-row">

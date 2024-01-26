@@ -3,7 +3,6 @@
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
-import { toast } from "~/components/ui/use-toast";
 import { api } from "~/trpc/react";
 
 interface SendInviteButtonProps {
@@ -18,19 +17,6 @@ export default function SendInviteButton({ userId }: SendInviteButtonProps) {
     onSuccess() {
       setSent(true);
     },
-    onError(error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-    retry(failureCount) {
-      if (failureCount >= 3) return true;
-
-      return false;
-    },
-    retryDelay: 500,
   });
 
   return (

@@ -3,7 +3,6 @@
 import { newSocietyValidationSchema } from "~/lib/validators/newSociety";
 import AutoForm, { AutoFormSubmit } from "../ui/auto-form";
 import { api } from "~/trpc/react";
-import { toast } from "../ui/use-toast";
 import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -17,19 +16,6 @@ export default function NewSocietyForm() {
       await utils.society.getUserMemberships.invalidate();
       router.push(`/society/${data.id}`);
     },
-    onError(error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-    retry(failureCount) {
-      if (failureCount > 3) return true;
-
-      return false;
-    },
-    retryDelay: 500,
   });
   return (
     <AutoForm

@@ -1,7 +1,7 @@
 "use client";
 
 import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
-import { Info, MoreVertical, User, Check, X } from "lucide-react";
+import { MoreVertical, User } from "lucide-react";
 import { useState } from "react";
 import {
   AlertDialog,
@@ -18,14 +18,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
+
 import { type SafeRole } from "~/lib/types";
 import UpdateRole from "./UpdateRole";
+import DeleteRole from "./DeleteRole";
 
 interface RoleViewerProps {
   role: SafeRole & {
@@ -36,7 +32,7 @@ interface RoleViewerProps {
 }
 
 export default function RoleViewer({ role }: RoleViewerProps) {
-  const [open, setOpen] = useState<"edit" | "assign" | "delete" | null>(null);
+  const [open, setOpen] = useState<"edit" | "delete" | null>(null);
 
   return (
     <>
@@ -46,74 +42,28 @@ export default function RoleViewer({ role }: RoleViewerProps) {
           <div className="my-2 flex flex-row">
             <User /> <span>{role._count.members}</span>
           </div>
-          <div className="flex flex-row">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="icon"
-                    className="mx-2 rounded-full"
-                    variant="outline"
-                  >
-                    <Info />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="flex flex-col">
-                  <div className="flex flex-row">
-                    <span className="my-1">Access General Settings Page</span>
-                    {role.accessGeneral ? (
-                      <Check className="mx-2" />
-                    ) : (
-                      <X className="mx-2" />
-                    )}
-                  </div>
-                  <div className="flex flex-row">
-                    <span className="my-1">Access Role Settings Page</span>
-                    {role.accessRole ? (
-                      <Check className="mx-2" />
-                    ) : (
-                      <X className="mx-2" />
-                    )}
-                  </div>
-                  <div className="flex flex-row">
-                    <span className="my-1">Access Danger Settings Page</span>
-                    {role.accessDanger ? (
-                      <Check className="mx-2" />
-                    ) : (
-                      <X className="mx-2" />
-                    )}
-                  </div>
-                  <div className="flex flex-row">
-                    <span className="my-1">Create and send invites</span>
-                    {role.createInvite ? (
-                      <Check className="mx-2" />
-                    ) : (
-                      <X className="mx-2" />
-                    )}
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  size="icon"
-                  className="mx-2 rounded-full"
-                  variant="outline"
-                >
-                  <MoreVertical />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="absolute right-0">
-                <DropdownMenuItem onClick={() => setOpen("edit")}>
-                  Edit <Pencil2Icon className="mx-2" />
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-destructive">
-                  Delete <TrashIcon className="mx-2" />
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                size="icon"
+                className="mx-2 rounded-full"
+                variant="outline"
+              >
+                <MoreVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="absolute right-0">
+              <DropdownMenuItem onClick={() => setOpen("edit")}>
+                Edit <Pencil2Icon className="mx-2" />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setOpen("delete")}
+                className="text-destructive"
+              >
+                Delete <TrashIcon className="mx-2" />
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <AlertDialog
@@ -125,6 +75,21 @@ export default function RoleViewer({ role }: RoleViewerProps) {
             <AlertDialogTitle>Edit Role</AlertDialogTitle>
           </AlertDialogHeader>
           <UpdateRole id={role.id} />
+          <AlertDialogFooter>
+            <AlertDialogCancel>Close</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={Boolean(open === "delete")}
+        onOpenChange={() => setOpen(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Role</AlertDialogTitle>
+          </AlertDialogHeader>
+          <DeleteRole roleId={role.id} />
           <AlertDialogFooter>
             <AlertDialogCancel>Close</AlertDialogCancel>
           </AlertDialogFooter>

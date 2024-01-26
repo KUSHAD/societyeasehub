@@ -7,14 +7,7 @@ import InviteCard from "./InviteCard";
 
 export default function Invites() {
   const { data: pendingInvites, isLoading } =
-    api.invite.getUserPending.useQuery(undefined, {
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-      retryDelay: 500,
-    });
+    api.invite.getUserPending.useQuery(undefined);
   return isLoading ? (
     <Skeleton className="my-2 h-[75px] w-full" count={10} />
   ) : pendingInvites && pendingInvites.length !== 0 ? (

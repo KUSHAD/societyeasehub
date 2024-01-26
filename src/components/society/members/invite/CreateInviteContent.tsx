@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Input } from "~/components/ui/input";
 import { api } from "~/trpc/react";
 import { useDebounce } from "@uidotdev/usehooks";
-import { toast } from "~/components/ui/use-toast";
 import Skeleton from "react-loading-skeleton";
 import UserInviteCard from "./UserInviteCard";
 import NotFound from "~/components/NotFound";
@@ -22,13 +21,6 @@ export default function CreateInviteContent() {
     },
     {
       enabled: !!debouncedSearchSring,
-
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-      retryDelay: 500,
     },
   );
 

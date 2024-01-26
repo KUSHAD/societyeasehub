@@ -8,33 +8,9 @@ import { api } from "~/trpc/react";
 
 export default function UpdateRole({ id }: { id: string }) {
   const utils = api.useUtils();
-  const { data: role, isLoading } = api.role.getByID.useQuery(
-    { id },
-    {
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-
-      retryDelay: 500,
-    },
-  );
+  const { data: role, isLoading } = api.role.getByID.useQuery({ id }, {});
 
   const { isLoading: updating, mutate: update } = api.role.update.useMutation({
-    onError(error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-    retry(failureCount) {
-      if (failureCount >= 3) return true;
-
-      return false;
-    },
-
     onSuccess: async () => {
       await utils.role.invalidate();
       toast({

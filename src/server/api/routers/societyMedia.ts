@@ -7,7 +7,7 @@ export const societyMediaRouter = createTRPCRouter({
   getBySociety: protectedProcedure
     .input(
       z.object({
-        societyId: z.string(),
+        societyId: z.string().cuid(),
       }),
     )
     .query(async ({ ctx: { db }, input: { societyId } }) => {
@@ -29,7 +29,7 @@ export const societyMediaRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        id: z.string().cuid(),
       }),
     )
     .mutation(async ({ ctx: { db }, input: { id } }) => {

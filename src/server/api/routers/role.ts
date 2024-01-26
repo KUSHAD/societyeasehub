@@ -8,7 +8,7 @@ export const rolesRouter = createTRPCRouter({
     .input(
       newRole.merge(
         z.object({
-          societyId: z.string(),
+          societyId: z.string().cuid(),
         }),
       ),
     )
@@ -32,7 +32,7 @@ export const rolesRouter = createTRPCRouter({
   getBySociety: protectedProcedure
     .input(
       z.object({
-        societyId: z.string(),
+        societyId: z.string().cuid(),
       }),
     )
     .query(async ({ ctx: { db }, input }) => {
@@ -55,8 +55,10 @@ export const rolesRouter = createTRPCRouter({
           name: true,
           accessDanger: true,
           accessGeneral: true,
-          accessRole: true,
+          createRole: true,
           createInvite: true,
+          assignRole: true,
+          kickUser: true,
           _count: {
             select: {
               members: true,
@@ -73,7 +75,7 @@ export const rolesRouter = createTRPCRouter({
   getByID: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        id: z.string().cuid(),
       }),
     )
     .query(async ({ ctx: { db }, input: { id } }) => {
@@ -82,11 +84,14 @@ export const rolesRouter = createTRPCRouter({
           id: id,
         },
         select: {
+          id: true,
           name: true,
           accessDanger: true,
           accessGeneral: true,
-          accessRole: true,
+          createRole: true,
           createInvite: true,
+          assignRole: true,
+          kickUser: true,
         },
       });
 
@@ -98,7 +103,7 @@ export const rolesRouter = createTRPCRouter({
     .input(
       newRole.merge(
         z.object({
-          id: z.string(),
+          id: z.string().cuid(),
         }),
       ),
     )
@@ -120,8 +125,10 @@ export const rolesRouter = createTRPCRouter({
           name: true,
           accessDanger: true,
           accessGeneral: true,
-          accessRole: true,
+          createRole: true,
           createInvite: true,
+          assignRole: true,
+          kickUser: true,
         },
       });
       return updatedRole;
@@ -129,7 +136,7 @@ export const rolesRouter = createTRPCRouter({
   delete: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        id: z.string().cuid(),
       }),
     )
     .mutation(async ({ ctx: { db }, input: { id } }) => {

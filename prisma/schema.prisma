@@ -87,9 +87,10 @@ model Member {
     roleId    String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    society   Society  @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-    user      User     @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-    role      Role?    @relation(fields: [roleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+    society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    user    User    @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    role    Role?   @relation(fields: [roleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
     @@id(name: "memberId", [societyId, userId])
 }
@@ -98,9 +99,11 @@ model Role {
     id            String   @id @default(cuid())
     name          String   @db.VarChar(255)
     accessGeneral Boolean  @default(false) // Access General Settings
-    accessRole    Boolean  @default(false) // Access Role Settings
+    createRole    Boolean  @default(false) // Access Role Settings
     accessDanger  Boolean  @default(false) // Access Danger Settings
     createInvite  Boolean  @default(false) // Create and Send Invites
+    assignRole    Boolean  @default(false) // Assign Role
+    kickUser      Boolean  @default(false) // Can Remove Users
     societyId     String
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt

@@ -1,13 +1,28 @@
-import { MoreVertical } from "lucide-react";
+import { CircleSlash, MoreVertical, UserCog } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import type { SocietyUsersOutput } from "~/lib/types";
+import { type MembersProps } from "./Members";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import AssignRole from "./AssignRole";
 
-interface MemberCardProps {
+interface MemberCardProps extends MembersProps {
   member: SocietyUsersOutput;
 }
 
-export default function MemberCard({ member }: MemberCardProps) {
+export default function MemberCard({
+  member,
+  canAssignRoles,
+  canKick,
+}: MemberCardProps) {
   return (
     <div className="my-2 w-full scale-95 rounded bg-accent shadow-md">
       <div className="mx-4 flex flex-row justify-between py-2">
@@ -26,9 +41,33 @@ export default function MemberCard({ member }: MemberCardProps) {
           <strong className="my-2">{member.user.name}</strong>
         </div>
         <em className="my-2">{member.role?.name ?? "Not Assigned"}</em>
-        <Button size="icon" variant="outline">
-          <MoreVertical />
-        </Button>
+        {canAssignRoles || canKick ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="icon" variant="outline">
+                <MoreVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {canAssignRoles ? (
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <UserCog className="mx-2" />
+                    Assign Role
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    <AssignRole userId={member.user.id} />
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              ) : null}
+              {canKick ? (
+                <DropdownMenuItem>
+                  <CircleSlash className="mx-2" /> Can Kick
+                </DropdownMenuItem>
+              ) : null}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : null}
       </div>
     </div>
   );

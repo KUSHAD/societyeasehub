@@ -40,27 +40,10 @@ export default function UpdateDetails() {
         setOpen(false);
         await utils.society.getInfo.invalidate();
       },
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-      retryDelay: 500,
     });
-  const { data: societyDetails, isLoading } = api.society.getInfo.useQuery(
-    {
-      id,
-    },
-    {
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-
-      retryDelay: 500,
-    },
-  );
+  const { data: societyDetails, isLoading } = api.society.getInfo.useQuery({
+    id,
+  });
 
   return (
     <>

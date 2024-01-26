@@ -6,8 +6,8 @@ export const inviteRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
-        userId: z.string(),
-        societyId: z.string(),
+        userId: z.string().cuid(),
+        societyId: z.string().cuid(),
       }),
     )
     .mutation(async ({ ctx: { db }, input: { societyId, userId } }) => {
@@ -102,14 +102,16 @@ export const inviteRouter = createTRPCRouter({
   reject: protectedProcedure
     .input(
       z.object({
-        societyId: z.string(),
+        societyId: z.string().cuid(),
       }),
     )
     .mutation(async ({ ctx: { db, session }, input: { societyId } }) => {
-      const rejectedInvite = await db.invite.updateMany({
+      const rejectedInvite = await db.invite.update({
         where: {
-          societyId,
-          userId: session.user.id,
+          inviteId: {
+            societyId,
+            userId: session.user.id,
+          },
         },
         data: {
           status: "IGNORED",
@@ -121,7 +123,7 @@ export const inviteRouter = createTRPCRouter({
   accept: protectedProcedure
     .input(
       z.object({
-        societyId: z.string(),
+        societyId: z.string().cuid(),
       }),
     )
     .mutation(async ({ ctx: { db, session }, input: { societyId } }) => {
@@ -141,10 +143,12 @@ export const inviteRouter = createTRPCRouter({
         },
       });
 
-      await db.invite.updateMany({
+      await db.invite.update({
         where: {
-          societyId,
-          userId: session.user.id,
+          inviteId: {
+            societyId,
+            userId: session.user.id,
+          },
         },
         data: {
           status: "ACCEPTED",

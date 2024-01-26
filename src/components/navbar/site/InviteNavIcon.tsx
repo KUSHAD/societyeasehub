@@ -4,7 +4,6 @@ import { EnvelopeOpenIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { badgeVariants } from "~/components/ui/badge";
-import { toast } from "~/components/ui/use-toast";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -15,15 +14,7 @@ interface InviteNavIconProps {
 export default function InviteNavIcon({ className }: InviteNavIconProps) {
   const { data: pendingCount } = api.invite.getPendingCount.useQuery(
     undefined,
-    {
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-
-      retryDelay: 500,
-    },
+    {},
   );
   const pathname = usePathname();
   return (

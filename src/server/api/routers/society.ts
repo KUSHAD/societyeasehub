@@ -62,7 +62,7 @@ export const societyRouter = createTRPCRouter({
   getName: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        id: z.string().cuid(),
       }),
     )
     .query(async ({ ctx: { db }, input: { id } }) => {
@@ -82,7 +82,7 @@ export const societyRouter = createTRPCRouter({
   getInfo: protectedProcedure
     .input(
       z.object({
-        id: z.string(),
+        id: z.string().cuid(),
       }),
     )
     .query(async ({ ctx: { db }, input: { id } }) => {
@@ -108,7 +108,7 @@ export const societyRouter = createTRPCRouter({
   update: protectedProcedure
     .input(
       editSocietyValidationSchema.extend({
-        id: z.string(),
+        id: z.string().cuid(),
       }),
     )
     .mutation(async ({ ctx: { db }, input }) => {

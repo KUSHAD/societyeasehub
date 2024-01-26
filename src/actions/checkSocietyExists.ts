@@ -1,12 +1,15 @@
 import { db } from "~/server/db";
+import { getCurrentUser } from "./getCurrentUser";
+import { redirect } from "next/navigation";
 
 export async function checkSocietyExists(id: string) {
-  const dbSociety = await db.society.findUnique({
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) return redirect("/api/auth/signin");
+  const dbSociety = await db.member.findFirst({
     where: {
-      id,
-    },
-    select: {
-      id: true,
+      societyId: id,
+      userId: currentUser.id,
     },
   });
 

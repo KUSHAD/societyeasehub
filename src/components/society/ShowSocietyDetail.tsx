@@ -15,38 +15,15 @@ import CarouselPlayer, { CarouselPlayerSkeleton } from "./CarouselPlayer";
 export default function ShowSocietyDetail() {
   const { id } = useParams<{ id: string }>();
   const { data: medias, isLoading: mediaLoading } =
-    api.societyMedia.getBySociety.useQuery(
-      {
-        societyId: id,
-      },
-      {
-        onError(error) {
-          toast({
-            title: "Error",
-            description: error.message,
-            variant: "destructive",
-          });
-        },
-        retry(failureCount) {
-          if (failureCount >= 3) return true;
-
-          return false;
-        },
-        retryDelay: 500,
-      },
-    );
+    api.societyMedia.getBySociety.useQuery({
+      societyId: id,
+    });
 
   const { data: societyDetails, isLoading } = api.society.getInfo.useQuery(
     {
       id,
     },
     {
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-      retryDelay: 500,
       onSuccess(data) {
         if (!data)
           return toast({

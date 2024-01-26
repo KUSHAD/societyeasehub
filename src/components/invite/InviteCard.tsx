@@ -22,12 +22,6 @@ export default function InviteCard({ invite: { society } }: InviteCardProps) {
   const router = useRouter();
   const { mutate: reject, isLoading: rejecting } =
     api.invite.reject.useMutation({
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-      retryDelay: 500,
       onSuccess: async () => {
         await utils.invite.getPendingCount.invalidate();
         await utils.invite.getUserPending.invalidate();
@@ -36,12 +30,6 @@ export default function InviteCard({ invite: { society } }: InviteCardProps) {
 
   const { mutate: accept, isLoading: accepting } =
     api.invite.accept.useMutation({
-      retry(failureCount) {
-        if (failureCount >= 3) return true;
-
-        return false;
-      },
-      retryDelay: 500,
       onSuccess: async (data) => {
         router.push(`/society/${data.societyId}`);
         await utils.invite.getPendingCount.invalidate();
