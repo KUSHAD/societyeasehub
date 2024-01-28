@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { canAssignRoles } from "~/actions/checkUserRole";
+import { TRPCError } from "@trpc/server";
 
 export const memberRouter = createTRPCRouter({
   getBySociety: protectedProcedure
@@ -40,6 +42,13 @@ export const memberRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx: { db }, input: { societyId, userId } }) => {
+      const canAssign = await canAssignRoles(societyId);
+
+      if (!canAssign)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
       const userRole = await db.member.findUnique({
         where: {
           memberId: {
@@ -63,6 +72,13 @@ export const memberRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx: { db }, input: { roleId, societyId, userId } }) => {
+      const canAssign = await canAssignRoles(societyId);
+
+      if (!canAssign)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
       const newMember = await db.member.update({
         where: {
           memberId: {

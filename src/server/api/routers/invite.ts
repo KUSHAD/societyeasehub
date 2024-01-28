@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { canCreateInvites } from "~/actions/checkUserRole";
 
 export const inviteRouter = createTRPCRouter({
   create: protectedProcedure
@@ -11,6 +12,10 @@ export const inviteRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx: { db }, input: { societyId, userId } }) => {
+      const canCreate = await canCreateInvites(societyId);
+
+      if (!canCreate) throw new TRPCError({ code: "FORBIDDEN" });
+
       const societyExists = await db.society.findUnique({
         where: { id: societyId },
       });

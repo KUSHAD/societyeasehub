@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { z } from "zod";
 import { editSocietyValidationSchema } from "~/lib/validators/editSociety";
 import { TRPCError } from "@trpc/server";
+import { canAccessGeneral } from "~/actions/checkUserRole";
 
 export const societyRouter = createTRPCRouter({
   create: protectedProcedure
@@ -112,6 +113,10 @@ export const societyRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx: { db }, input }) => {
+      const canAccess = await canAccessGeneral(input.id);
+
+      if (!canAccess) throw new TRPCError({ code: "FORBIDDEN" });
+
       const dbSociety = await db.society.findUnique({
         where: {
           id: input.id,

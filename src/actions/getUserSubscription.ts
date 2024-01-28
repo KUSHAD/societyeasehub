@@ -1,10 +1,9 @@
-import { redirect } from "next/navigation";
 import { getCurrentUser } from "~/actions/getCurrentUser";
 import { stripe } from "~/lib/stripe";
 
 export async function getUserSubscriptionPlan() {
   const currentUser = await getCurrentUser();
-  if (!currentUser) redirect("/api/auth/signin");
+  if (!currentUser) throw new Error("Unauthorized");
 
   const isSubscribed = Boolean(
     currentUser.stripePriceId &&

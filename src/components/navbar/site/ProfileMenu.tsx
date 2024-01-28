@@ -13,7 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button, buttonVariants } from "~/components/ui/button";
+import { buttonVariants } from "~/components/ui/button";
 
 interface ProfileMenuProps {
   currentUser: SafeUser | null;
@@ -69,25 +69,28 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
         </DropdownMenuContent>
       </DropdownMenu>
     </>
-  ) : pathname !== "/" && pathname !== "/pricing" ? (
+  ) : pathname !== "/" && pathname !== "/pricing" && pathname !== "/auth" ? (
     signIn(undefined, { callbackUrl: "/dashboard" })
   ) : (
     <div className="mt-4">
       <Link
         className={buttonVariants({
           className: "mx-2",
-          variant: pathname === "/pricing" ? "secondary" : "link",
+          variant: pathname === "/pricing" ? "outline" : "link",
         })}
         href="/pricing"
       >
         Pricing
       </Link>
-      <Button
-        className="mx-2"
-        onClick={() => signIn(undefined, { callbackUrl: "/dashboard" })}
+      <Link
+        className={buttonVariants({
+          className: "mx-2",
+          variant: pathname === "/auth" ? "outline" : "link",
+        })}
+        href="/auth"
       >
         Sign In
-      </Button>
+      </Link>
     </div>
   );
 };

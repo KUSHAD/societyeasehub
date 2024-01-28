@@ -11,6 +11,7 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { getCurrentUser } from "~/actions/getCurrentUser";
+import { getUserSubscriptionPlan } from "~/actions/getUserSubscription";
 
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
@@ -86,6 +87,11 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+
+  const subscription = await getUserSubscriptionPlan();
+
+  if (!subscription.isSubscribed) throw new TRPCError({ code: "FORBIDDEN" });
+
   return next({
     ctx: {
       // infers the `session` as non-nullable

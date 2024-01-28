@@ -2,6 +2,7 @@ import { newRole } from "~/lib/validators/newRole";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { canCreateRoles } from "~/actions/checkUserRole";
 
 export const rolesRouter = createTRPCRouter({
   create: protectedProcedure
@@ -13,6 +14,10 @@ export const rolesRouter = createTRPCRouter({
       ),
     )
     .mutation(async ({ ctx: { db }, input }) => {
+      const canCreate = await canCreateRoles(input.societyId);
+
+      if (!canCreate) throw new TRPCError({ code: "FORBIDDEN" });
+
       const societyExists = await db.society.findUnique({
         where: { id: input.societyId },
       });
@@ -112,10 +117,14 @@ export const rolesRouter = createTRPCRouter({
         where: {
           id: input.id,
         },
-        select: { id: true },
+        select: { id: true, societyId: true },
       });
 
       if (!dbRole) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const canCreate = await canCreateRoles(dbRole.societyId);
+
+      if (!canCreate) throw new TRPCError({ code: "FORBIDDEN" });
 
       const updatedRole = await db.role.update({
         where: { id: input.id },
@@ -149,10 +158,15 @@ export const rolesRouter = createTRPCRouter({
           _count: {
             select: { members: true },
           },
+          societyId: true,
         },
       });
 
       if (!dbRole) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const canCreate = await canCreateRoles(dbRole.societyId);
+
+      if (!canCreate) throw new TRPCError({ code: "FORBIDDEN" });
 
       if (dbRole._count.members !== 0)
         throw new TRPCError({

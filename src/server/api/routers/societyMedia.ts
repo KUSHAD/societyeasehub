@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { utapi } from "~/server/storage";
+import { canAccessGeneral } from "~/actions/checkUserRole";
 
 export const societyMediaRouter = createTRPCRouter({
   getBySociety: protectedProcedure
@@ -11,6 +12,10 @@ export const societyMediaRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx: { db }, input: { societyId } }) => {
+      const canAccess = await canAccessGeneral(societyId);
+
+      if (!canAccess) throw new TRPCError({ code: "FORBIDDEN" });
+
       const medias = await db.societyMedia.findMany({
         where: {
           societyId,
@@ -33,6 +38,22 @@ export const societyMediaRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx: { db }, input: { id } }) => {
+      const dbMedia = await db.societyMedia.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          id: true,
+          uri: true,
+          societyId: true,
+        },
+      });
+
+      if (!dbMedia) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const canAccess = await canAccessGeneral(dbMedia.societyId);
+
+      if (!canAccess) throw new TRPCError({ code: "FORBIDDEN" });
       const media = await db.societyMedia.delete({
         where: {
           id: id,
@@ -42,8 +63,6 @@ export const societyMediaRouter = createTRPCRouter({
           uri: true,
         },
       });
-
-      if (!media) throw new TRPCError({ code: "NOT_FOUND" });
 
       const fileKey = media.uri.split("/f/")[1]!;
 

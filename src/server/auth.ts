@@ -63,7 +63,6 @@ export const authOptions: NextAuthOptions = {
      */
   ],
   debug: env.NODE_ENV === "development",
-
   session: {
     strategy: "jwt",
   },
@@ -72,6 +71,11 @@ export const authOptions: NextAuthOptions = {
     colorScheme: "auto",
     logo: "/favicon.ico",
     brandColor: "#18181b",
+  },
+  pages: {
+    error: "/auth",
+    signIn: "/auth",
+    signOut: "/",
   },
 };
 

@@ -1,5 +1,5 @@
 import { getCurrentUser } from "~/actions/getCurrentUser";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { getUserSubscriptionPlan } from "~/actions/getUserSubscription";
 import { env } from "~/env";
@@ -9,81 +9,81 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 
 export const userRouter = createTRPCRouter({
-  createStripeSession: protectedProcedure.mutation(
-    async ({ ctx: { db, session } }) => {
-      const currentUser = await getCurrentUser();
-      const billingUrl = absoluteUrl("/subscription");
+  createStripeSession: publicProcedure.mutation(async ({ ctx: { db } }) => {
+    const currentUser = await getCurrentUser();
+    const billingUrl = absoluteUrl("/subscription");
 
-      if (!currentUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+    if (!currentUser) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-      const dbUser = await db.user.findFirst({
-        where: {
-          email: session.user.email,
-        },
-      });
+    const dbUser = await db.user.findFirst({
+      where: {
+        email: currentUser.email,
+      },
+    });
 
-      if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+    if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
 
-      const subscriptionPlan = await getUserSubscriptionPlan();
+    const subscriptionPlan = await getUserSubscriptionPlan();
 
-      if (subscriptionPlan.isSubscribed && dbUser.stripeCustomerId) {
-        const stripeSession = await stripe.billingPortal.sessions.create({
-          customer: dbUser.stripeCustomerId,
-          return_url: billingUrl,
-        });
-
-        return { url: stripeSession.url };
-      }
-
-      const stripeSession = await stripe.checkout.sessions.create({
-        success_url: billingUrl,
-        cancel_url: billingUrl,
-        payment_method_types: ["card"],
-        mode: "subscription",
-        billing_address_collection: "auto",
-        customer_email: dbUser.email!,
-        line_items: [
-          {
-            price: env.STRIPE_PRICE_CONFIG,
-            quantity: 1,
-          },
-        ],
-        metadata: {
-          userId: currentUser.id,
-        },
-        client_reference_id: currentUser.id,
-      });
-
-      return { url: stripeSession.url };
-    },
-  ),
-  createBillingPortal: protectedProcedure.mutation(
-    async ({ ctx: { db, session } }) => {
-      const billingUrl = absoluteUrl("/subscription");
-
-      const dbUser = await db.user.findFirst({
-        where: {
-          email: session.user.email,
-        },
-      });
-
-      if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
-
-      const subscriptionPlan = await getUserSubscriptionPlan();
-
-      if (!subscriptionPlan.isSubscribed || !dbUser.stripeCustomerId)
-        throw new TRPCError({
-          code: "FORBIDDEN",
-        });
-
+    if (subscriptionPlan.isSubscribed && dbUser.stripeCustomerId) {
       const stripeSession = await stripe.billingPortal.sessions.create({
         customer: dbUser.stripeCustomerId,
         return_url: billingUrl,
       });
 
       return { url: stripeSession.url };
-    },
-  ),
+    }
+
+    const stripeSession = await stripe.checkout.sessions.create({
+      success_url: billingUrl,
+      cancel_url: billingUrl,
+      payment_method_types: ["card"],
+      mode: "subscription",
+      billing_address_collection: "auto",
+      customer_email: dbUser.email!,
+      line_items: [
+        {
+          price: env.STRIPE_PRICE_CONFIG,
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        userId: currentUser.id,
+      },
+      client_reference_id: currentUser.id,
+    });
+
+    return { url: stripeSession.url };
+  }),
+  createBillingPortal: publicProcedure.mutation(async ({ ctx: { db } }) => {
+    const currentUser = await getCurrentUser();
+
+    const billingUrl = absoluteUrl("/subscription");
+
+    if (!currentUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+
+    const dbUser = await db.user.findFirst({
+      where: {
+        email: currentUser.email,
+      },
+    });
+
+    if (!dbUser) throw new TRPCError({ code: "UNAUTHORIZED" });
+
+    const subscriptionPlan = await getUserSubscriptionPlan();
+
+    if (!subscriptionPlan.isSubscribed || !dbUser.stripeCustomerId)
+      throw new TRPCError({
+        code: "FORBIDDEN",
+      });
+
+    const stripeSession = await stripe.billingPortal.sessions.create({
+      customer: dbUser.stripeCustomerId,
+      return_url: billingUrl,
+    });
+
+    return { url: stripeSession.url };
+  }),
   updateName: protectedProcedure
     .input(
       z.object({
