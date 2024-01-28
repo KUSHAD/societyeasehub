@@ -49,6 +49,7 @@
     "@trpc/server": "^10.43.6",
     "@uidotdev/usehooks": "^2.4.1",
     "@uploadthing/react": "^6.0.2",
+    "@vercel/analytics": "^1.1.2",
     "@vercel/speed-insights": "^1.0.5",
     "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",

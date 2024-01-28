@@ -1171,6 +1171,13 @@
   resolved "https://registry.yarnpkg.com/@uploadthing/shared/-/shared-6.0.2.tgz#8c804ee087b76254f06d76792967515bd12e6971"
   integrity sha512-yFOhvzBG8VB2qmEGWDuW/tV/ZcfRZ4a6rX7i9/ZS3IqHA0FO7CKa8yitltAl3yRdSI9it88iMEQg7Ah/ve8D4A==
 
+"@vercel/analytics@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@vercel/analytics/-/analytics-1.1.2.tgz#7e3a863abca5cb276a8e7783dc8a32689cb769bb"
+  integrity sha512-CodhkLCQ/EHzjX8k+Qg+OzTBY0UadykrcfolfSOJVZZY/ZJM5nbhztm9KdbYvMfqKlasAr1+OYy0ThZnDA/MYA==
+  dependencies:
+    server-only "^0.0.1"
+
 "@vercel/speed-insights@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@vercel/speed-insights/-/speed-insights-1.0.5.tgz#dc9de7426a0234cbeb70db90b9066d1631d15496"

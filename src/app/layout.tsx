@@ -12,6 +12,7 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { NextAuthReactProvider } from "~/next-auth/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -46,6 +47,7 @@ export default async function RootLayout({
               {children}
               <Toaster />
               <SpeedInsights debug />
+              <Analytics />
             </NextAuthReactProvider>
           </TRPCReactProvider>
         </div>
