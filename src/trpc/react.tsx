@@ -9,7 +9,6 @@ import { type AppRouter } from "~/server/api/root";
 import { getUrl, transformer } from "./shared";
 import { toast } from "~/components/ui/use-toast";
 import { type TRPCClientErrorType } from "~/lib/types";
-import { env } from "~/env";
 
 export const api = createTRPCReact<AppRouter>();
 
