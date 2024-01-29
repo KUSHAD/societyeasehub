@@ -96,17 +96,15 @@ model Member {
 }
 
 model Role {
-    id            String   @id @default(cuid())
-    name          String   @db.VarChar(255)
-    accessGeneral Boolean  @default(false) // Access General Settings
-    createRole    Boolean  @default(false) // Access Role Settings
-    accessDanger  Boolean  @default(false) // Access Danger Settings
-    createInvite  Boolean  @default(false) // Create and Send Invites
-    assignRole    Boolean  @default(false) // Assign Role
-    kickUser      Boolean  @default(false) // Can Remove Users
-    societyId     String
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
+    id             String   @id @default(cuid())
+    name           String   @db.VarChar(255)
+    accessSettings Boolean  @default(false) // Access Settings Page
+    createInvite   Boolean  @default(false) // Create and Send Invites
+    assignRole     Boolean  @default(false) // Assign Role
+    kickUser       Boolean  @default(false) // Can Remove Users
+    societyId      String
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
 
     society Society  @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     members Member[]

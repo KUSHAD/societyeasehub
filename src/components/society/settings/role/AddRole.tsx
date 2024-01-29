@@ -49,17 +49,9 @@ export default function AddRole() {
           formSchema={newRole}
           fieldConfig={{
             name: { description: "Name of the role" },
-            accessDanger: {
+            accessSettings: {
               fieldType: "switch",
-              description: "Access to Danger Settings Page",
-            },
-            accessGeneral: {
-              fieldType: "switch",
-              description: "Access to General Settings Page",
-            },
-            createRole: {
-              fieldType: "switch",
-              description: "Access to Role Settings Page and Create Roles",
+              description: "Access Settings Page",
             },
             createInvite: {
               fieldType: "switch",

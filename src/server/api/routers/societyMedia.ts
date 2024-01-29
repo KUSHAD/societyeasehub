@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { utapi } from "~/server/storage";
-import { canAccessGeneral } from "~/actions/checkUserRole";
+import { canAccessSettings } from "~/actions/checkUserRole";
 
 export const societyMediaRouter = createTRPCRouter({
   getBySociety: protectedProcedure
@@ -12,7 +12,7 @@ export const societyMediaRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx: { db }, input: { societyId } }) => {
-      const canAccess = await canAccessGeneral(societyId);
+      const canAccess = await canAccessSettings(societyId);
 
       if (!canAccess) throw new TRPCError({ code: "FORBIDDEN" });
 
@@ -51,7 +51,7 @@ export const societyMediaRouter = createTRPCRouter({
 
       if (!dbMedia) throw new TRPCError({ code: "NOT_FOUND" });
 
-      const canAccess = await canAccessGeneral(dbMedia.societyId);
+      const canAccess = await canAccessSettings(dbMedia.societyId);
 
       if (!canAccess) throw new TRPCError({ code: "FORBIDDEN" });
       const media = await db.societyMedia.delete({

@@ -2,7 +2,7 @@ import { newRole } from "~/lib/validators/newRole";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { canCreateRoles } from "~/actions/checkUserRole";
+import { canAccessSettings } from "~/actions/checkUserRole";
 
 export const rolesRouter = createTRPCRouter({
   create: protectedProcedure
@@ -14,7 +14,7 @@ export const rolesRouter = createTRPCRouter({
       ),
     )
     .mutation(async ({ ctx: { db }, input }) => {
-      const canCreate = await canCreateRoles(input.societyId);
+      const canCreate = await canAccessSettings(input.societyId);
 
       if (!canCreate) throw new TRPCError({ code: "FORBIDDEN" });
 
@@ -58,9 +58,7 @@ export const rolesRouter = createTRPCRouter({
         select: {
           id: true,
           name: true,
-          accessDanger: true,
-          accessGeneral: true,
-          createRole: true,
+          accessSettings: true,
           createInvite: true,
           assignRole: true,
           kickUser: true,
@@ -91,9 +89,7 @@ export const rolesRouter = createTRPCRouter({
         select: {
           id: true,
           name: true,
-          accessDanger: true,
-          accessGeneral: true,
-          createRole: true,
+          accessSettings: true,
           createInvite: true,
           assignRole: true,
           kickUser: true,
@@ -122,7 +118,7 @@ export const rolesRouter = createTRPCRouter({
 
       if (!dbRole) throw new TRPCError({ code: "NOT_FOUND" });
 
-      const canCreate = await canCreateRoles(dbRole.societyId);
+      const canCreate = await canAccessSettings(dbRole.societyId);
 
       if (!canCreate) throw new TRPCError({ code: "FORBIDDEN" });
 
@@ -132,9 +128,7 @@ export const rolesRouter = createTRPCRouter({
         select: {
           id: true,
           name: true,
-          accessDanger: true,
-          accessGeneral: true,
-          createRole: true,
+          accessSettings: true,
           createInvite: true,
           assignRole: true,
           kickUser: true,
@@ -164,7 +158,7 @@ export const rolesRouter = createTRPCRouter({
 
       if (!dbRole) throw new TRPCError({ code: "NOT_FOUND" });
 
-      const canCreate = await canCreateRoles(dbRole.societyId);
+      const canCreate = await canAccessSettings(dbRole.societyId);
 
       if (!canCreate) throw new TRPCError({ code: "FORBIDDEN" });
 

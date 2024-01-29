@@ -4,7 +4,7 @@ import SettingsDrawer from "~/components/navbar/society/SettingsDrawer";
 import SettingsMobileNav from "~/components/navbar/society/SettingsMobileNav";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
-export default async function SettingsLayout({
+export default async function SettingsAccessLayout({
   children,
 }: {
   children: React.ReactNode;

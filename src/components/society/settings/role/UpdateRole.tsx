@@ -31,6 +31,25 @@ export default function UpdateRole({ id }: { id: string }) {
           id,
         });
       }}
+      fieldConfig={{
+        name: { description: "Name of the role" },
+        accessSettings: {
+          fieldType: "switch",
+          description: "Access Settings Page",
+        },
+        createInvite: {
+          fieldType: "switch",
+          description: "Can create Invites",
+        },
+        assignRole: {
+          fieldType: "switch",
+          description: "Assign Role to Members",
+        },
+        kickUser: {
+          fieldType: "switch",
+          description: "Remove users from society",
+        },
+      }}
       formSchema={newRole}
       values={role}
     >

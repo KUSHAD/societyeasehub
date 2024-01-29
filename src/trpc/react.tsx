@@ -21,8 +21,8 @@ export function TRPCReactProvider(props: {
       new QueryClient({
         defaultOptions: {
           queries: {
-            staleTime: 5 * 1000, // 5 seconds
-            refetchInterval: 5 * 1000, // 5 seconds
+            // staleTime: 5 * 1000, // 5 seconds
+            // refetchInterval: 5 * 1000, // 5 seconds
             retry: (failureCount) => failureCount <= 3,
             retryDelay: 500,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment

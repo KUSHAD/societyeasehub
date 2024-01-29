@@ -48,6 +48,7 @@ export default function InviteCard({ invite: { society } }: InviteCardProps) {
         <div className="flex flex-row">
           <div className="mr-auto" />
           <Button
+            disabled={accepting || rejecting}
             onClick={() =>
               reject({
                 societyId: society.id,
@@ -59,6 +60,7 @@ export default function InviteCard({ invite: { society } }: InviteCardProps) {
             {rejecting ? "Rejecting .." : "Reject"}
           </Button>
           <Button
+            disabled={accepting || rejecting}
             onClick={() =>
               accept({
                 societyId: society.id,

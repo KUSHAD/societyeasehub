@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { canAssignRoles } from "~/actions/checkUserRole";
+import {
+  canAssignRoles,
+  canKickMember,
+  isSocietyOwner,
+} from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 
 export const memberRouter = createTRPCRouter({
@@ -92,5 +96,86 @@ export const memberRouter = createTRPCRouter({
       });
 
       return newMember;
+    }),
+  canAccessSettings: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+      }),
+    )
+    .query(async ({ ctx: { db, session }, input: { societyId } }) => {
+      const dbSociety = await db.society.findUnique({
+        where: {
+          id: societyId,
+        },
+      });
+
+      if (!dbSociety) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const memberPerms = await db.member.findUnique({
+        where: {
+          memberId: {
+            societyId,
+            userId: session.user.id,
+          },
+        },
+        select: {
+          role: {
+            select: {
+              accessSettings: true,
+            },
+          },
+        },
+      });
+
+      if (!memberPerms) throw new TRPCError({ code: "NOT_FOUND" });
+
+      if (!memberPerms.role) return false;
+      return memberPerms.role.accessSettings;
+    }),
+  exitSociety: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db, session }, input: { societyId } }) => {
+      const removedMember = await db.member.delete({
+        where: {
+          memberId: {
+            societyId,
+            userId: session.user.id,
+          },
+        },
+      });
+
+      return removedMember;
+    }),
+  kick: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+        userId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { societyId, userId } }) => {
+      const canKick = await canKickMember(societyId);
+
+      if (!canKick) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const isOwner = await isSocietyOwner(societyId, userId);
+
+      if (isOwner) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const removedMember = await db.member.delete({
+        where: {
+          memberId: {
+            societyId,
+            userId,
+          },
+        },
+      });
+
+      return removedMember;
     }),
 });
