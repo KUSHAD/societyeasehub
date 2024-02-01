@@ -24,7 +24,6 @@ export const metadata: Metadata = {
   title: "SocietyEaseHub",
   description:
     "Effortlessly manage societies with our SaaS society management system. Enjoy role-based access, invite-only memberships, streamlined account management, and efficient roadmap tracking. Elevate your community management experience today!",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
   keywords: [
     "Society management system",
     "SaaS community platform",

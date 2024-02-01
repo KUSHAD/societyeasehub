@@ -18,7 +18,7 @@ export default function LandingPage() {
             alt="Building Icon"
             className="mb-6"
             height="120"
-            src="/favicon.ico"
+            src="/favicon.png"
             style={{
               aspectRatio: "120/120",
               objectFit: "cover",

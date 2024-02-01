@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
   secret: env.NEXTAUTH_SECRET!,
   theme: {
     colorScheme: "auto",
-    logo: "/favicon.ico",
+    logo: "/favicon.png",
     brandColor: "#18181b",
   },
   pages: {
