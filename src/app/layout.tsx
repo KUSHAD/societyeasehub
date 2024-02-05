@@ -35,6 +35,7 @@ export const metadata: Metadata = {
     "Society administration tool",
     "Membership management",
   ],
+  metadataBase:new URL("https://societyeasehub.vercel.app/")
 };
 
 export default async function RootLayout({

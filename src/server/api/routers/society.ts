@@ -4,7 +4,8 @@ import bcrypt from "bcrypt";
 import { z } from "zod";
 import { editSocietyValidationSchema } from "~/lib/validators/editSociety";
 import { TRPCError } from "@trpc/server";
-import { canAccessSettings } from "~/actions/checkUserRole";
+import { canAccessSettings, isSocietyOwner } from "~/actions/checkUserRole";
+import { changePasswordServerSchema } from "~/lib/validators/changePassword";
 
 export const societyRouter = createTRPCRouter({
   create: protectedProcedure
@@ -134,4 +135,62 @@ export const societyRouter = createTRPCRouter({
 
       return updatedValue;
     }),
+  changePassword: protectedProcedure.input(changePasswordServerSchema).mutation(
+    async ({
+      input: { currentPassword, newPassword, societyId },
+      ctx: {
+        db,
+        session: { user },
+      },
+    }) => {
+      const isOwner = await isSocietyOwner(societyId, user.id);
+
+      if (!isOwner) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const dbSociety = await db.society.findUnique({
+        where: {
+          id: societyId,
+        },
+        select: {
+          id: true,
+          password: true,
+        },
+      });
+
+      if (!dbSociety) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const passMatch = await bcrypt.compare(
+        currentPassword,
+        dbSociety.password,
+      );
+
+      if (!passMatch)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Incorrect Password",
+        });
+
+      const newPasswordHash = await bcrypt.hash(newPassword, 12);
+
+      const updatedSociety = await db.society.update({
+        where: {
+          id: societyId,
+        },
+        data: {
+          password: newPasswordHash,
+        },
+        select: {
+          name: true,
+          streetAddress: true,
+          addressLine2: true,
+          city: true,
+          province: true,
+          zipCode: true,
+          country: true,
+        },
+      });
+
+      return updatedSociety;
+    },
+  ),
 });

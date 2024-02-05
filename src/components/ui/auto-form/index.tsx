@@ -61,6 +61,7 @@ function AutoForm<SchemaType extends ZodObjectOrWrapped>({
     defaultValues,
     values: valuesProp,
     mode: "all",
+    reValidateMode: "onChange",
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {

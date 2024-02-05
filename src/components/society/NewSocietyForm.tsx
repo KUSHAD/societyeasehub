@@ -3,12 +3,18 @@
 import { newSocietyValidationSchema } from "~/lib/validators/newSociety";
 import AutoForm, { AutoFormSubmit } from "../ui/auto-form";
 import { api } from "~/trpc/react";
-import { Checkbox } from "../ui/checkbox";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { type AutoFormInputComponentProps } from "../ui/auto-form/types";
+import {
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "../ui/form";
+import { PasswordInput } from "../ui/password-input";
 
 export default function NewSocietyForm() {
-  const [showPass, setShowPass] = useState(false);
   const router = useRouter();
   const utils = api.useUtils();
   const { isLoading, mutate: create } = api.society.create.useMutation({
@@ -26,22 +32,59 @@ export default function NewSocietyForm() {
           fieldType: "number",
         },
         password: {
-          description:
-            "This password will be used when performing sensitive actions",
-          inputProps: {
-            type: showPass ? "text" : "password",
-          },
+          fieldType: ({
+            label,
+            isRequired,
+            field,
+            fieldConfigItem,
+          }: AutoFormInputComponentProps) => (
+            <FormItem>
+              <div>
+                <FormLabel>
+                  {label}
+                  {isRequired && <span className="text-destructive">*</span>}
+                </FormLabel>
+                <FormControl>
+                  <PasswordInput {...field} />
+                </FormControl>
+                {fieldConfigItem.description && (
+                  <FormDescription>
+                    {fieldConfigItem.description}
+                  </FormDescription>
+                )}
+                <FormMessage />
+              </div>
+            </FormItem>
+          ),
+        },
+        confirmPassword: {
+          fieldType: ({
+            label,
+            isRequired,
+            field,
+            fieldConfigItem,
+          }: AutoFormInputComponentProps) => (
+            <FormItem>
+              <div>
+                <FormLabel>
+                  {label}
+                  {isRequired && <span className="text-destructive">*</span>}
+                </FormLabel>
+                <FormControl>
+                  <PasswordInput {...field} />
+                </FormControl>
+                {fieldConfigItem.description && (
+                  <FormDescription>
+                    {fieldConfigItem.description}
+                  </FormDescription>
+                )}
+                <FormMessage />
+              </div>
+            </FormItem>
+          ),
         },
       }}
     >
-      <div className="flex flex-row">
-        <Checkbox
-          checked={showPass}
-          onClick={() => setShowPass((_prevState) => !_prevState)}
-          className="mx-2 my-1"
-        />
-        {showPass ? "Hide Password" : "Show Password"}
-      </div>
       <AutoFormSubmit className="w-full" disabled={isLoading} />
     </AutoForm>
   );

@@ -1,10 +1,23 @@
 import { redirect } from "next/navigation";
-import { canAccessSettings } from "~/actions/checkUserRole";
+import { isSocietyOwner } from "~/actions/checkUserRole";
+import { getCurrentUser } from "~/actions/getCurrentUser";
+import ChangePasswordCard from "~/components/society/settings/danger/ChangePasswordCard";
+import DeleteSocietyCard from "~/components/society/settings/danger/DeleteSocietyCard";
+import TransferOwnershipCard from "~/components/society/settings/danger/TransferOwnershipCard";
 import { type PageProps } from "~/lib/types";
 
 export default async function Page({ params: { id } }: PageProps) {
-  const canAccess = await canAccessSettings(id);
+  const currentUser = await getCurrentUser();
+  if (!currentUser) redirect("/api/auth/signin");
 
-  if (!canAccess) redirect(`/society/${id}/feed`);
-  return <div>Danger Page</div>;
+  const isOwner = await isSocietyOwner(id, currentUser.id);
+
+  if (!isOwner) redirect(`/society/${id}/feed`);
+  return (
+    <>
+      <ChangePasswordCard />
+      <TransferOwnershipCard />
+      <DeleteSocietyCard />
+    </>
+  );
 }

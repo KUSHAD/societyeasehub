@@ -17,7 +17,7 @@ export default async function Page({ params: { id } }: PageProps) {
   const canAccess = await canAccessSettings(id);
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect("/api/auth/signin");
-  const isOwner = await isSocietyOwner(id, currentUser?.id);
+  const isOwner = await isSocietyOwner(id, currentUser.id);
 
   if (!canAccess) redirect(`/society/${id}/feed`);
   return (

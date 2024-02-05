@@ -151,6 +151,20 @@ export const memberRouter = createTRPCRouter({
 
       return removedMember;
     }),
+  isOwner: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+      }),
+    )
+    .query(
+      async ({
+        input: { societyId },
+        ctx: {
+          session: { user },
+        },
+      }) => await isSocietyOwner(societyId, user.id),
+    ),
   kick: protectedProcedure
     .input(
       z.object({
