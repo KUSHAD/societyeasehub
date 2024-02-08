@@ -3,6 +3,9 @@ import SubscriptionExpiryDate from "~/components/subscription/SubscriptionExpiry
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+
 export default function Page() {
   return (
     <Card>

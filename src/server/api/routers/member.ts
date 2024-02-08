@@ -192,4 +192,46 @@ export const memberRouter = createTRPCRouter({
 
       return removedMember;
     }),
+  getBySocietyWithoutOwner: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+      }),
+    )
+    .query(
+      async ({
+        ctx: {
+          db,
+          session: { user },
+        },
+        input: { societyId },
+      }) => {
+        const isOwner = await isSocietyOwner(societyId, user.id);
+
+        if (!isOwner) throw new TRPCError({ code: "FORBIDDEN" });
+
+        const members = await db.member.findMany({
+          where: {
+            societyId,
+            NOT: {
+              userId: user.id,
+            },
+          },
+          select: {
+            userId: true,
+            user: {
+              select: { name: true, image: true },
+            },
+          },
+        });
+
+        return members.map((_member) => ({
+          id: _member.userId,
+          name: _member.user.name ?? "User",
+          image:
+            _member.user.image ??
+            "https://res.cloudinary.com/dst2pmia1/image/upload/c_crop,h_300,w_300/default_profile_pic.jpg",
+        }));
+      },
+    ),
 });

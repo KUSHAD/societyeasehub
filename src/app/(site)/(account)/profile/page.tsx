@@ -4,6 +4,9 @@ import ShowProfile, {
 } from "~/components/profile/ShowProfile";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+
 export default function Page() {
   return (
     <Card>

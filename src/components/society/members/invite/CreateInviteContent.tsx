@@ -14,7 +14,7 @@ export default function CreateInviteContent() {
   const [searchString, setSearchString] = useState("");
   const debouncedSearchSring = useDebounce(searchString, 500);
 
-  const { data: users, isLoading } = api.user.search.useQuery(
+  const { data: users, isLoading } = api.invite.search.useQuery(
     {
       searchString: debouncedSearchSring,
       societyId: id,

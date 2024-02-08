@@ -162,4 +162,52 @@ export const inviteRouter = createTRPCRouter({
 
       return newMember;
     }),
+  search: protectedProcedure
+    .input(
+      z.object({
+        searchString: z.string().toLowerCase(),
+        societyId: z.string().cuid(),
+      }),
+    )
+    .query(
+      async ({ ctx: { db, session }, input: { searchString, societyId } }) => {
+        const users = await db.user.findMany({
+          where: {
+            OR: [
+              {
+                name: {
+                  contains: searchString,
+                },
+              },
+              {
+                email: {
+                  contains: searchString,
+                },
+              },
+            ],
+            NOT: {
+              id: session.user.id,
+            },
+            memberShips: {
+              every: {
+                NOT: {
+                  societyId: societyId,
+                },
+              },
+            },
+          },
+          orderBy: {
+            name: "asc",
+          },
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+          },
+        });
+
+        return users;
+      },
+    ),
 });

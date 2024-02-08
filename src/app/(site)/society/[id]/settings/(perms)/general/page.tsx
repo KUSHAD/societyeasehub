@@ -13,6 +13,9 @@ import {
 } from "~/components/ui/accordion";
 import { type PageProps } from "~/lib/types";
 
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+
 export default async function Page({ params: { id } }: PageProps) {
   const canAccess = await canAccessSettings(id);
   const currentUser = await getCurrentUser();

@@ -39,21 +39,17 @@ export default function NewSocietyForm() {
             fieldConfigItem,
           }: AutoFormInputComponentProps) => (
             <FormItem>
-              <div>
-                <FormLabel>
-                  {label}
-                  {isRequired && <span className="text-destructive">*</span>}
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput {...field} />
-                </FormControl>
-                {fieldConfigItem.description && (
-                  <FormDescription>
-                    {fieldConfigItem.description}
-                  </FormDescription>
-                )}
-                <FormMessage />
-              </div>
+              <FormLabel>
+                {label}
+                {isRequired && <span className="text-destructive">*</span>}
+              </FormLabel>
+              <FormControl>
+                <PasswordInput {...field} />
+              </FormControl>
+              {fieldConfigItem.description && (
+                <FormDescription>{fieldConfigItem.description}</FormDescription>
+              )}
+              <FormMessage />
             </FormItem>
           ),
         },
@@ -65,21 +61,17 @@ export default function NewSocietyForm() {
             fieldConfigItem,
           }: AutoFormInputComponentProps) => (
             <FormItem>
-              <div>
-                <FormLabel>
-                  {label}
-                  {isRequired && <span className="text-destructive">*</span>}
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput {...field} />
-                </FormControl>
-                {fieldConfigItem.description && (
-                  <FormDescription>
-                    {fieldConfigItem.description}
-                  </FormDescription>
-                )}
-                <FormMessage />
-              </div>
+              <FormLabel>
+                {label}
+                {isRequired && <span className="text-destructive">*</span>}
+              </FormLabel>
+              <FormControl>
+                <PasswordInput {...field} />
+              </FormControl>
+              {fieldConfigItem.description && (
+                <FormDescription>{fieldConfigItem.description}</FormDescription>
+              )}
+              <FormMessage />
             </FormItem>
           ),
         },

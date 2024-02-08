@@ -1,8 +1,20 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 import AutoForm, { AutoFormSubmit } from "~/components/ui/auto-form";
 import { type AutoFormInputComponentProps } from "~/components/ui/auto-form/types";
+import { Button } from "~/components/ui/button";
 import {
   FormControl,
   FormDescription,
@@ -16,108 +28,119 @@ import { changePasswordSchema } from "~/lib/validators/changePassword";
 import { api } from "~/trpc/react";
 
 export default function ChangePasswordForm() {
-  const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams<{ id: string }>();
   const { mutate: changePassword, isLoading } =
     api.society.changePassword.useMutation({
       onSuccess() {
         toast({ title: "Success", description: "Password Updated" });
-        router.refresh();
+        setIsOpen(false);
       },
     });
   return (
-    <AutoForm
-      formSchema={changePasswordSchema}
-      onSubmit={(data) =>
-        changePassword({
-          ...data,
-          societyId: id,
-        })
-      }
-      fieldConfig={{
-        currentPassword: {
-          fieldType: ({
-            label,
-            isRequired,
-            field,
-            fieldConfigItem,
-          }: AutoFormInputComponentProps) => (
-            <FormItem>
-              <div>
-                <FormLabel>
-                  {label}
-                  {isRequired && <span className="text-destructive">*</span>}
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput {...field} />
-                </FormControl>
-                {fieldConfigItem.description && (
-                  <FormDescription>
-                    {fieldConfigItem.description}
-                  </FormDescription>
-                )}
-                <FormMessage />
-              </div>
-            </FormItem>
-          ),
-        },
-        newPassword: {
-          fieldType: ({
-            label,
-            isRequired,
-            field,
-            fieldConfigItem,
-          }: AutoFormInputComponentProps) => (
-            <FormItem>
-              <div>
-                <FormLabel>
-                  {label}
-                  {isRequired && <span className="text-destructive">*</span>}
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput {...field} />
-                </FormControl>
-                {fieldConfigItem.description && (
-                  <FormDescription>
-                    {fieldConfigItem.description}
-                  </FormDescription>
-                )}
-                <FormMessage />
-              </div>
-            </FormItem>
-          ),
-        },
-        confirmNewPassword: {
-          fieldType: ({
-            label,
-            isRequired,
-            field,
-            fieldConfigItem,
-          }: AutoFormInputComponentProps) => (
-            <FormItem>
-              <div>
-                <FormLabel>
-                  {label}
-                  {isRequired && <span className="text-destructive">*</span>}
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput {...field} />
-                </FormControl>
-                {fieldConfigItem.description && (
-                  <FormDescription>
-                    {fieldConfigItem.description}
-                  </FormDescription>
-                )}
-                <FormMessage />
-              </div>
-            </FormItem>
-          ),
-        },
-      }}
-    >
-      <AutoFormSubmit disabled={isLoading}>
-        {isLoading ? "Updating ..." : "Update Password"}
-      </AutoFormSubmit>
-    </AutoForm>
+    <AlertDialog open={isOpen} onOpenChange={(v) => setIsOpen(v)}>
+      <AlertDialogTrigger asChild>
+        <Button onClick={() => setIsOpen(true)}>Change Password</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Change Password</AlertDialogTitle>
+          <AlertDialogDescription>
+            Change Society Password Required For Sensitive Actions. Your
+            previous passwords will not work after the update
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AutoForm
+          formSchema={changePasswordSchema}
+          onSubmit={(data) =>
+            changePassword({
+              ...data,
+              societyId: id,
+            })
+          }
+          fieldConfig={{
+            currentPassword: {
+              fieldType: ({
+                label,
+                isRequired,
+                field,
+                fieldConfigItem,
+              }: AutoFormInputComponentProps) => (
+                <FormItem>
+                  <FormLabel>
+                    {label}
+                    {isRequired && <span className="text-destructive">*</span>}
+                  </FormLabel>
+                  <FormControl>
+                    <PasswordInput {...field} />
+                  </FormControl>
+                  {fieldConfigItem.description && (
+                    <FormDescription>
+                      {fieldConfigItem.description}
+                    </FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              ),
+            },
+            newPassword: {
+              fieldType: ({
+                label,
+                isRequired,
+                field,
+                fieldConfigItem,
+              }: AutoFormInputComponentProps) => (
+                <FormItem>
+                  <FormLabel>
+                    {label}
+                    {isRequired && <span className="text-destructive">*</span>}
+                  </FormLabel>
+                  <FormControl>
+                    <PasswordInput {...field} />
+                  </FormControl>
+                  {fieldConfigItem.description && (
+                    <FormDescription>
+                      {fieldConfigItem.description}
+                    </FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              ),
+            },
+            confirmNewPassword: {
+              fieldType: ({
+                label,
+                isRequired,
+                field,
+                fieldConfigItem,
+              }: AutoFormInputComponentProps) => (
+                <FormItem>
+                  <FormLabel>
+                    {label}
+                    {isRequired && <span className="text-destructive">*</span>}
+                  </FormLabel>
+                  <FormControl>
+                    <PasswordInput {...field} />
+                  </FormControl>
+                  {fieldConfigItem.description && (
+                    <FormDescription>
+                      {fieldConfigItem.description}
+                    </FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              ),
+            },
+          }}
+        >
+          <AutoFormSubmit className="w-full" disabled={isLoading}>
+            {isLoading ? "Updating ..." : "Update Password"}
+          </AutoFormSubmit>
+        </AutoForm>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
