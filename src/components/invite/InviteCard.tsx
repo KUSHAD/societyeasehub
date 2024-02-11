@@ -31,7 +31,7 @@ export default function InviteCard({ invite: { society } }: InviteCardProps) {
   const { mutate: accept, isLoading: accepting } =
     api.invite.accept.useMutation({
       onSuccess: async (data) => {
-        router.push(`/society/${data.societyId}`);
+        router.push(`/society/${data.societyId}/feed`);
         await utils.invite.getPendingCount.invalidate();
         await utils.invite.getUserPending.invalidate();
       },
