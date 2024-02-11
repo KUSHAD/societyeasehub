@@ -1,5 +1,5 @@
-import { Skeleton } from "~/components/ui/skeleton";
+import Skeleton from "react-loading-skeleton";
 
-export default function loading() {
-  return <Skeleton className="h-full max-h-full w-full" />;
+export default function Loadinng() {
+  return <Skeleton className="my-2 h-[100px] w-full" count={1} />;
 }

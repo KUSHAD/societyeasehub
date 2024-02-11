@@ -25,6 +25,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -176,24 +177,28 @@ export default function TransferOwnershipForm() {
                   <FormControl>
                     <PasswordInput {...field} />
                   </FormControl>
+                  <FormDescription>
+                    This is a sensitive action so it requires the password which
+                    you set for this society
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button
-              disabled={isTransferring}
-              type="submit"
-              className="my-2 w-full"
-            >
-              Transfer
-            </Button>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel
+                type="button"
+                disabled={isTransferring || gettingMembers}
+              >
+                Close
+              </AlertDialogCancel>
+              <Button disabled={isTransferring} type="submit">
+                Transfer
+              </Button>
+            </AlertDialogFooter>
           </form>
         </Form>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isTransferring || gettingMembers}>
-            Close
-          </AlertDialogCancel>
-        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );

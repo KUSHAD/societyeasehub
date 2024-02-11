@@ -7,6 +7,7 @@ import { TRPCError } from "@trpc/server";
 import { canAccessSettings, isSocietyOwner } from "~/actions/checkUserRole";
 import { changePasswordServerSchema } from "~/lib/validators/changePassword";
 import { checkIsSocietyMember } from "~/actions/checkIsSocietyMember";
+import { deleteSocietySchema } from "~/lib/validators/deleteSociety";
 
 export const societyRouter = createTRPCRouter({
   create: protectedProcedure
@@ -266,6 +267,44 @@ export const societyRouter = createTRPCRouter({
         });
 
         return updatedSociety;
+      },
+    ),
+  delete: protectedProcedure
+    .input(
+      deleteSocietySchema.merge(
+        z.object({
+          societyId: z.string().cuid(),
+        }),
+      ),
+    )
+    .mutation(
+      async ({ ctx: { db, session }, input: { password, societyId } }) => {
+        const isOwner = await isSocietyOwner(societyId, session.user.id);
+
+        if (!isOwner) throw new TRPCError({ code: "UNAUTHORIZED" });
+
+        const dbSociety = await db.society.findUnique({
+          where: {
+            id: societyId,
+          },
+          select: {
+            id: true,
+            password: true,
+            ownerId: true,
+          },
+        });
+
+        if (!dbSociety) throw new TRPCError({ code: "NOT_FOUND" });
+
+        const passMatch = await bcrypt.compare(password, dbSociety.password);
+
+        if (!passMatch)
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Incorrect Password",
+          });
+
+        throw new TRPCError({ code: "NOT_IMPLEMENTED" });
       },
     ),
 });

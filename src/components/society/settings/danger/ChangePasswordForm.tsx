@@ -133,13 +133,13 @@ export default function ChangePasswordForm() {
             },
           }}
         >
-          <AutoFormSubmit className="w-full" disabled={isLoading}>
-            {isLoading ? "Updating ..." : "Update Password"}
-          </AutoFormSubmit>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+            <AutoFormSubmit disabled={isLoading}>
+              {isLoading ? "Updating ..." : "Update Password"}
+            </AutoFormSubmit>
+          </AlertDialogFooter>
         </AutoForm>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
-        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );

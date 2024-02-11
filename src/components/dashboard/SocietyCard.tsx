@@ -13,7 +13,7 @@ const SocietyCard: React.FC<SocietyCardProps> = ({ society }) => {
   const { data } = useSession();
   return (
     <Link
-      href={`/society/${society.id}`}
+      href={`/society/${society.id}/feed`}
       className="scale-95 cursor-pointer rounded bg-secondary shadow  transition-transform ease-in-out hover:scale-100"
     >
       <div className="flex flex-col truncate px-2 py-4">
