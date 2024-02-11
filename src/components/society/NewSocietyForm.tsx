@@ -20,7 +20,7 @@ export default function NewSocietyForm() {
   const { isLoading, mutate: create } = api.society.create.useMutation({
     onSuccess: async (data) => {
       await utils.society.getUserMemberships.invalidate();
-      router.push(`/society/${data.id}`);
+      router.push(`/society/${data.id}/feed`);
     },
   });
   return (
