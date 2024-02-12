@@ -20,11 +20,9 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <>
-      <ClientOnly>
-        <AuthError />
-        <AuthButtons />
-      </ClientOnly>
-    </>
+    <ClientOnly>
+      <AuthError />
+      <AuthButtons />
+    </ClientOnly>
   );
 }

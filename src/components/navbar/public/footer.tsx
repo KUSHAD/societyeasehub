@@ -8,10 +8,22 @@ export default function Footer() {
           © {new Date().getFullYear()} SocietyEaseHub. All rights reserved.
         </span>
         <div className="flex space-x-4">
-          <Link className="text-sm text-gray-600 hover:text-gray-800" href="/privacy">
+          <Link
+            className="text-sm text-gray-600 hover:text-gray-800"
+            href="/cookie"
+          >
+            Cookie Policy
+          </Link>
+          <Link
+            className="text-sm text-gray-600 hover:text-gray-800"
+            href="/privacy"
+          >
             Privacy Policy
           </Link>
-          <Link className="text-sm text-gray-600 hover:text-gray-800" href="/tos">
+          <Link
+            className="text-sm text-gray-600 hover:text-gray-800"
+            href="/tos"
+          >
             Terms of Service
           </Link>
         </div>

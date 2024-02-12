@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { type SafeUser } from "~/lib/types";
 import {
   DropdownMenu,
@@ -69,9 +69,12 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
         </DropdownMenuContent>
       </DropdownMenu>
     </>
-  ) : pathname !== "/" && pathname !== "/pricing" && pathname !== "/auth" ? (
-    signIn(undefined, { callbackUrl: "/dashboard" })
-  ) : (
+  ) : pathname !== "/" &&
+    pathname !== "/pricing" &&
+    pathname !== "/auth" &&
+    pathname !== "/tos" &&
+    pathname !== "/privacy" &&
+    pathname !== "/cookie" ? null : (
     <div className="mt-4">
       <Link
         className={buttonVariants({
