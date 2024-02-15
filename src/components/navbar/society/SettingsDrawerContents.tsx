@@ -19,7 +19,7 @@ export default function SettingsDrawerContents() {
           className: "my-2",
           variant:
             pathname === `/society/${id}/settings/general`
-              ? "default"
+              ? "outline"
               : "ghost",
         })}
       >
@@ -31,7 +31,7 @@ export default function SettingsDrawerContents() {
         className={buttonVariants({
           className: "my-2",
           variant:
-            pathname === `/society/${id}/settings/role` ? "default" : "ghost",
+            pathname === `/society/${id}/settings/role` ? "outline" : "ghost",
         })}
       >
         <UserCog className="mx-2 my-1" />

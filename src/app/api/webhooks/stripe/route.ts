@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
   const session = event.data.object as Stripe.Checkout.Session;
 
-  if (!session?.metadata?.userId) {
+  if (!session?.metadata?.userId || !session.customer) {
     return new Response(null, {
       status: 200,
     });
@@ -56,6 +56,24 @@ export async function POST(request: Request) {
 
   if (event.type === "invoice.payment_succeeded") {
     // Retrieve the subscription details from Stripe.
+    const subscription = await stripe.subscriptions.retrieve(
+      session.subscription as string,
+    );
+
+    await db.user.update({
+      where: {
+        stripeSubscriptionId: subscription.id,
+      },
+      data: {
+        stripePriceId: subscription.items.data[0]?.price.id,
+        stripeCurrentPeriodEnd: new Date(
+          subscription.current_period_end * 1000,
+        ),
+      },
+    });
+  }
+
+  if (event.type === "subscription_schedule.completed") {
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string,
     );

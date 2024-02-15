@@ -23,7 +23,12 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
   const pathname = usePathname();
   return currentUser ? (
     <>
-      {pathname === "/" || pathname === "/pricing" ? (
+      {pathname === "/" ||
+      pathname === "/pricing" ||
+      pathname === "/cookie" ||
+      pathname === "/privacy" ||
+      pathname === "/tos" ||
+      pathname === "/auth" ? (
         <Link
           href="/dashboard"
           className={buttonVariants({

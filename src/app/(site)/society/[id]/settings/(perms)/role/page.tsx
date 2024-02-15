@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function Page({ params: { id } }: PageProps) {
   const canAccess = await canAccessSettings(id);
 
-  if (!canAccess) redirect(`/society/${id}/feed`);
+  if (!canAccess) redirect(`/society/${id}/settings`);
   return (
     <>
       <div className="flex flex-row">

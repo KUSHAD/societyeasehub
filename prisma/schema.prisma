@@ -46,6 +46,7 @@ model User {
     societies   Society[]
     memberShips Member[]
     invites     Invite[]
+    messages    Message[]
 }
 
 // App Models
@@ -64,11 +65,12 @@ model Society {
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
 
-    owner   User           @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-    members Member[]
-    images  SocietyMedia[]
-    roles   Role[]
-    invites Invite[]
+    owner    User           @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+    members  Member[]
+    images   SocietyMedia[]
+    roles    Role[]
+    invites  Invite[]
+    channels Channel[]
 }
 
 model SocietyMedia {
@@ -83,7 +85,7 @@ model SocietyMedia {
 
 model Member {
     societyId String
-    userId    String
+    userId    String   @unique
     roleId    String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -127,4 +129,40 @@ enum INVITE_STATUS {
     PENDING
     ACCEPTED
     IGNORED
+}
+
+model Channel {
+    id        String   @id @default(cuid())
+    name      String   @db.VarChar(50)
+    societyId String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    society  Society   @relation(fields: [societyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    messages Message[]
+}
+
+model Message {
+    id        String   @id @default(cuid())
+    content   String   @db.VarChar(250)
+    channelId String
+    userId    String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    channel         Channel             @relation(fields: [channelId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    member          User                @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    attachments     MessageAttachment[]
+    memberSocietyId String?
+    memberUserId    String?
+}
+
+model MessageAttachment {
+    id        String   @id @default(cuid())
+    uri       String   @unique @db.Text
+    messageId String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    message Message @relation(fields: [messageId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }

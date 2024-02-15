@@ -15,7 +15,7 @@ export default async function Page({ params: { id } }: PageProps) {
 
   const isOwner = await isSocietyOwner(id, currentUser.id);
 
-  if (!isOwner) redirect(`/society/${id}/feed`);
+  if (!isOwner) redirect(`/society/${id}/settings`);
   return (
     <>
       <ChangePasswordCard />

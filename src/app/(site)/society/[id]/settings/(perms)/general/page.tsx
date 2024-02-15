@@ -22,7 +22,7 @@ export default async function Page({ params: { id } }: PageProps) {
   if (!currentUser) redirect("/api/auth/signin");
   const isOwner = await isSocietyOwner(id, currentUser.id);
 
-  if (!canAccess) redirect(`/society/${id}/feed`);
+  if (!canAccess) redirect(`/society/${id}/settings`);
   return (
     <div className="px-4 py-2">
       <ClientOnly>

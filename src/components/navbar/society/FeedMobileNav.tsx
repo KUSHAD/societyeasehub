@@ -10,9 +10,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "~/components/ui/sheet";
-import SettingsDrawerContents from "./SettingsDrawerContents";
+import FeedDrawer from "./FeedDrawer";
 
-export default function SettingsMobileNav() {
+export default function FeedMobileNav() {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -22,11 +22,11 @@ export default function SettingsMobileNav() {
       </SheetTrigger>
       <SheetContent side="left">
         <SheetHeader>
-          <SheetTitle>Settings</SheetTitle>
-          <SheetDescription>Navigate through the Settings</SheetDescription>
+          <SheetTitle>Feed</SheetTitle>
+          <SheetDescription>Navigate through the Feed</SheetDescription>
         </SheetHeader>
         <div className="flex flex-col">
-          <SettingsDrawerContents />
+          <FeedDrawer />
         </div>
       </SheetContent>
     </Sheet>
