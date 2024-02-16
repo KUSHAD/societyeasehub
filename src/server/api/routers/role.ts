@@ -62,6 +62,7 @@ export const rolesRouter = createTRPCRouter({
           createInvite: true,
           assignRole: true,
           kickUser: true,
+          createChannel: true,
           _count: {
             select: {
               members: true,
