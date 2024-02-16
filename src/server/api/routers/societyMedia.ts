@@ -20,9 +20,6 @@ export const societyMediaRouter = createTRPCRouter({
         where: {
           societyId,
         },
-        orderBy: {
-          createdAt: "desc",
-        },
         select: {
           id: true,
           uri: true,

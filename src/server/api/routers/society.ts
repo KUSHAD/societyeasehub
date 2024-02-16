@@ -41,7 +41,7 @@ export const societyRouter = createTRPCRouter({
           },
         },
         orderBy: {
-          createdAt: "desc",
+          name: "desc",
         },
         select: {
           id: true,

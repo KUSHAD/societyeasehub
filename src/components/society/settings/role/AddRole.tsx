@@ -65,6 +65,10 @@ export default function AddRole() {
               fieldType: "switch",
               description: "Remove users from society",
             },
+            createChannel: {
+              fieldType: "switch",
+              description: "Create Feed Channels",
+            },
           }}
         >
           <AutoFormSubmit disabled={isLoading} className="w-full">

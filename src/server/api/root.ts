@@ -5,6 +5,7 @@ import { societyMediaRouter } from "./routers/societyMedia";
 import { rolesRouter } from "./routers/role";
 import { memberRouter } from "./routers/member";
 import { inviteRouter } from "./routers/invite";
+import { channelRouter } from "./routers/channel";
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   role: rolesRouter,
   member: memberRouter,
   invite: inviteRouter,
+  channel: channelRouter,
 });
 
 // export type definition of API

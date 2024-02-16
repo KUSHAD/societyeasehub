@@ -69,7 +69,7 @@ export const rolesRouter = createTRPCRouter({
           },
         },
         orderBy: {
-          createdAt: "asc",
+          name: "asc",
         },
       });
 

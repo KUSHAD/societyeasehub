@@ -11,4 +11,5 @@ export const newRole = z.object({
   createInvite: z.boolean().optional().default(false),
   assignRole: z.boolean().optional().default(false),
   kickUser: z.boolean().optional().default(false),
+  createChannel: z.boolean().optional().default(false),
 });

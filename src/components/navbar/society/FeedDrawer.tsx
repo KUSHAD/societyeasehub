@@ -1,13 +1,30 @@
 "use client";
 
-import { Megaphone, Plus, Vote } from "lucide-react";
+import { Ghost, Megaphone, Vote } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import CreateChannel from "~/components/society/channel/CreateChannel";
 import { Button, buttonVariants } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
+import { api } from "~/trpc/react";
+import LoadingSkeleton from "react-loading-skeleton";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "~/components/ui/accordion";
+import ChannelButton from "~/components/society/channel/ChannelButton";
 
 export default function FeedDrawer() {
   const { id } = useParams<{ id: string }>();
   const pathname = usePathname();
+  const { data: createChannels, isLoading: gettingPerms } =
+    api.member.canCreateChannels.useQuery({ societyId: id });
+
+  const { data: channels, isLoading } = api.channel.getBySociety.useQuery({
+    societyId: id,
+  });
 
   return (
     <>
@@ -35,10 +52,31 @@ export default function FeedDrawer() {
         <Vote className="mx-2 my-1" />
         Poll
       </Link>
-      <Button className="my-2 w-full" variant="default">
-        <Plus className="mx-2 my-1" />
-        Create Channel
-      </Button>
+      {gettingPerms ? (
+        <Skeleton className="my-2 h-[40px] w-full" />
+      ) : (
+        createChannels && <CreateChannel />
+      )}
+
+      <Accordion type="single" collapsible>
+        <AccordionItem value="channels">
+          <AccordionTrigger>Channels</AccordionTrigger>
+          <AccordionContent>
+            {isLoading ? (
+              <LoadingSkeleton className="my-2 h-[40px] w-full" count={5} />
+            ) : channels && channels.length === 0 ? (
+              <Button className="my-2 w-full" variant="ghost" disabled>
+                <Ghost className="mx-2 my-1" />
+                No Channels
+              </Button>
+            ) : (
+              channels?.map((_channel) => (
+                <ChannelButton channel={_channel} key={_channel.id} />
+              ))
+            )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </>
   );
 }

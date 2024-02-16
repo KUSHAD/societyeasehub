@@ -62,8 +62,8 @@ model Society {
     country       String   @db.VarChar(255)
     password      String   @db.Text
     ownerId       String
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
+    createdAt     DateTime @default(now()) @ignore
+    updatedAt     DateTime @updatedAt @ignore
 
     owner    User           @relation(fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     members  Member[]
@@ -77,8 +77,8 @@ model SocietyMedia {
     id        String   @id @default(cuid())
     uri       String   @unique @db.Text
     societyId String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
 
     society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
@@ -87,8 +87,8 @@ model Member {
     societyId String
     userId    String   @unique
     roleId    String?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
 
     society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     user    User    @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
@@ -104,9 +104,10 @@ model Role {
     createInvite   Boolean  @default(false) // Create and Send Invites
     assignRole     Boolean  @default(false) // Assign Role
     kickUser       Boolean  @default(false) // Can Remove Users
+    createChannel  Boolean  @default(false) // Create Feed Channels
     societyId      String
-    createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
+    createdAt      DateTime @default(now()) @ignore
+    updatedAt      DateTime @updatedAt @ignore
 
     society Society  @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     members Member[]
@@ -116,8 +117,8 @@ model Invite {
     societyId String
     userId    String
     status    INVITE_STATUS @default(PENDING)
-    createdAt DateTime      @default(now())
-    updatedAt DateTime      @updatedAt
+    createdAt DateTime      @default(now()) @ignore
+    updatedAt DateTime      @updatedAt @ignore
 
     society Society @relation(fields: [societyId], references: [id], onDelete: Restrict, onUpdate: Cascade)
     to      User    @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
@@ -135,8 +136,8 @@ model Channel {
     id        String   @id @default(cuid())
     name      String   @db.VarChar(50)
     societyId String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
 
     society  Society   @relation(fields: [societyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     messages Message[]
@@ -147,8 +148,8 @@ model Message {
     content   String   @db.VarChar(250)
     channelId String
     userId    String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
 
     channel         Channel             @relation(fields: [channelId], references: [id], onUpdate: Cascade, onDelete: Cascade)
     member          User                @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
@@ -161,8 +162,8 @@ model MessageAttachment {
     id        String   @id @default(cuid())
     uri       String   @unique @db.Text
     messageId String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
 
     message Message @relation(fields: [messageId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }

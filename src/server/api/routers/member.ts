@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import {
   canAssignRoles,
+  canCreateChannels,
   canKickMember,
   isSocietyOwner,
 } from "~/actions/checkUserRole";
@@ -233,5 +234,10 @@ export const memberRouter = createTRPCRouter({
             "https://res.cloudinary.com/dst2pmia1/image/upload/c_crop,h_300,w_300/default_profile_pic.jpg",
         }));
       },
+    ),
+  canCreateChannels: protectedProcedure
+    .input(z.object({ societyId: z.string().cuid() }))
+    .query(
+      async ({ input: { societyId } }) => await canCreateChannels(societyId),
     ),
 });
