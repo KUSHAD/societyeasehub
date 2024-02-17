@@ -1,3 +1,10 @@
+import ClientOnly from "~/components/ClientOnly";
+import MessageContainer from "~/components/society/channel/MessageContainer";
+
 export default function Page() {
-  return <div>Page</div>;
+  return (
+    <ClientOnly>
+      <MessageContainer />
+    </ClientOnly>
+  );
 }

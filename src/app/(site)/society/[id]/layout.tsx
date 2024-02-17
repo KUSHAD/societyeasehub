@@ -20,7 +20,7 @@ export default async function SocietyLayout({
   if (!societyExists) redirect("/dashboard");
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col overflow-hidden">
       <ClientOnly>
         <BackBar />
       </ClientOnly>

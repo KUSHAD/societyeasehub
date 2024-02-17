@@ -36,7 +36,7 @@ export default function CreateChannel() {
       <AlertDialogTrigger asChild>
         <Button className="my-2 w-full" variant="default">
           <Plus className="mx-2 my-1" />
-          Create Channel
+          New Channel
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

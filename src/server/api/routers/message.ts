@@ -5,17 +5,6 @@ import { canSendMessages } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 
 export const messageRouter = createTRPCRouter({
-  getCountByChannel: protectedProcedure
-    .input(z.object({ channelId: z.string().cuid() }))
-    .query(async ({ ctx: { db }, input: { channelId } }) => {
-      const count = await db.message.count({
-        where: {
-          channelId,
-        },
-      });
-
-      return count;
-    }),
   getByChannel: protectedProcedure
     .input(z.object({ channelId: z.string().cuid() }))
     .query(async ({ ctx: { db }, input: { channelId } }) => {
