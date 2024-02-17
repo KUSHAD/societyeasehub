@@ -141,7 +141,7 @@ export async function canKickMember(societyId: string) {
   return true;
 }
 
-export async function canCreateChannels(societyId: string) {
+export async function canManageChannels(societyId: string) {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) redirect("/api/auth/signin");
@@ -157,7 +157,37 @@ export async function canCreateChannels(societyId: string) {
       societyId,
       userId: currentUser.id,
       role: {
-        createChannel: true,
+        manageChannel: true,
+      },
+    },
+  });
+
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
+  if (!dbMemberShip) return false;
+
+  return true;
+}
+
+export async function canSendMessages(societyId: string) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) redirect("/api/auth/signin");
+
+  const dbSociety = await db.society.findUnique({
+    where: {
+      id: societyId,
+    },
+  });
+
+  const dbMemberShip = await db.member.findFirst({
+    where: {
+      societyId,
+      userId: currentUser.id,
+      role: {
+        sendMessage: true,
       },
     },
   });

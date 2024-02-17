@@ -19,8 +19,8 @@ import ChannelButton from "~/components/society/channel/ChannelButton";
 export default function FeedDrawer() {
   const { id } = useParams<{ id: string }>();
   const pathname = usePathname();
-  const { data: createChannels, isLoading: gettingPerms } =
-    api.member.canCreateChannels.useQuery({ societyId: id });
+  const { data: manageChannels, isLoading: gettingPerms } =
+    api.member.canManageChannels.useQuery({ societyId: id });
 
   const { data: channels, isLoading } = api.channel.getBySociety.useQuery({
     societyId: id,
@@ -55,7 +55,7 @@ export default function FeedDrawer() {
       {gettingPerms ? (
         <Skeleton className="my-2 h-[40px] w-full" />
       ) : (
-        createChannels && <CreateChannel />
+        manageChannels && <CreateChannel />
       )}
 
       <Accordion type="single" collapsible>

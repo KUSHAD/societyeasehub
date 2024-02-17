@@ -6,6 +6,7 @@ import { rolesRouter } from "./routers/role";
 import { memberRouter } from "./routers/member";
 import { inviteRouter } from "./routers/invite";
 import { channelRouter } from "./routers/channel";
+import { messageRouter } from "./routers/message";
 
 /**
  * This is the primary router for your server.
@@ -20,6 +21,7 @@ export const appRouter = createTRPCRouter({
   member: memberRouter,
   invite: inviteRouter,
   channel: channelRouter,
+  message: messageRouter,
 });
 
 // export type definition of API

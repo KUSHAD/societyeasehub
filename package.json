@@ -59,7 +59,7 @@
     "date-fns": "^2.30.0",
     "embla-carousel-react": "^8.0.0-rc22",
     "lucide-react": "^0.295.0",
-    "next": "^14.1.1-canary.10",
+    "next": "^14.1.1-canary.58",
     "next-auth": "^4.24.5",
     "react": "18.2.0",
     "react-day-picker": "^8.9.1",

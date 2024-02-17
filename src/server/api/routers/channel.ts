@@ -1,7 +1,7 @@
 import { channelSchema } from "~/lib/validators/channel";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { z } from "zod";
-import { canCreateChannels } from "~/actions/checkUserRole";
+import { canManageChannels } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 
 export const channelRouter = createTRPCRouter({
@@ -14,7 +14,7 @@ export const channelRouter = createTRPCRouter({
       ),
     )
     .mutation(async ({ ctx: { db }, input: { name, societyId } }) => {
-      const canCreate = await canCreateChannels(societyId);
+      const canCreate = await canManageChannels(societyId);
 
       if (!canCreate) throw new TRPCError({ code: "UNAUTHORIZED" });
       const newChannel = await db.channel.create({

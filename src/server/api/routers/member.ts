@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import {
   canAssignRoles,
-  canCreateChannels,
+  canManageChannels,
   canKickMember,
   isSocietyOwner,
 } from "~/actions/checkUserRole";
@@ -235,9 +235,9 @@ export const memberRouter = createTRPCRouter({
         }));
       },
     ),
-  canCreateChannels: protectedProcedure
+  canManageChannels: protectedProcedure
     .input(z.object({ societyId: z.string().cuid() }))
     .query(
-      async ({ input: { societyId } }) => await canCreateChannels(societyId),
+      async ({ input: { societyId } }) => await canManageChannels(societyId),
     ),
 });

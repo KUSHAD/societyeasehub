@@ -104,7 +104,8 @@ model Role {
     createInvite   Boolean  @default(false) // Create and Send Invites
     assignRole     Boolean  @default(false) // Assign Role
     kickUser       Boolean  @default(false) // Can Remove Users
-    createChannel  Boolean  @default(false) // Create Feed Channels
+    manageChannel  Boolean  @default(false) // Manage Feed Channels
+    sendMessage    Boolean  @default(false) // Send Message in Feed Channels
     societyId      String
     createdAt      DateTime @default(now()) @ignore
     updatedAt      DateTime @updatedAt @ignore
@@ -145,17 +146,15 @@ model Channel {
 
 model Message {
     id        String   @id @default(cuid())
-    content   String   @db.VarChar(250)
+    content   String   @default("") @db.Text
     channelId String
     userId    String
-    createdAt DateTime @default(now()) @ignore
+    createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt @ignore
 
-    channel         Channel             @relation(fields: [channelId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    member          User                @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    attachments     MessageAttachment[]
-    memberSocietyId String?
-    memberUserId    String?
+    channel     Channel             @relation(fields: [channelId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    member      User                @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    attachments MessageAttachment[]
 }
 
 model MessageAttachment {

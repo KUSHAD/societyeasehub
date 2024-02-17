@@ -65,9 +65,13 @@ export default function AddRole() {
               fieldType: "switch",
               description: "Remove users from society",
             },
-            createChannel: {
+            manageChannel: {
               fieldType: "switch",
-              description: "Create Feed Channels",
+              description: "Manage Feed Channels",
+            },
+            sendMessage: {
+              fieldType: "switch",
+              description: "Send Message in Feed Channels",
             },
           }}
         >

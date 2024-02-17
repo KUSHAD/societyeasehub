@@ -49,9 +49,13 @@ export default function UpdateRole({ id }: { id: string }) {
           fieldType: "switch",
           description: "Remove users from society",
         },
-        createChannel: {
+        manageChannel: {
           fieldType: "switch",
           description: "Create Feed Channels",
+        },
+        sendMessage: {
+          fieldType: "switch",
+          description: "Send Message in Feed Channels",
         },
       }}
       formSchema={newRole}
