@@ -50,7 +50,7 @@ export default function ChatInput() {
                     disabled={isSending}
                     minLength={1}
                     placeholder="Type Something ..."
-                    className="w-[90%] bg-secondary"
+                    className="bg-secondaryz w-[90%]"
                     onMessageSubmit={(content) =>
                       onSubmit({ content: content })
                     }

@@ -21,6 +21,7 @@ export const messageRouter = createTRPCRouter({
               id: true,
               name: true,
               image: true,
+              email: true,
             },
           },
           channel: {
@@ -39,6 +40,7 @@ export const messageRouter = createTRPCRouter({
           name: _message.member.name ?? "Member",
           userId: _message.member.id,
           societyId: _message.channel.societyId,
+          email: _message.member.email!,
           image:
             _message.member.image ??
             "https://res.cloudinary.com/dst2pmia1/image/upload/c_crop,h_300,w_300/default_profile_pic.jpg",

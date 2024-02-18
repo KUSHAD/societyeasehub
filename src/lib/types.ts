@@ -42,3 +42,18 @@ export type TRPCClientErrorType = TRPCClientErrorLike<
 >;
 
 export type SafeChannel = Omit<Channel, "societyId">;
+
+export type ChannelMember = {
+  name: string;
+  userId: string;
+  societyId: string;
+  image: string;
+  email: string;
+};
+
+export type ChannelMessage = {
+  content: string;
+  id: string;
+  attachments: SafeMedia[];
+  member: ChannelMember;
+};
