@@ -1,15 +1,15 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { File, Send } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { type z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
-import ResizableTextarea from "~/components/ui/resizeable-textarea";
+import { Input } from "~/components/ui/input";
+import { File, Send } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { useParams } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { messageSchema } from "~/lib/validators/message";
 import { api } from "~/trpc/react";
+import { type z } from "zod";
 
 export default function ChatInput() {
   const utils = api.useUtils();
@@ -18,6 +18,7 @@ export default function ChatInput() {
     api.message.create.useMutation({
       onSuccess: async () => {
         await utils.message.getByChannel.invalidate({ channelId });
+        form.reset();
       },
     });
   const form = useForm<z.infer<typeof messageSchema>>({
@@ -32,56 +33,49 @@ export default function ChatInput() {
       channelId,
       societyId: id,
     });
-    form.reset();
   };
 
   return (
     <Form {...form}>
-      <div>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-          <FormField
-            control={form.control}
-            name="content"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <ResizableTextarea
-                    maxLength={500}
-                    disabled={isSending}
-                    minLength={1}
-                    placeholder="Type Something ..."
-                    className="bg-secondaryz w-[90%]"
-                    onMessageSubmit={(content) =>
-                      onSubmit({ content: content })
-                    }
-                    {...field}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          {form.getValues("content") ? (
-            <Button
-              disabled={isSending}
-              type="submit"
-              className="absolute right-0 top-3 rounded-full"
-              size="icon"
-            >
-              <Send className="p-1" />
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              className="absolute right-0 top-3 rounded-full"
-              size="icon"
-              variant="outline"
-            >
-              <File className="p-1" />
-            </Button>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="relative flex flex-row items-stretch"
+      >
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="mr-2 rounded-full"
+        >
+          <File />
+        </Button>
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem className="flex-grow">
+              <FormControl>
+                <Input
+                  maxLength={200}
+                  disabled={isSending}
+                  minLength={1}
+                  placeholder="Type Something ..."
+                  className="w-3/4 bg-secondary sm:w-[90%] lg:w-[93%]"
+                  {...field}
+                />
+              </FormControl>
+            </FormItem>
           )}
-        </form>
-      </div>
+        />
+        <Button
+          disabled={isSending}
+          type="submit"
+          className="absolute right-0 top-0 rounded-full"
+          size="icon"
+        >
+          <Send className="p-1" />
+        </Button>
+      </form>
     </Form>
   );
 }

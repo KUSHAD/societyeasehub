@@ -16,7 +16,7 @@ export default async function ChannelLayout({
   const canSend = await canSendMessages(id);
   return (
     <div className="overflow-hidden">
-      <ScrollArea className="flex h-[300px] flex-col overflow-auto md:h-[400px] lg:h-[525px]">
+      <ScrollArea className="flex h-[400px] flex-col overflow-auto lg:h-[525px]">
         {children}
       </ScrollArea>
       <div className="m-2">

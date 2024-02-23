@@ -95,6 +95,7 @@ model Member {
     role    Role?   @relation(fields: [roleId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
     @@id(name: "memberId", [societyId, userId])
+    @@unique([societyId, userId])
 }
 
 model Role {

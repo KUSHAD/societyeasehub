@@ -240,4 +240,25 @@ export const memberRouter = createTRPCRouter({
     .query(
       async ({ input: { societyId } }) => await canManageChannels(societyId),
     ),
+  getDetails: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+        userId: z.string().cuid(),
+      }),
+    )
+    .query(async ({ ctx: { db }, input: { societyId, userId } }) => {
+      const member = await db.member.findUnique({
+        where: {
+          memberId: {
+            societyId,
+            userId,
+          },
+        },
+      });
+
+      if (!member) return false;
+
+      return true;
+    }),
 });
