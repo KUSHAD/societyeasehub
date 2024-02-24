@@ -1,4 +1,4 @@
-import MessageSkeleton from "~/components/society/channel/message/MessageSkeleton";
+import MessageSkeleton from "~/components/society/channel/chat/message/MessageSkeleton";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
 export default function Loading() {

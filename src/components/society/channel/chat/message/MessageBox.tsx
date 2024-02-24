@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { type ChannelMessage } from "~/lib/types";
-import MessageMemberCard from "../../MessageMemberCard";
+import MessageMemberCard from "../../../MessageMemberCard";
 
 interface MessageBoxProps {
   message: ChannelMessage;

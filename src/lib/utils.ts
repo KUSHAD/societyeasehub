@@ -80,3 +80,14 @@ export const homeFeatures: HomeFeature[] = [
       "Plan and visualize future projects and maintenance schedules.",
   },
 ];
+
+export async function getMediaTypeFromURL(uri: string) {
+  try {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    return blob.type;
+  } catch (error) {
+    console.error("Error fetching MIME type:", error);
+    return "";
+  }
+}

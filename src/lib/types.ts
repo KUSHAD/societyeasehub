@@ -62,3 +62,13 @@ export type HomeFeature = {
   title: string;
   description: string;
 };
+
+export type DraftMessage = {
+  channelId: string;
+  content: string;
+};
+
+export type DraftAttachment = {
+  channelId: string;
+  uri: string;
+};

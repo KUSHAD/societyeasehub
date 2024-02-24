@@ -55,6 +55,7 @@ export const messageRouter = createTRPCRouter({
         z.object({
           channelId: z.string().cuid(),
           societyId: z.string().cuid(),
+          attachments: z.array(z.string().url()).default([]),
         }),
       ),
     )
@@ -66,7 +67,7 @@ export const messageRouter = createTRPCRouter({
             user: { id },
           },
         },
-        input: { channelId, content, societyId },
+        input: { channelId, content, societyId, attachments },
       }) => {
         const canSend = await canSendMessages(societyId);
 
@@ -78,6 +79,16 @@ export const messageRouter = createTRPCRouter({
             userId: id,
           },
         });
+
+        if (attachments.length !== 0) {
+          await db.messageAttachment.createMany({
+            data: attachments.map((_uri) => ({
+              uri: _uri,
+              messageId: newMessage.id,
+            })),
+            skipDuplicates: true,
+          });
+        }
 
         return newMessage;
       },

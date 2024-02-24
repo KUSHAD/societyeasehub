@@ -3,15 +3,20 @@
 import { Button } from "~/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { File, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { messageSchema } from "~/lib/validators/message";
 import { api } from "~/trpc/react";
 import { type z } from "zod";
+import ChatAttachment from "./ChatAttachment";
+import { useMessageStore } from "~/store/message";
+import { useMessageAttachmentStore } from "~/store/messageAttachment";
 
 export default function ChatInput() {
+  const messageStore = useMessageStore();
+  const messageAttachmentStore = useMessageAttachmentStore();
   const utils = api.useUtils();
   const { channelId, id } = useParams<{ channelId: string; id: string }>();
   const { mutate: create, isLoading: isSending } =
@@ -19,12 +24,18 @@ export default function ChatInput() {
       onSuccess: async () => {
         await utils.message.getByChannel.invalidate({ channelId });
         form.reset();
+        messageStore.updateByChannel(channelId, "");
+        messageAttachmentStore.clearByChannel(channelId);
       },
     });
+
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
     mode: "all",
     reValidateMode: "onChange",
+    defaultValues: {
+      content: messageStore.getByChannel(channelId),
+    },
   });
 
   const onSubmit = (data: z.infer<typeof messageSchema>) => {
@@ -32,6 +43,7 @@ export default function ChatInput() {
       ...data,
       channelId,
       societyId: id,
+      attachments: messageAttachmentStore.getByChannel(channelId),
     });
   };
 
@@ -41,14 +53,7 @@ export default function ChatInput() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="relative flex flex-row items-stretch"
       >
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className="mr-2 rounded-full"
-        >
-          <File />
-        </Button>
+        <ChatAttachment />
         <FormField
           control={form.control}
           name="content"
@@ -62,13 +67,21 @@ export default function ChatInput() {
                   placeholder="Type Something ..."
                   className="w-3/4 bg-secondary sm:w-[90%] lg:w-[93%]"
                   {...field}
+                  onChange={(e) => {
+                    field.onChange(e);
+                    messageStore.updateByChannel(channelId, e.target.value);
+                  }}
                 />
               </FormControl>
             </FormItem>
           )}
         />
         <Button
-          disabled={isSending}
+          disabled={
+            isSending ||
+            (!form.getValues("content") &&
+              messageAttachmentStore.getByChannel(channelId).length === 0)
+          }
           type="submit"
           className="absolute right-0 top-0 rounded-full"
           size="icon"

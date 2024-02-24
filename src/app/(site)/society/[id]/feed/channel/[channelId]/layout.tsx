@@ -2,7 +2,7 @@ import React from "react";
 import { checkChannelExists } from "~/actions/checkChannelExists";
 import { canSendMessages } from "~/actions/checkUserRole";
 import ClientOnly from "~/components/ClientOnly";
-import ChatInput from "~/components/society/channel/message/ChatInput";
+import ChatInput from "~/components/society/channel/chat/ChatInput";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
 export default async function ChannelLayout({
