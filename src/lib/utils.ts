@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { env } from "~/env";
 import countries from "world-countries";
+import { type HomeFeature } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -43,3 +44,39 @@ export function getAuthErrors(errorCode: string) {
 
   return message;
 }
+
+export const pricingFeatures = [
+  "Unlimited society creation",
+  "Unlimited roles",
+  "Unlimited members",
+  "Accounts management",
+  "Unlimited roadmaps",
+];
+
+export const homeFeatures: HomeFeature[] = [
+  {
+    title: "Creating Societies",
+    description:
+      "Easily set up and customize your society's structure with a few clicks.",
+  },
+  {
+    title: "Role-Based Access",
+    description:
+      "Control permissions and access for different members within your society.",
+  },
+  {
+    title: "Invite-Only Membership",
+    description:
+      "Maintain exclusivity and privacy by inviting members to join your society.",
+  },
+  {
+    title: "Managing Accounts",
+    description:
+      "Keep track of financial transactions and member dues with ease.",
+  },
+  {
+    title: "Managing Roadmaps",
+    description:
+      "Plan and visualize future projects and maintenance schedules.",
+  },
+];

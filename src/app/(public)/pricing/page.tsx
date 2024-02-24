@@ -1,5 +1,5 @@
 import { type Metadata } from "next";
-import { Pricing } from "~/components/pricing/Pricing";
+import Pricing from "~/components/pricing/Pricing";
 
 export const metadata: Metadata = {
   title: "Pricing | SocietyEaseHub",

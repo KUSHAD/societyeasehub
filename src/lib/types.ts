@@ -57,3 +57,8 @@ export type ChannelMessage = {
   attachments: SafeMedia[];
   member: ChannelMember;
 };
+
+export type HomeFeature = {
+  title: string;
+  description: string;
+};
