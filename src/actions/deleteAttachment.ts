@@ -15,10 +15,8 @@ export const deleteDraftMessageAttachment = safeAction(
       return {
         success: "Deleted Attachment",
       };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-      return { failure: error.message };
+    } catch (error) {
+      if (error instanceof Error) return { failure: error.message };
     }
   },
 );

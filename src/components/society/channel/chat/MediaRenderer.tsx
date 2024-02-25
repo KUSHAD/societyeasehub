@@ -1,12 +1,15 @@
 "use client";
 
-import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Trash2Icon } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { AspectRatio } from "~/components/ui/aspect-ratio";
 import { Button } from "~/components/ui/button";
 import { getMediaTypeFromURL } from "~/lib/utils";
+import { useAction } from "next-safe-action/hooks";
+import { deleteDraftMessageAttachment } from "~/actions/deleteAttachment";
+import { toast } from "~/components/ui/use-toast";
+import { useMessageAttachmentStore } from "~/store/messageAttachment";
 
 export default function MediaRenderer({
   uri,
@@ -15,7 +18,9 @@ export default function MediaRenderer({
   uri: string;
   showDelete?: boolean;
 }) {
-  const [type, setType] = useState("image/png");
+  const [type, setType] = useState("");
+  const draftDeleteAction = useAction(deleteDraftMessageAttachment);
+  const messageAttachmentStore = useMessageAttachmentStore();
 
   const getMimeType = useCallback(async () => {
     const mimeType = await getMediaTypeFromURL(uri);
@@ -24,14 +29,10 @@ export default function MediaRenderer({
 
   useEffect(() => {
     void getMimeType();
-
-    return () => {
-      setType("image/png");
-    };
   }, [getMimeType]);
 
   return (
-    <div className="my-2 flex aspect-square w-full flex-col items-center justify-center p-2">
+    <div className="my-2 flex aspect-square flex-col items-center justify-center p-2">
       <AspectRatio ratio={1 / 1} className="w-full max-w-full">
         {type.startsWith("image") ? (
           <Image src={uri} fill alt="Carousel Image" quality={100} />
@@ -43,16 +44,32 @@ export default function MediaRenderer({
           <iframe src={uri} className="h-full w-full" />
         )}
       </AspectRatio>
-      <div className="mt-1 flex flex-row">
+      <div className="mt-1 ">
         {showDelete ? (
-          <>
-            <Button variant="destructive" size="icon" className="mx-2">
-              <Trash2Icon />
-            </Button>
-            <Button variant="outline" size="icon" className="mx-2">
-              <ExternalLinkIcon />
-            </Button>
-          </>
+          <Button
+            onClick={() => {
+              draftDeleteAction.execute({ uri });
+              messageAttachmentStore.deleteByUri(uri);
+
+              if (draftDeleteAction.result.data?.failure) {
+                toast({
+                  title: "Error",
+                  description: draftDeleteAction.result.data.failure,
+                });
+              }
+              if (draftDeleteAction.result.data?.success) {
+                toast({
+                  title: "Success",
+                  description: draftDeleteAction.result.data.success,
+                });
+              }
+            }}
+            variant="destructive"
+            disabled={draftDeleteAction.status === "executing"}
+            className="w-full"
+          >
+            <Trash2Icon />
+          </Button>
         ) : null}
       </div>
     </div>

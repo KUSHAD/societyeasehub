@@ -77,9 +77,9 @@ export default function ChatAttachment() {
             </>
           )}
         </div>
-        <DrawerFooter>
+        <DrawerFooter className="mt-8">
           <DrawerClose asChild>
-            <Button disabled={isUploading} variant="outline">
+            <Button disabled={isUploading} className="my-2" variant="outline">
               Close
             </Button>
           </DrawerClose>
