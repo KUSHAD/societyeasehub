@@ -17,7 +17,13 @@ import {
 import { useMessageAttachmentStore } from "~/store/messageAttachment";
 import AddChatAttachment from "./AddChatAttachment";
 import MediaRenderer from "./MediaRenderer";
-import { getMediaTypeFromURL } from "~/lib/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "~/components/ui/carousel";
 
 export default function ChatAttachment() {
   const [isUploading, setIsUploading] = useState(false);
@@ -43,21 +49,33 @@ export default function ChatAttachment() {
           </DrawerDescription>
         </DrawerHeader>
         <div className="px-2">
+          <strong className="my-2">Add Attachments</strong>
           <AddChatAttachment setIsUploading={setIsUploading} />
-          <div className="snap-x snap-start overflow-x-auto">
-            {messageAttachmentStore
-              .getByChannel(channelId)
-              .map(async (_uri) => {
-                const type = await getMediaTypeFromURL(_uri);
-                return (
-                  <MediaRenderer
-                    key={_uri}
-                    uri={_uri}
-                    type={type as "image" | "video"}
-                  />
-                );
-              })}
-          </div>
+          {messageAttachmentStore.getByChannel(channelId).length > 0 && (
+            <>
+              <strong className="my-2 ">View Attachments</strong>
+              <div className="flex justify-center">
+                <Carousel className="h-[200px] w-[200px] md:h-[300px] md:w-[300px]">
+                  <CarouselContent>
+                    {messageAttachmentStore
+                      .getByChannel(channelId)
+                      .map(async (_uri) => (
+                        <CarouselItem key={_uri}>
+                          <MediaRenderer uri={_uri} showDelete />
+                        </CarouselItem>
+                      ))}
+                  </CarouselContent>
+                  {messageAttachmentStore.getByChannel(channelId).length >
+                    1 && (
+                    <>
+                      <CarouselPrevious />
+                      <CarouselNext />
+                    </>
+                  )}
+                </Carousel>
+              </div>
+            </>
+          )}
         </div>
         <DrawerFooter>
           <DrawerClose asChild>
