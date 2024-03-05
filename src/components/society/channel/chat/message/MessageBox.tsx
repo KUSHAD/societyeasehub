@@ -6,6 +6,7 @@ import MessageMemberCard from "../../../MessageMemberCard";
 import MediaRenderer from "../MediaRenderer";
 import { Suspense } from "react";
 import { RefreshCcw } from "lucide-react";
+import MessageOptions from "./MessageOptions";
 
 interface MessageBoxProps {
   message: ChannelMessage;
@@ -17,12 +18,13 @@ export default function MessageBox({ message }: MessageBoxProps) {
     <div className="flex flex-row">
       <div className="mr-auto" />
       <div className="my-2 flex w-1/2 flex-col rounded-lg bg-primary">
+        <MessageOptions self />
         <Suspense
           fallback={
-            <>
+            <div className="flex justify-center">
               <RefreshCcw className="animate-spin text-muted" />
               <div className="sr-only">Media Loading</div>
-            </>
+            </div>
           }
         >
           {message.attachments.map(async (_attachment) => (
@@ -41,12 +43,13 @@ export default function MessageBox({ message }: MessageBoxProps) {
         societyId={message.member.societyId}
       />
       <div className="my-2 flex w-1/2 flex-col rounded-lg bg-muted">
+        <MessageOptions />
         <Suspense
           fallback={
-            <>
+            <div className="flex justify-center">
               <RefreshCcw className="animate-spin text-muted" />
               <div className="sr-only">Media Loading</div>
-            </>
+            </div>
           }
         >
           {message.attachments.map(async (_attachment) => (

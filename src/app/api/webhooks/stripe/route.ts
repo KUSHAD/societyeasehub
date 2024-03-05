@@ -62,31 +62,14 @@ export async function POST(request: Request) {
 
     await db.user.update({
       where: {
-        stripeSubscriptionId: subscription.id,
+        stripeCustomerId: subscription.customer as string,
       },
       data: {
         stripePriceId: subscription.items.data[0]?.price.id,
         stripeCurrentPeriodEnd: new Date(
           subscription.current_period_end * 1000,
         ),
-      },
-    });
-  }
-
-  if (event.type === "subscription_schedule.completed") {
-    const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string,
-    );
-
-    await db.user.update({
-      where: {
         stripeSubscriptionId: subscription.id,
-      },
-      data: {
-        stripePriceId: subscription.items.data[0]?.price.id,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000,
-        ),
       },
     });
   }
