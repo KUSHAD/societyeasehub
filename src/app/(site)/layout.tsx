@@ -18,7 +18,7 @@ export default async function AccountLayout({
   return (
     <>
       <Navbar />
-      {subscription.isSubscribed && !subscription.isCanceled ? (
+      {subscription.isSubscribed ? (
         <>
           <div className="min-h-screen">
             <main className="mt-4 px-2">{children}</main>
