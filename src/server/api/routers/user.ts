@@ -10,6 +10,12 @@ import { revalidatePath } from "next/cache";
 
 export const userRouter = createTRPCRouter({
   createStripeSession: publicProcedure.mutation(async ({ ctx: { db } }) => {
+    if (env.NODE_ENV !== "production")
+      throw new TRPCError({
+        code: "NOT_IMPLEMENTED",
+        message: "This method is only enabled in production",
+      });
+
     const currentUser = await getCurrentUser();
     const billingUrl = absoluteUrl("/subscription");
 
@@ -56,6 +62,12 @@ export const userRouter = createTRPCRouter({
     return { url: stripeSession.url };
   }),
   createBillingPortal: publicProcedure.mutation(async ({ ctx: { db } }) => {
+    if (env.NODE_ENV !== "production")
+      throw new TRPCError({
+        code: "NOT_IMPLEMENTED",
+        message: "This method is only enabled in production",
+      });
+
     const currentUser = await getCurrentUser();
 
     const billingUrl = absoluteUrl("/subscription");

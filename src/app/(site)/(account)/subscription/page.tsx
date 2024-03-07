@@ -13,7 +13,15 @@ export default function Page() {
         <CardTitle>My Subscription</CardTitle>
       </CardHeader>
       <CardContent>
-        <Suspense fallback={<Skeleton className="h-[14px] w-full rounded" />}>
+        <Suspense
+          fallback={
+            <div className="flex flex-col">
+              <Skeleton className="my-1 h-[14px] w-full rounded" />
+              <Skeleton className="my-1 h-[14px] w-full rounded" />
+              <Skeleton className="my-1 h-[14px] w-full rounded" />
+            </div>
+          }
+        >
           <SubscriptionExpiryDate />
         </Suspense>
       </CardContent>

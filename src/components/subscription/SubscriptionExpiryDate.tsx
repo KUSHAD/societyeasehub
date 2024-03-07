@@ -9,6 +9,14 @@ export default async function SubscriptionExpiryDate() {
   return (
     <>
       <CardDescription>
+        Your Subscription Customer Id{" "}
+        <strong>{subscription.stripeCustomerId}</strong>
+      </CardDescription>
+      <CardDescription>
+        Your Subscription Id{" "}
+        <strong>{subscription.stripeSubscriptionId} </strong>
+      </CardDescription>
+      <CardDescription>
         Your Subscription ends on{" "}
         <strong>
           {format(subscription.stripeCurrentPeriodEnd!, "dd MMM yyyy")}

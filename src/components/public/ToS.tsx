@@ -38,17 +38,12 @@ export default function ToS() {
         fees in advance before using the Service.
       </p>
       <p className="ml-4">
-        <h3 className="text-xl"> 2.4 Non-Cancelable Subscription: </h3>
-        Subscriptions are non-cancelable and non-refundable. Once you subscribe
-        to the Service and pay the applicable fees, you are obligated to fulfill
-        the entire subscription term and pay all associated fees, regardless of
-        your actual usage of the Service.
-      </p>
-      <p className="ml-4">
-        <h3 className="text-xl">2.5 Manual Renewal:</h3> Subscriptions require
-        manual renewal at the end of each subscription term. Failure to renew
-        your subscription will result in the termination of your access to the
-        Service.
+        <h3 className="text-xl"> 2.4 Cancelable Subscription: </h3>
+        Subscriptions are non-refundable. Once you subscribe to the Service and
+        pay the applicable fees, you are obligated to fulfill the entire
+        subscription term and pay all associated fees, regardless of your actual
+        usage of the Service. If you cancel, you will the able to access the
+        service till the end of current tenure
       </p>
       <p>
         <h2 className="text-2xl">3. Intellectual Property</h2>
