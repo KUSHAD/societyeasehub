@@ -3,7 +3,6 @@
  * for Docker builds.
  */
 await import("./src/env.js");
-import million from "million/compiler";
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
@@ -38,16 +37,4 @@ const nextConfig = {
   },
 };
 
-const millionConfig = {
-  auto: {
-    threshold: 0.05, // default: 0.1,
-    rsc: true,
-  },
-};
-
-export default million.next(
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  nextConfig,
-  millionConfig,
-);
+export default nextConfig;
