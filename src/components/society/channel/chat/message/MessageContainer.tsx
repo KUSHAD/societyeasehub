@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef } from "react";
 import { useParams } from "next/navigation";
 import NotFound from "~/components/NotFound";
 import { api } from "~/trpc/react";

@@ -57,6 +57,7 @@ export const userRouter = createTRPCRouter({
         userId: currentUser.id,
       },
       client_reference_id: currentUser.id,
+      allow_promotion_codes: true,
     });
 
     return { url: stripeSession.url };
@@ -91,6 +92,7 @@ export const userRouter = createTRPCRouter({
 
     const stripeSession = await stripe.billingPortal.sessions.create({
       customer: dbUser.stripeCustomerId,
+
       return_url: billingUrl,
     });
 
