@@ -1559,6 +1559,11 @@ commander@^4.0.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
   integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
 
+commander@~2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.1.0.tgz#d121bbae860d9992a3d517ba96f56588e47c6781"
+  integrity sha512-J2wnb6TKniXNOtoHS8TSrG9IOQluPrsmyAJ8oCUJOBmv+uLBCyPYAZkD2jFvw2DCzIXNnISIM01NIvr35TkBMQ==
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -2228,6 +2233,13 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+license-generator@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/license-generator/-/license-generator-0.0.13.tgz#45191e90b2cccc2e00eff742e2a52243af07f27d"
+  integrity sha512-QNcePnhMqCr2Kya8ioz3vVJc9s/KWzwavHamhdUMg0y9vwx6F4AjWt4qQqh7ORC5ZyvsEj/bc68cHmcXZ1vu4g==
+  dependencies:
+    commander "~2.1.0"
 
 lilconfig@^2.1.0:
   version "2.1.0"
