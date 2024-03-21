@@ -64,6 +64,7 @@ export const rolesRouter = createTRPCRouter({
           kickUser: true,
           manageChannel: true,
           sendMessage: true,
+          createMeeting: true,
           _count: {
             select: {
               members: true,
@@ -87,14 +88,6 @@ export const rolesRouter = createTRPCRouter({
       const dbRole = await db.role.findUnique({
         where: {
           id: id,
-        },
-        select: {
-          id: true,
-          name: true,
-          accessSettings: true,
-          createInvite: true,
-          assignRole: true,
-          kickUser: true,
         },
       });
 
@@ -127,14 +120,6 @@ export const rolesRouter = createTRPCRouter({
       const updatedRole = await db.role.update({
         where: { id: input.id },
         data: input,
-        select: {
-          id: true,
-          name: true,
-          accessSettings: true,
-          createInvite: true,
-          assignRole: true,
-          kickUser: true,
-        },
       });
       return updatedRole;
     }),

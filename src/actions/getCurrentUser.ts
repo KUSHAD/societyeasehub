@@ -16,10 +16,6 @@ export async function getCurrentUser() {
       name: true,
       email: true,
       image: true,
-      stripeCustomerId: true,
-      stripeSubscriptionId: true,
-      stripePriceId: true,
-      stripeCurrentPeriodEnd: true,
     },
   });
 

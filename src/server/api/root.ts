@@ -7,6 +7,7 @@ import { memberRouter } from "./routers/member";
 import { inviteRouter } from "./routers/invite";
 import { channelRouter } from "./routers/channel";
 import { messageRouter } from "./routers/message";
+import { meetingRoomRouter } from "./routers/meetingRoom";
 
 /**
  * This is the primary router for your server.
@@ -22,6 +23,7 @@ export const appRouter = createTRPCRouter({
   invite: inviteRouter,
   channel: channelRouter,
   message: messageRouter,
+  meetingRoom: meetingRoomRouter,
 });
 
 // export type definition of API

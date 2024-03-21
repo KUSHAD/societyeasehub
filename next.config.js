@@ -32,7 +32,6 @@ const nextConfig = {
         protocol: "https",
         pathname: "/f/**",
       },
-      { hostname: "cdn.discordapp.com", protocol: "https" },
     ],
   },
 };

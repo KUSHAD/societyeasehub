@@ -33,21 +33,18 @@ model Account {
 }
 
 model User {
-    id                     String    @id @default(cuid())
-    name                   String?
-    email                  String?   @unique
-    emailVerified          DateTime?
-    image                  String?
-    stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
-    stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-    stripePriceId          String?   @map(name: "stripe_price_id")
-    stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
 
     accounts    Account[]
     societies   Society[]
     memberShips Member[]
     invites     Invite[]
     messages    Message[]
+    rooms       MeetingRoom[]
 }
 
 // App Models
@@ -72,6 +69,7 @@ model Society {
     roles    Role[]
     invites  Invite[]
     channels Channel[]
+    rooms    MeetingRoom[]
 }
 
 model SocietyMedia {
@@ -108,6 +106,7 @@ model Role {
     kickUser       Boolean  @default(false) // Can Remove Users
     manageChannel  Boolean  @default(false) // Manage Feed Channels
     sendMessage    Boolean  @default(false) // Send Message in Feed Channels
+    createMeeting  Boolean  @default(false) // Create Meeting Rooms
     societyId      String
     createdAt      DateTime @default(now()) @ignore
     updatedAt      DateTime @updatedAt @ignore
@@ -167,4 +166,25 @@ model MessageAttachment {
     updatedAt DateTime @updatedAt @ignore
 
     message Message @relation(fields: [messageId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model MeetingRoom {
+    id          String       @id @default(cuid())
+    title       String       @db.VarChar(100)
+    description String       @db.VarChar(250)
+    startTime   DateTime
+    endTime     DateTime
+    type        MEETING_TYPE @default(AUDIO)
+    userId      String
+    societyId   String
+    createdAt   DateTime     @default(now()) @ignore
+    updatedAt   DateTime     @updatedAt @ignore
+
+    society Society @relation(fields: [societyId], references: [id])
+    user    User    @relation(fields: [userId], references: [id])
+}
+
+enum MEETING_TYPE {
+    AUDIO
+    VIDEO
 }

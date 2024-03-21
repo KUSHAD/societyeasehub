@@ -4,15 +4,8 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
-      allow: ["/", "/pricing", "/auth","/tos","/privacy","/cookie"],
-      disallow: [
-        "/dashboard",
-        "/profile",
-        "/subscription",
-        "/society/*",
-        "/society",
-        "/invite",
-      ],
+      allow: ["/", "/pricing", "/auth", "/tos", "/privacy", "/cookie"],
+      disallow: ["/dashboard", "/profile", "/society/*", "/society", "/invite"],
     },
   };
 }

@@ -2,7 +2,6 @@ import { revalidatePath } from "next/cache";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UTApi, UploadThingError } from "uploadthing/server";
 import { getCurrentUser } from "~/actions/getCurrentUser";
-import { getUserSubscriptionPlan } from "~/actions/getUserSubscription";
 import { db } from "./db";
 import { z } from "zod";
 import { canAccessSettings, canSendMessages } from "~/actions/checkUserRole";
@@ -24,10 +23,7 @@ export const ourFileRouter = {
     .middleware(async () => {
       const currentUser = await getCurrentUser();
 
-      const subscription = await getUserSubscriptionPlan();
-
-      if (!currentUser || !subscription.isSubscribed)
-        throw new UploadThingError("Unauthorized");
+      if (!currentUser) throw new UploadThingError("Unauthorized");
 
       return { userId: currentUser.id, prevImage: currentUser.image! };
     })
@@ -71,11 +67,9 @@ export const ourFileRouter = {
     .middleware(async ({ input: { societyId }, files }) => {
       const currentUser = await getCurrentUser();
 
-      const subscription = await getUserSubscriptionPlan();
-
       const canAccess = await canAccessSettings(societyId);
 
-      if (!currentUser || !subscription.isSubscribed || !canAccess)
+      if (!currentUser || !canAccess)
         throw new UploadThingError("Unauthorized");
 
       const dbSociety = await db.society.findUnique({
@@ -132,11 +126,9 @@ export const ourFileRouter = {
 
       const currentUser = await getCurrentUser();
 
-      const subscription = await getUserSubscriptionPlan();
-
       const canAccess = await canSendMessages(societyId);
 
-      if (!currentUser || !subscription.isSubscribed || !canAccess)
+      if (!currentUser || !canAccess)
         throw new UploadThingError("Unauthorized");
 
       if (messageId) {
