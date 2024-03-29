@@ -57,7 +57,7 @@ export default function Contents() {
         href={`/society/${id}/meeting`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname === `/society/${id}/meeting`
+          pathname.includes(`/society/${id}/meeting`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}

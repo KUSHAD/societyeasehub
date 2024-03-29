@@ -29,6 +29,7 @@ export const env = createEnv({
     UPLOADTHING_SECRET: z.string(),
     UPLOADTHING_APP_ID: z.string(),
     CRON_JOB_SECRET: z.string(),
+    GETSTREAM_SECRET_KEY: z.string(),
   },
 
   /**
@@ -36,7 +37,9 @@ export const env = createEnv({
    * isn't built with invalid env vars. To expose them to the client, prefix them with
    * `NEXT_PUBLIC_`.
    */
-  client: {},
+  client: {
+    NEXT_PUBLIC_GETSTREAM_API_KEY: z.string(),
+  },
 
   /**
    * You can't destruct `process.env` as a regular object in the Next.js edge runtimes (e.g.
@@ -53,7 +56,10 @@ export const env = createEnv({
     UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
     UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
     CRON_JOB_SECRET: process.env.CRON_JOB_SECRET,
+    NEXT_PUBLIC_GETSTREAM_API_KEY: process.env.NEXT_PUBLIC_GETSTREAM_API_KEY,
+    GETSTREAM_SECRET_KEY: process.env.GETSTREAM_SECRET_KEY,
   },
+
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
    * useful for Docker builds.

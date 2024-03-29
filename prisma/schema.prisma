@@ -169,22 +169,16 @@ model MessageAttachment {
 }
 
 model MeetingRoom {
-    id          String       @id @default(cuid())
-    title       String       @db.VarChar(100)
-    description String       @db.VarChar(250)
+    id          String   @id @default(cuid())
+    title       String   @db.VarChar(100)
+    description String   @db.VarChar(250)
     startTime   DateTime
     endTime     DateTime
-    type        MEETING_TYPE @default(AUDIO)
     userId      String
     societyId   String
-    createdAt   DateTime     @default(now()) @ignore
-    updatedAt   DateTime     @updatedAt @ignore
+    createdAt   DateTime @default(now()) @ignore
+    updatedAt   DateTime @updatedAt @ignore
 
     society Society @relation(fields: [societyId], references: [id])
     user    User    @relation(fields: [userId], references: [id])
-}
-
-enum MEETING_TYPE {
-    AUDIO
-    VIDEO
 }

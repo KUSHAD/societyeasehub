@@ -5,7 +5,6 @@ export const createRoomSchema = z
   .object({
     title: z.string().min(1, "Required").max(50, "Max 50 Characters"),
     description: z.string().min(1, "Required").max(100, "Max 100 Characters"),
-    type: z.enum(["AUDIO", "VIDEO"]).default("AUDIO"),
     startTime: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/)

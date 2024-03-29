@@ -19,7 +19,6 @@ export const meetingRoomRouter = createTRPCRouter({
           startTime: new Date(input.startTime).toISOString(),
           societyId: input.societyId,
           title: input.title,
-          type: input.type,
           userId: session.user.id,
         },
       });
@@ -46,7 +45,6 @@ export const meetingRoomRouter = createTRPCRouter({
           id: true,
           startTime: true,
           title: true,
-          type: true,
         },
       });
 
@@ -58,5 +56,63 @@ export const meetingRoomRouter = createTRPCRouter({
           return "ONGOING";
         },
       }));
+    }),
+  getById: protectedProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .query(async ({ ctx: { db }, input: { id } }) => {
+      const meeting = await db.meetingRoom.findUnique({
+        where: { id },
+        select: {
+          startTime: true,
+          endTime: true,
+        },
+      });
+
+      if (!meeting)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+
+      const currentTime = Date.now();
+
+      if (meeting.startTime >= toDate(currentTime))
+        return {
+          beforeTime: true,
+        };
+
+      if (meeting.endTime <= toDate(currentTime))
+        return {
+          afterTime: true,
+        };
+
+      return {
+        ok: true,
+      };
+    }),
+  checkExpiry: protectedProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .query(async ({ ctx: { db }, input: { id } }) => {
+      const meeting = await db.meetingRoom.findUnique({
+        where: { id },
+        select: {
+          endTime: true,
+        },
+      });
+
+      if (!meeting)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+
+      const currentTime = Date.now();
+
+      if (meeting.endTime <= toDate(currentTime))
+        return {
+          expired: true,
+        };
+
+      return {
+        expired: false,
+      };
     }),
 });

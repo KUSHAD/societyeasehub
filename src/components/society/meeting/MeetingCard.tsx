@@ -1,6 +1,6 @@
 "use client";
 
-import { format } from "date-fns";
+import { format, formatISO } from "date-fns";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { buttonVariants } from "~/components/ui/button";
@@ -28,11 +28,8 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
       </CardHeader>
       <CardContent className="flex flex-col">
         <div>
-          <strong> Meeting Type :-</strong> {meeting.type}
-        </div>
-        <div>
           <strong>Start Time :- </strong>
-          {format(meeting.startTime, "dd/mm/yy hh:mm")}hrs
+          {formatISO(meeting.startTime)}hrs
         </div>
         <div>
           <strong>End Time :-</strong>
