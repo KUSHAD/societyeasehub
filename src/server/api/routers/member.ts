@@ -5,6 +5,7 @@ import {
   canManageChannels,
   canKickMember,
   isSocietyOwner,
+  canAccessSettings,
 } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 
@@ -104,36 +105,9 @@ export const memberRouter = createTRPCRouter({
         societyId: z.string().cuid(),
       }),
     )
-    .query(async ({ ctx: { db, session }, input: { societyId } }) => {
-      const dbSociety = await db.society.findUnique({
-        where: {
-          id: societyId,
-        },
-      });
-
-      if (!dbSociety) throw new TRPCError({ code: "NOT_FOUND" });
-
-      const memberPerms = await db.member.findUnique({
-        where: {
-          memberId: {
-            societyId,
-            userId: session.user.id,
-          },
-        },
-        select: {
-          role: {
-            select: {
-              accessSettings: true,
-            },
-          },
-        },
-      });
-
-      if (!memberPerms) throw new TRPCError({ code: "NOT_FOUND" });
-
-      if (!memberPerms.role) return false;
-      return memberPerms.role.accessSettings;
-    }),
+    .query(
+      async ({ input: { societyId } }) => await canAccessSettings(societyId),
+    ),
   exitSociety: protectedProcedure
     .input(
       z.object({

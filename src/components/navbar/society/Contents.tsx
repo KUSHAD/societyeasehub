@@ -1,6 +1,6 @@
 "use client";
 
-import { Route, Rss, Settings, Users } from "lucide-react";
+import { Route, Rss, Settings, Users, Video } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { cn } from "~/lib/utils";
@@ -52,6 +52,18 @@ export default function Contents() {
       >
         <Route className="mx-2" />
         <span className="hidden md:block">Roadmap</span>
+      </Link>
+      <Link
+        href={`/society/${id}/meeting`}
+        className={cn(
+          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+          pathname === `/society/${id}/meeting`
+            ? "border-b-4 border-primary bg-muted"
+            : "hover:bg-muted",
+        )}
+      >
+        <Video className="mx-2" />
+        <span className="hidden md:block">Meetings</span>
       </Link>
       {settingsLoading ? (
         <div className="flex flex-row rounded bg-inherit px-4 py-4 opacity-50 transition-colors ease-in-out ">

@@ -1,4 +1,4 @@
-import type { Channel, Role, User } from "@prisma/client";
+import type { Channel, MeetingRoom, Role, User } from "@prisma/client";
 import { type TRPCClientErrorLike } from "@trpc/client";
 import { type BuildProcedure, type inferRouterOutputs } from "@trpc/server";
 import { type AppRouter } from "~/server/api/root";
@@ -71,4 +71,8 @@ export type DraftMessage = {
 export type DraftAttachment = {
   channelId: string;
   uri: string;
+};
+
+export type SafeMeeting = Omit<MeetingRoom, "societyId" | "userId"> & {
+  status: "UPCOMING" | "ONGOING";
 };

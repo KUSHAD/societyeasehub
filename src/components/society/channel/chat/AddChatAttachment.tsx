@@ -21,6 +21,10 @@ export default function AddChatAttachment({
       onUploadBegin={() => {
         setIsUploading(true);
       }}
+      config={{
+        appendOnPaste: true,
+        mode: "auto",
+      }}
       onClientUploadComplete={(files) => {
         files.forEach((_file) => {
           messageAttachmentStore.updateByChannel(channelId, _file.url);

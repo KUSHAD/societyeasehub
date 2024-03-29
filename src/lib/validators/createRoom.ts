@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getTime, differenceInMinutes } from "date-fns";
+import { getTime, differenceInMinutes, parseISO } from "date-fns";
 
 export const createRoomSchema = z
   .object({
@@ -8,25 +8,33 @@ export const createRoomSchema = z
     type: z.enum(["AUDIO", "VIDEO"]).default("AUDIO"),
     startTime: z
       .string()
-      .datetime()
-      .refine((value) => Number(value) > getTime(Date.now()), {
+      .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/)
+      .refine((value) => getTime(parseISO(value)) > getTime(Date.now()), {
         message: "Should be  more than current time",
       }),
-    endTime: z.string().datetime(),
+    endTime: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/),
   })
   .superRefine(({ endTime, startTime }, ctx) => {
-    if (Number(endTime) < Number(startTime)) {
+    if (differenceInMinutes(parseISO(endTime), parseISO(startTime)) === 0) {
       ctx.addIssue({
         code: "custom",
-        message: "End Time should  be more than start time",
+        message: "End time and start time can't be same",
         path: ["endTime"],
       });
     }
 
-    if (differenceInMinutes(Number(endTime), Number(startTime)) > 60) {
+    if (differenceInMinutes(parseISO(endTime), parseISO(startTime)) > 60) {
       ctx.addIssue({
         code: "custom",
-        message: "Meeting can be maximum  of  1 hr",
+        message: "Meeting can be maximum  of 1 hr",
+        path: ["endTime"],
+      });
+    }
+
+    if (differenceInMinutes(parseISO(endTime), parseISO(startTime)) < 0) {
+      ctx.addIssue({
+        code: "custom",
+        message: "End Time should  be more than start time",
         path: ["endTime"],
       });
     }
