@@ -4,12 +4,10 @@ import { useParams, useRouter } from "next/navigation";
 import NotFound from "~/components/NotFound";
 import { api } from "~/trpc/react";
 import StreamPlayer from "./StreamPlayer";
-import { useMeetingStore } from "~/store/meeting";
 import Skeleton from "react-loading-skeleton";
 
 export default function MeetingPlayer() {
   const { meetingId, id } = useParams<{ meetingId: string; id: string }>();
-  const meetingStore = useMeetingStore();
 
   const router = useRouter();
 
@@ -36,14 +34,9 @@ export default function MeetingPlayer() {
   }
 
   if (meeting?.afterTime) {
-    if (meetingStore.call && meetingStore.client) {
-      void meetingStore.call.leave();
-      void meetingStore.client.disconnectUser();
-      meetingStore.setCall(null);
-      meetingStore.setClient(null);
-    }
     return <NotFound message="Meeting has ended" />;
   }
+
   return isLoading ? (
     <Skeleton className="h-[300px] w-full" />
   ) : (

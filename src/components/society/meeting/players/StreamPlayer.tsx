@@ -3,11 +3,11 @@
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import {
+  type Call,
   CallControls,
-  CallParticipantsList,
   SpeakerLayout,
   StreamCall,
   StreamTheme,
@@ -17,14 +17,14 @@ import {
 } from "@stream-io/video-react-sdk";
 import { env } from "~/env";
 import { useSession } from "next-auth/react";
-import { useMeetingStore } from "~/store/meeting";
 import { api } from "~/trpc/react";
 import { generateMeetingToken } from "~/actions/generateMeetingToken";
 
 export default function StreamPlayer() {
   const { meetingId, id } = useParams<{ meetingId: string; id: string }>();
   const router = useRouter();
-  const meetingStore = useMeetingStore();
+  const [client, setClient] = useState<StreamVideoClient | null>(null);
+  const [call, setCall] = useState<Call | null>(null);
 
   const session = useSession();
 
@@ -36,6 +36,7 @@ export default function StreamPlayer() {
       onSuccess(data) {
         if (data.expired) {
           router.push(`/society/${id}/meeting`);
+          window.location.reload();
         }
       },
     },
@@ -54,35 +55,34 @@ export default function StreamPlayer() {
       user,
       tokenProvider: () => generateMeetingToken(),
     });
-    meetingStore.setClient(client);
+    setClient(client);
     const call = client.call("default", meetingId);
-    void call.join({ create: true });
+    void call.join({ create: true, notify: true });
+    void call.camera.enable();
+    void call.microphone.enable();
+    setCall(call);
 
-    meetingStore.setCall(call);
     return () => {
+      void call.camera.disable();
+      void call.microphone.disable();
       void call.leave();
       void client.disconnectUser();
-      meetingStore.setCall(null);
-      meetingStore.setClient(null);
     };
-  }, [session, meetingId, meetingStore]);
+  }, [session, meetingId]);
   return (
-    meetingStore.client &&
-    meetingStore.call && (
-      <StreamVideo client={meetingStore.client}>
+    client &&
+    call && (
+      <StreamVideo client={client}>
         <StreamTheme>
-          <StreamCall call={meetingStore.call}>
-            <SpeakerLayout />
+          <StreamCall call={call}>
+            <SpeakerLayout
+              participantsBarLimit="dynamic"
+              participantsBarPosition="bottom"
+            />
             <CallControls
               onLeave={() => {
-                meetingStore.setCall(null);
-                meetingStore.setClient(null);
+                window.location.reload();
                 router.push(`/society/${id}/meeting`);
-              }}
-            />
-            <CallParticipantsList
-              onClose={() => {
-                undefined;
               }}
             />
           </StreamCall>
