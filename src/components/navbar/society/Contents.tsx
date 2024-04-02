@@ -71,24 +71,22 @@ export default function Contents() {
           <span className="hidden md:block">Settings</span>
         </div>
       ) : (
-        accessSettings && (
-          <Link
-            href={
-              accessSettings
-                ? `/society/${id}/settings/general`
-                : `/society/${id}/settings`
-            }
-            className={cn(
-              "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-              pathname.includes(`/society/${id}/settings`)
-                ? "border-b-4 border-primary bg-muted"
-                : "hover:bg-muted",
-            )}
-          >
-            <Settings className="mx-2" />
-            <span className="hidden md:block">Settings</span>
-          </Link>
-        )
+        <Link
+          href={
+            accessSettings
+              ? `/society/${id}/settings/general`
+              : `/society/${id}/settings`
+          }
+          className={cn(
+            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+            pathname.includes(`/society/${id}/settings`)
+              ? "border-b-4 border-primary bg-muted"
+              : "hover:bg-muted",
+          )}
+        >
+          <Settings className="mx-2" />
+          <span className="hidden md:block">Settings</span>
+        </Link>
       )}
     </>
   );

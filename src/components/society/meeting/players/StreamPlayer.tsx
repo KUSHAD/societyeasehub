@@ -19,6 +19,7 @@ import { env } from "~/env";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import { generateMeetingToken } from "~/actions/generateMeetingToken";
+import { sleep } from "~/lib/utils";
 
 export default function StreamPlayer() {
   const { meetingId, id } = useParams<{ meetingId: string; id: string }>();
@@ -63,10 +64,10 @@ export default function StreamPlayer() {
     setCall(call);
 
     return () => {
-      void call.camera.disable();
-      void call.microphone.disable();
+      void call.camera.disable(true);
+      void call.microphone.disable(true);
       void call.leave();
-      void client.disconnectUser();
+      void client.disconnectUser(500);
     };
   }, [session, meetingId]);
   return (
@@ -80,9 +81,10 @@ export default function StreamPlayer() {
               participantsBarPosition="bottom"
             />
             <CallControls
-              onLeave={() => {
-                window.location.reload();
+              onLeave={async () => {
                 router.push(`/society/${id}/meeting`);
+                await sleep(500);
+                window.location.reload();
               }}
             />
           </StreamCall>
