@@ -34,9 +34,10 @@ export default function StreamPlayer() {
       id: meetingId,
     },
     {
-      onSuccess(data) {
+      async onSuccess(data) {
         if (data.expired) {
           router.push(`/society/${id}/meeting`);
+          await sleep(500);
           window.location.reload();
         }
       },
