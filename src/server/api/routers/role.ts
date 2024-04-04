@@ -65,6 +65,7 @@ export const rolesRouter = createTRPCRouter({
           manageChannel: true,
           sendMessage: true,
           createMeeting: true,
+          manageRoadmap:true,
           _count: {
             select: {
               members: true,

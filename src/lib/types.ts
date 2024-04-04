@@ -1,4 +1,11 @@
-import type { Channel, MeetingRoom, Role, User } from "@prisma/client";
+import type {
+  Channel,
+  MeetingRoom,
+  RoadmapCard,
+  RoadmapList,
+  Role,
+  User,
+} from "@prisma/client";
 import { type TRPCClientErrorLike } from "@trpc/client";
 import { type BuildProcedure, type inferRouterOutputs } from "@trpc/server";
 import { type AppRouter } from "~/server/api/root";
@@ -76,3 +83,7 @@ export type DraftAttachment = {
 export type SafeMeeting = Omit<MeetingRoom, "societyId" | "userId"> & {
   status: "UPCOMING" | "ONGOING";
 };
+
+export type CardWithList = RoadmapCard & { list: RoadmapList };
+
+export type ListWithCards = RoadmapList & { cards: RoadmapCard[] };

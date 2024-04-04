@@ -2,7 +2,7 @@
 
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import {
@@ -19,11 +19,9 @@ import { env } from "~/env";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import { generateMeetingToken } from "~/actions/generateMeetingToken";
-import { sleep } from "~/lib/utils";
 
 export default function StreamPlayer() {
   const { meetingId, id } = useParams<{ meetingId: string; id: string }>();
-  const router = useRouter();
   const [client, setClient] = useState<StreamVideoClient | null>(null);
   const [call, setCall] = useState<Call | null>(null);
 
@@ -34,11 +32,9 @@ export default function StreamPlayer() {
       id: meetingId,
     },
     {
-      async onSuccess(data) {
+      onSuccess(data) {
         if (data.expired) {
-          router.push(`/society/${id}/meeting`);
-          await sleep(500);
-          window.location.reload();
+          window.location.href = `/society/${id}/meeting`;
         }
       },
     },
@@ -82,10 +78,8 @@ export default function StreamPlayer() {
               participantsBarPosition="bottom"
             />
             <CallControls
-              onLeave={async () => {
-                router.push(`/society/${id}/meeting`);
-                await sleep(500);
-                window.location.reload();
+              onLeave={() => {
+                window.location.href = `/society/${id}/meeting`;
               }}
             />
           </StreamCall>

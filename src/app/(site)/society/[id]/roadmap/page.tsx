@@ -1,6 +1,13 @@
+import ClientOnly from "~/components/ClientOnly";
+import KanbanBoard from "~/components/roadmap/KanbanBoard";
+
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 export default function Page() {
-  return <div>Roadmap Page</div>;
+  return (
+    <ClientOnly>
+      <KanbanBoard />
+    </ClientOnly>
+  );
 }

@@ -91,7 +91,3 @@ export async function getMediaTypeFromURL(uri: string) {
     return "";
   }
 }
-
-export function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
