@@ -6,7 +6,7 @@ import ListContainer from "./ListContainer";
 
 export default function KanbanBoard() {
   const { id } = useParams<{ id: string }>();
-  const { isLoading, data: lists } = api.roadmap.getBySociety.useQuery({
+  const { isLoading, data: lists } = api.roadmapList.getBySociety.useQuery({
     societyId: id,
   });
   return isLoading ? <div>Loading</div> : <ListContainer data={lists!} />;

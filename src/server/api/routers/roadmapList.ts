@@ -4,7 +4,7 @@ import { createListSchema } from "~/lib/validators/createList";
 import { canManageRoadmaps } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 
-export const roadmapRouter = createTRPCRouter({
+export const roadmapListRouter = createTRPCRouter({
   getBySociety: protectedProcedure
     .input(
       z.object({
@@ -56,6 +56,35 @@ export const roadmapRouter = createTRPCRouter({
 
       const list = await db.roadmapList.create({
         data: { ...input, order: newOrder },
+      });
+
+      return list;
+    }),
+  updateListTitle: protectedProcedure
+    .input(
+      createListSchema.and(
+        z.object({
+          societyId: z.string().cuid(),
+          listId: z.string().cuid(),
+        }),
+      ),
+    )
+    .mutation(async ({ ctx: { db }, input }) => {
+      const canAccess = await canManageRoadmaps(input.societyId);
+
+      if (!canAccess)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
+      const list = await db.roadmapList.update({
+        where: {
+          id: input.listId,
+          societyId: input.societyId,
+        },
+        data: {
+          title: input.title,
+        },
       });
 
       return list;

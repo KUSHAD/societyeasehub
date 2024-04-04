@@ -12,6 +12,7 @@ import {
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import AutoForm, { AutoFormSubmit } from "../ui/auto-form";
@@ -25,9 +26,9 @@ export default function ListForm() {
     societyId: id,
   });
   const { isLoading: creating, mutate: createList } =
-    api.roadmap.createList.useMutation({
+    api.roadmapList.createList.useMutation({
       async onSuccess() {
-        await utils.roadmap.getBySociety.invalidate({ societyId: id });
+        await utils.roadmapList.getBySociety.invalidate({ societyId: id });
 
         toast({
           title: "Message",
@@ -48,7 +49,9 @@ export default function ListForm() {
             </Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
-            <AlertDialogHeader>Add a List</AlertDialogHeader>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Add a List</AlertDialogTitle>
+            </AlertDialogHeader>
             <AutoForm
               onSubmit={(data) =>
                 createList({
