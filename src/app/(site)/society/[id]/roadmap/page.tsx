@@ -1,13 +1,15 @@
 import ClientOnly from "~/components/ClientOnly";
-import KanbanBoard from "~/components/roadmap/KanbanBoard";
+import KanbanBoard from "~/components/society/roadmap/KanbanBoard";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 export default function Page() {
   return (
-    <ClientOnly>
-      <KanbanBoard />
-    </ClientOnly>
+    <div className="h-full overflow-x-auto p-4">
+      <ClientOnly>
+        <KanbanBoard />
+      </ClientOnly>
+    </div>
   );
 }

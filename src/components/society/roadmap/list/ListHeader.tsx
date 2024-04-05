@@ -9,12 +9,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../../ui/alert-dialog";
-import AutoForm, { AutoFormSubmit } from "../../ui/auto-form";
+} from "../../../ui/alert-dialog";
+import AutoForm, { AutoFormSubmit } from "../../../ui/auto-form";
 import { createListSchema } from "~/lib/validators/createList";
 import { api } from "~/trpc/react";
 import { useParams } from "next/navigation";
-import { toast } from "../../ui/use-toast";
+import { toast } from "../../../ui/use-toast";
 import ListOptions from "./ListOptions";
 
 interface ListHeaderProps {
