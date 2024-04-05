@@ -89,4 +89,81 @@ export const roadmapListRouter = createTRPCRouter({
 
       return list;
     }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+        listId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { listId, societyId } }) => {
+      const canAccess = await canManageRoadmaps(societyId);
+
+      if (!canAccess)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
+      const list = await db.roadmapList.delete({
+        where: {
+          id: listId,
+          societyId,
+        },
+      });
+
+      return list;
+    }),
+  copy: protectedProcedure
+    .input(
+      z.object({
+        listId: z.string().cuid(),
+        societyId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { listId, societyId } }) => {
+      const listToCopy = await db.roadmapList.findUnique({
+        where: {
+          id: listId,
+          societyId,
+        },
+        include: {
+          cards: true,
+        },
+      });
+
+      if (!listToCopy)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "List not found",
+        });
+
+      const lastList = await db.roadmapList.findFirst({
+        where: { societyId },
+        orderBy: { order: "desc" },
+        select: { order: true },
+      });
+
+      const newOrder = lastList ? lastList.order + 1 : 1;
+
+      const list = await db.roadmapList.create({
+        data: {
+          societyId: listToCopy.societyId,
+          title: `${listToCopy.title} - Copy`,
+          order: newOrder,
+          cards: {
+            createMany: {
+              data: listToCopy.cards.map((card) => ({
+                title: card.title,
+                description: card.description,
+                order: card.order,
+              })),
+            },
+          },
+        },
+        include: {
+          cards: true,
+        },
+      });
+      return list;
+    }),
 });

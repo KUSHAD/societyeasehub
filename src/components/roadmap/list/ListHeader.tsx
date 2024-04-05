@@ -9,12 +9,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import AutoForm, { AutoFormSubmit } from "../ui/auto-form";
+} from "../../ui/alert-dialog";
+import AutoForm, { AutoFormSubmit } from "../../ui/auto-form";
 import { createListSchema } from "~/lib/validators/createList";
 import { api } from "~/trpc/react";
 import { useParams } from "next/navigation";
-import { toast } from "../ui/use-toast";
+import { toast } from "../../ui/use-toast";
+import ListOptions from "./ListOptions";
 
 interface ListHeaderProps {
   list: RoadmapList;
@@ -36,13 +37,14 @@ export default function ListHeader({ list }: ListHeaderProps) {
     });
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <div className="flex cursor-pointer items-start justify-between gap-x-2 px-2 pt-2 text-sm font-semibold">
-          <div className="h-7 w-full border-transparent px-2.5 py-1 text-sm font-medium">
+      <div className="flex items-start justify-between gap-x-2 px-2 pt-2 text-sm font-semibold">
+        <AlertDialogTrigger asChild>
+          <div className="h-7 w-full cursor-pointer border-transparent px-2.5 py-1 text-sm font-medium">
             {list.title}
           </div>
-        </div>
-      </AlertDialogTrigger>
+        </AlertDialogTrigger>
+        <ListOptions list={list} onAddCard={() => {}} />
+      </div>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Update List Name</AlertDialogTitle>

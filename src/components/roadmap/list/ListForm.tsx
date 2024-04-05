@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
 import { api } from "~/trpc/react";
 import ListWrapper from "./ListWrapper";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Plus } from "lucide-react";
 import {
   AlertDialog,
@@ -14,10 +14,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import AutoForm, { AutoFormSubmit } from "../ui/auto-form";
+} from "../../ui/alert-dialog";
+import AutoForm, { AutoFormSubmit } from "../../ui/auto-form";
 import { createListSchema } from "~/lib/validators/createList";
-import { toast } from "../ui/use-toast";
+import { toast } from "../../ui/use-toast";
 
 export default function ListForm() {
   const { id } = useParams<{ id: string }>();
