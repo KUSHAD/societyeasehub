@@ -1,5 +1,5 @@
 import { newRole } from "~/lib/validators/newRole";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { canAccessSettings } from "~/actions/checkUserRole";
@@ -65,7 +65,7 @@ export const rolesRouter = createTRPCRouter({
           manageChannel: true,
           sendMessage: true,
           createMeeting: true,
-          manageRoadmap:true,
+          manageRoadmap: true,
           _count: {
             select: {
               members: true,

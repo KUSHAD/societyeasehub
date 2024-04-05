@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { createListSchema } from "~/lib/validators/createList";
 import { canManageRoadmaps } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
@@ -121,6 +121,13 @@ export const roadmapListRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx: { db }, input: { listId, societyId } }) => {
+      const canAccess = await canManageRoadmaps(societyId);
+
+      if (!canAccess)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
       const listToCopy = await db.roadmapList.findUnique({
         where: {
           id: listId,

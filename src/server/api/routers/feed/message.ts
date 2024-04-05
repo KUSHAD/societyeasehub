@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { messageSchema } from "~/lib/validators/message";
 import { canSendMessages } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";

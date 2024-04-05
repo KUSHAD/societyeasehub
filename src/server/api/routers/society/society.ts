@@ -1,5 +1,5 @@
 import { newSocietyValidationSchema } from "~/lib/validators/newSociety";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 import { editSocietyValidationSchema } from "~/lib/validators/editSociety";

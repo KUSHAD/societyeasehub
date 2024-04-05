@@ -43,7 +43,7 @@ export default function ListHeader({ list }: ListHeaderProps) {
             {list.title}
           </div>
         </AlertDialogTrigger>
-        <ListOptions list={list} onAddCard={() => {}} />
+        <ListOptions list={list} />
       </div>
       <AlertDialogContent>
         <AlertDialogHeader>

@@ -3,6 +3,13 @@
 import { type RoadmapList } from "@prisma/client";
 import { MoreHorizontal } from "lucide-react";
 import { useParams } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -14,13 +21,13 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { toast } from "~/components/ui/use-toast";
 import { api } from "~/trpc/react";
+import CardForm from "../card/CardForm";
 
 interface ListOptionsProps {
   list: RoadmapList;
-  onAddCard: () => void;
 }
 
-export default function ListOptions({ list, onAddCard }: ListOptionsProps) {
+export default function ListOptions({ list }: ListOptionsProps) {
   const utils = api.useUtils();
   const { id } = useParams<{ id: string }>();
   const { isLoading: gettingPerms, data: canManage } =
@@ -49,41 +56,51 @@ export default function ListOptions({ list, onAddCard }: ListOptionsProps) {
       },
     });
   return gettingPerms ? null : canManage ? (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button size="icon" variant="ghost">
-          <MoreHorizontal />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="absolute right-0">
-        <DropdownMenuLabel>List Options</DropdownMenuLabel>
-        <DropdownMenuItem disabled={isDeleting || copying} onClick={onAddCard}>
-          Add Card
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() =>
-            copyList({
-              listId: list.id,
-              societyId: id,
-            })
-          }
-          disabled={isDeleting || copying}
-        >
-          Copy this List
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          disabled={isDeleting || copying}
-          onClick={() =>
-            deleteList({
-              listId: list.id,
-              societyId: id,
-            })
-          }
-        >
-          Delete this List
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <AlertDialog>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="icon" variant="ghost">
+            <MoreHorizontal />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="absolute right-0">
+          <DropdownMenuLabel>List Options</DropdownMenuLabel>
+          <AlertDialogTrigger asChild>
+            <DropdownMenuItem disabled={isDeleting || copying}>
+              Add Card
+            </DropdownMenuItem>
+          </AlertDialogTrigger>
+          <DropdownMenuItem
+            onClick={() =>
+              copyList({
+                listId: list.id,
+                societyId: id,
+              })
+            }
+            disabled={isDeleting || copying}
+          >
+            Copy this List
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            disabled={isDeleting || copying}
+            onClick={() =>
+              deleteList({
+                listId: list.id,
+                societyId: id,
+              })
+            }
+          >
+            Delete this List
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Add Card</AlertDialogTitle>
+        </AlertDialogHeader>
+        <CardForm listId={list.id} />
+      </AlertDialogContent>
+    </AlertDialog>
   ) : null;
 }
