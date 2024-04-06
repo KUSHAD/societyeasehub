@@ -49,4 +49,45 @@ export const roadmapCardRouter = createTRPCRouter({
 
       return card;
     }),
+  reorder: protectedProcedure
+    .input(
+      z.object({
+        items: z.array(
+          z.object({
+            id: z.string(),
+            title: z.string(),
+            order: z.number(),
+            listId: z.string(),
+          }),
+        ),
+        societyId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { societyId, items } }) => {
+      const canAccess = await canManageRoadmaps(societyId);
+
+      if (!canAccess)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
+      const transaction = items.map((card) =>
+        db.roadmapCard.update({
+          where: {
+            id: card.id,
+            list: {
+              societyId,
+            },
+          },
+          data: {
+            order: card.order,
+            listId: card.listId,
+          },
+        }),
+      );
+
+      const updatedCards = await db.$transaction(transaction);
+
+      return updatedCards;
+    }),
 });

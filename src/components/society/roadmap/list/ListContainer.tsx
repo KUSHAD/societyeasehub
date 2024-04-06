@@ -12,6 +12,7 @@ import { api } from "~/trpc/react";
 import { useParams } from "next/navigation";
 import { reorder } from "~/lib/utils";
 import { useState, useEffect } from "react";
+import { toast } from "~/components/ui/use-toast";
 
 interface ListContainerProps {
   data: ListWithCards[];
@@ -21,6 +22,34 @@ export default function ListContainer({ data }: ListContainerProps) {
   const { id } = useParams<{ id: string }>();
 
   const [orderedData, setOrderedData] = useState(data);
+
+  const utils = api.useUtils();
+
+  const { isLoading: listReordering, mutate: listReorder } =
+    api.roadmapList.reorder.useMutation({
+      async onSuccess() {
+        await utils.roadmapList.getBySociety.invalidate({
+          societyId: id,
+        });
+        toast({
+          title: "Message",
+          description: "List Reordered",
+        });
+      },
+    });
+
+  const { isLoading: cardReordering, mutate: cardReorder } =
+    api.roadmapCard.reorder.useMutation({
+      async onSuccess() {
+        await utils.roadmapList.getBySociety.invalidate({
+          societyId: id,
+        });
+        toast({
+          title: "Message",
+          description: "Card Reordered",
+        });
+      },
+    });
 
   const { isLoading: gettingPerms, data: canManage } =
     api.member.canManageRoadmaps.useQuery({
@@ -53,6 +82,7 @@ export default function ListContainer({ data }: ListContainerProps) {
       );
 
       setOrderedData(items);
+      listReorder({ items, societyId: id });
     }
 
     // User moves a card
@@ -96,6 +126,10 @@ export default function ListContainer({ data }: ListContainerProps) {
         sourceList.cards = reorderedCards;
 
         setOrderedData(newOrderedData);
+        cardReorder({
+          items: reorderedCards,
+          societyId: id,
+        });
 
         // User moves the card to another list
       } else {
@@ -118,17 +152,23 @@ export default function ListContainer({ data }: ListContainerProps) {
         });
 
         setOrderedData(newOrderedData);
+        cardReorder({
+          societyId: id,
+          items: destList.cards,
+        });
       }
     }
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd} enableDefaultSensors>
       <Droppable
         droppableId="lists"
         type="list"
         direction="horizontal"
-        isDropDisabled={gettingPerms || !canManage}
+        isDropDisabled={
+          gettingPerms || !canManage || listReordering || cardReordering
+        }
       >
         {(provided) => (
           <ol

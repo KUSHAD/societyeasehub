@@ -173,4 +173,39 @@ export const roadmapListRouter = createTRPCRouter({
       });
       return list;
     }),
+  reorder: protectedProcedure
+    .input(
+      z.object({
+        items: z.array(
+          z.object({
+            id: z.string(),
+            title: z.string(),
+            order: z.number(),
+          }),
+        ),
+        societyId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { items, societyId } }) => {
+      const canAccess = await canManageRoadmaps(societyId);
+
+      if (!canAccess)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
+      const transaction = items.map((list) =>
+        db.roadmapList.update({
+          where: {
+            id: list.id,
+            societyId,
+          },
+          data: {
+            order: list.order,
+          },
+        }),
+      );
+      const lists = await db.$transaction(transaction);
+      return lists;
+    }),
 });
