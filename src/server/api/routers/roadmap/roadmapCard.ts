@@ -3,6 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { createCardSchema } from "~/lib/validators/createCard";
 import { canManageRoadmaps } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
+import { updateCardSchema } from "~/lib/validators/updateCard";
 
 export const roadmapCardRouter = createTRPCRouter({
   create: protectedProcedure
@@ -89,5 +90,134 @@ export const roadmapCardRouter = createTRPCRouter({
       const updatedCards = await db.$transaction(transaction);
 
       return updatedCards;
+    }),
+  getById: protectedProcedure
+    .input(
+      z.object({ cardId: z.string().cuid(), societyId: z.string().cuid() }),
+    )
+    .query(async ({ ctx: { db }, input: { cardId, societyId } }) => {
+      const card = await db.roadmapCard.findUnique({
+        where: {
+          id: cardId,
+          list: { societyId },
+        },
+        select: {
+          id: true,
+          description: true,
+          title: true,
+          list: { select: { title: true } },
+        },
+      });
+
+      if (!card) throw new TRPCError({ code: "NOT_FOUND" });
+
+      const formattedCard = {
+        ...card,
+        list: card.list.title,
+        description: card.description ?? "Not Provided",
+      };
+
+      return formattedCard;
+    }),
+  edit: protectedProcedure
+    .input(
+      updateCardSchema.and(
+        z.object({
+          societyId: z.string().cuid(),
+          cardId: z.string().cuid(),
+        }),
+      ),
+    )
+    .mutation(
+      async ({
+        ctx: { db },
+        input: { cardId, societyId, title, description },
+      }) => {
+        const canAccess = await canManageRoadmaps(societyId);
+
+        if (!canAccess)
+          throw new TRPCError({
+            code: "FORBIDDEN",
+          });
+
+        const card = await db.roadmapCard.update({
+          where: {
+            id: cardId,
+            list: { societyId },
+          },
+          data: { title, description },
+        });
+
+        return card;
+      },
+    ),
+  copy: protectedProcedure
+    .input(
+      z.object({
+        listId: z.string().cuid(),
+        societyId: z.string().cuid(),
+        cardId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { listId, societyId, cardId } }) => {
+      const canAccess = await canManageRoadmaps(societyId);
+
+      if (!canAccess)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
+      const cardToCopy = await db.roadmapCard.findUnique({
+        where: {
+          id: cardId,
+          listId,
+          list: { societyId },
+        },
+      });
+
+      if (!cardToCopy)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Card not found",
+        });
+
+      const lastCard = await db.roadmapCard.findFirst({
+        where: { listId, list: { societyId } },
+        orderBy: { order: "desc" },
+        select: { order: true },
+      });
+
+      const newOrder = lastCard ? lastCard.order + 1 : 1;
+
+      const card = await db.roadmapCard.create({
+        data: {
+          listId: cardToCopy.listId,
+          title: `${cardToCopy.title} - Copy`,
+          order: newOrder,
+        },
+      });
+      return card;
+    }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        cardId: z.string().cuid(),
+        listId: z.string().cuid(),
+        societyId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { cardId, listId, societyId } }) => {
+      const canAccess = await canManageRoadmaps(societyId);
+
+      if (!canAccess)
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+
+      const card = await db.roadmapCard.delete({
+        where: { id: cardId, listId, list: { societyId } },
+      });
+
+      return card;
     }),
 });

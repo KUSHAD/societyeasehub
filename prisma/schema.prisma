@@ -187,7 +187,7 @@ model MeetingRoom {
 
 model RoadmapList {
     id        String   @id @default(cuid())
-    title     String   @db.VarChar(100)
+    title     String   @db.VarChar(50)
     order     Int
     societyId String
     createdAt DateTime @default(now()) @ignore
@@ -199,9 +199,9 @@ model RoadmapList {
 
 model RoadmapCard {
     id          String   @id @default(cuid())
-    title       String
+    title       String   @db.VarChar(50)
     order       Int
-    description String?  @db.Text
+    description String?  @default("") @db.VarChar(150)
     listId      String
     createdAt   DateTime @default(now()) @ignore
     updatedAt   DateTime @updatedAt @ignore
