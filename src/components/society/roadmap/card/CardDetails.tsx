@@ -20,15 +20,15 @@ export default function CardDetails({ cardId }: CardDetailsProps) {
     card && (
       <div className="my-2 flex flex-col">
         <div className="my-2 flex flex-row">
-          <strong>Title</strong>
+          <strong>Title </strong>
           <em>{card.title}</em>
         </div>
         <div className="my-2 flex flex-row">
-          <strong>Description</strong>
+          <strong>Description </strong>
           <em>{card.description}</em>
         </div>
         <div className="my-2 flex flex-row">
-          <strong>List</strong>
+          <strong>List </strong>
           <em>{card.list}</em>
         </div>
       </div>

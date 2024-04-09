@@ -201,7 +201,7 @@ model RoadmapCard {
     id          String   @id @default(cuid())
     title       String   @db.VarChar(50)
     order       Int
-    description String?  @default("") @db.VarChar(150)
+    description String?  @db.VarChar(150)
     listId      String
     createdAt   DateTime @default(now()) @ignore
     updatedAt   DateTime @updatedAt @ignore

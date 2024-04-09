@@ -25,31 +25,29 @@ export default function ListContainer({ data }: ListContainerProps) {
 
   const utils = api.useUtils();
 
-  const { isLoading: listReordering, mutate: listReorder } =
-    api.roadmapList.reorder.useMutation({
-      async onSuccess() {
-        await utils.roadmapList.getBySociety.invalidate({
-          societyId: id,
-        });
-        toast({
-          title: "Message",
-          description: "List Reordered",
-        });
-      },
-    });
+  const { mutate: listReorder } = api.roadmapList.reorder.useMutation({
+    async onSuccess() {
+      await utils.roadmapList.getBySociety.invalidate({
+        societyId: id,
+      });
+      toast({
+        title: "Message",
+        description: "List Reordered",
+      });
+    },
+  });
 
-  const { isLoading: cardReordering, mutate: cardReorder } =
-    api.roadmapCard.reorder.useMutation({
-      async onSuccess() {
-        await utils.roadmapList.getBySociety.invalidate({
-          societyId: id,
-        });
-        toast({
-          title: "Message",
-          description: "Card Reordered",
-        });
-      },
-    });
+  const { mutate: cardReorder } = api.roadmapCard.reorder.useMutation({
+    async onSuccess() {
+      await utils.roadmapList.getBySociety.invalidate({
+        societyId: id,
+      });
+      toast({
+        title: "Message",
+        description: "Card Reordered",
+      });
+    },
+  });
 
   const { isLoading: gettingPerms, data: canManage } =
     api.member.canManageRoadmaps.useQuery({
@@ -166,9 +164,7 @@ export default function ListContainer({ data }: ListContainerProps) {
         droppableId="lists"
         type="list"
         direction="horizontal"
-        isDropDisabled={
-          gettingPerms || !canManage || listReordering || cardReordering
-        }
+        isDropDisabled={gettingPerms || !canManage}
       >
         {(provided) => (
           <ol

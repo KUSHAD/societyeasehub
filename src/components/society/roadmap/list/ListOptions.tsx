@@ -22,12 +22,16 @@ import {
 import { toast } from "~/components/ui/use-toast";
 import { api } from "~/trpc/react";
 import CardForm from "../card/CardForm";
+import { useState } from "react";
+import EditList from "./EditList";
 
 interface ListOptionsProps {
   list: RoadmapList;
 }
 
 export default function ListOptions({ list }: ListOptionsProps) {
+  const [modalType, setModalType] = useState<"CARD" | "EDIT">("CARD");
+
   const utils = api.useUtils();
   const { id } = useParams<{ id: string }>();
   const { isLoading: gettingPerms, data: canManage } =
@@ -55,6 +59,7 @@ export default function ListOptions({ list }: ListOptionsProps) {
         });
       },
     });
+
   return gettingPerms ? null : canManage ? (
     <AlertDialog>
       <DropdownMenu>
@@ -66,7 +71,18 @@ export default function ListOptions({ list }: ListOptionsProps) {
         <DropdownMenuContent className="absolute right-0">
           <DropdownMenuLabel>List Options</DropdownMenuLabel>
           <AlertDialogTrigger asChild>
-            <DropdownMenuItem disabled={isDeleting || copying}>
+            <DropdownMenuItem
+              onClick={() => setModalType("EDIT")}
+              disabled={isDeleting || copying}
+            >
+              Rename List
+            </DropdownMenuItem>
+          </AlertDialogTrigger>
+          <AlertDialogTrigger asChild>
+            <DropdownMenuItem
+              onClick={() => setModalType("CARD")}
+              disabled={isDeleting || copying}
+            >
               Add Card
             </DropdownMenuItem>
           </AlertDialogTrigger>
@@ -97,9 +113,15 @@ export default function ListOptions({ list }: ListOptionsProps) {
       </DropdownMenu>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Add Card</AlertDialogTitle>
+          <AlertDialogTitle>
+            {modalType === "CARD" ? "Add Card" : "Rename List"}
+          </AlertDialogTitle>
         </AlertDialogHeader>
-        <CardForm listId={list.id} />
+        {modalType === "CARD" ? (
+          <CardForm listId={list.id} />
+        ) : (
+          <EditList listId={list.id} title={list.title} />
+        )}
       </AlertDialogContent>
     </AlertDialog>
   ) : null;

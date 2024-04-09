@@ -6,5 +6,6 @@ export const updateCardSchema = z.object({
     .string()
     .min(3, "Too short")
     .max(100, "Max 100 Characters")
-    .optional(),
+    .optional()
+    .default("Not Provided"),
 });

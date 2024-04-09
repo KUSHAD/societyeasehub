@@ -60,35 +60,6 @@ export const roadmapListRouter = createTRPCRouter({
 
       return list;
     }),
-  updateListTitle: protectedProcedure
-    .input(
-      createListSchema.and(
-        z.object({
-          societyId: z.string().cuid(),
-          listId: z.string().cuid(),
-        }),
-      ),
-    )
-    .mutation(async ({ ctx: { db }, input }) => {
-      const canAccess = await canManageRoadmaps(input.societyId);
-
-      if (!canAccess)
-        throw new TRPCError({
-          code: "FORBIDDEN",
-        });
-
-      const list = await db.roadmapList.update({
-        where: {
-          id: input.listId,
-          societyId: input.societyId,
-        },
-        data: {
-          title: input.title,
-        },
-      });
-
-      return list;
-    }),
   delete: protectedProcedure
     .input(
       z.object({
