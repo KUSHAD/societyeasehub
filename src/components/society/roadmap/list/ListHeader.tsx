@@ -26,7 +26,7 @@ export default function ListHeader({ list }: ListHeaderProps) {
   const { id } = useParams<{ id: string }>();
 
   const { isLoading, mutate: updateListTitle } =
-    api.roadmapList.updateListTitle.useMutation({
+    api.roadmapList.updateTitle.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({ societyId: id });
         toast({
