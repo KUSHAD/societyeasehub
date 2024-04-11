@@ -6,7 +6,7 @@ export default function Logo({ isPublic }: { isPublic?: boolean }) {
     <Link href={isPublic ? "/" : "/dashboard"} passHref className="mr-auto">
       <Image
         alt="App Logo"
-        src={"/favicon.png"}
+        src={"/nav-icon.png"}
         height={64}
         width={64}
         quality={100}
