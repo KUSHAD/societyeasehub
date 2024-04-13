@@ -12,3 +12,5 @@ export const safeAction = createSafeActionClient({
     };
   },
 });
+
+export const publicSafeAction = createSafeActionClient({});

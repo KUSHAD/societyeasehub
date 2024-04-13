@@ -10,6 +10,18 @@ export default function Footer() {
         <div className="flex space-x-4">
           <Link
             className="text-sm text-gray-600 hover:text-gray-800"
+            href="/support"
+          >
+            Support
+          </Link>
+          <Link
+            className="text-sm text-gray-600 hover:text-gray-800"
+            href="/refund"
+          >
+            Refund Policy
+          </Link>
+          <Link
+            className="text-sm text-gray-600 hover:text-gray-800"
             href="/cookie"
           >
             Cookie Policy

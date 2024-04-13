@@ -28,7 +28,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
       pathname === "/cookie" ||
       pathname === "/privacy" ||
       pathname === "/tos" ||
-      pathname === "/auth" ? (
+      pathname === "/auth" ||
+      pathname === "/refund" ||
+      pathname === "/support" ? (
         <Link
           href="/dashboard"
           className={buttonVariants({
