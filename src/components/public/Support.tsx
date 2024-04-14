@@ -12,9 +12,7 @@ import { Button } from "~/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { supportSchema } from "~/lib/validators/support";
-import { Form } from "../ui/form";
-import { useAction } from "next-safe-action/hooks";
-import { sendSupportMessage } from "~/actions/sendSupportMessage";
+import { Form, FormControl, FormField, FormMessage } from "../ui/form";
 import { type z } from "zod";
 import { toast } from "../ui/use-toast";
 
@@ -28,24 +26,29 @@ export function Support() {
       message: "",
     },
   });
-  const { execute, result } = useAction(sendSupportMessage);
 
-  function onSubmit(data: z.infer<typeof supportSchema>) {
-    execute(data);
-    if (result.data?.success) {
-      toast({
-        title: "Success",
-        description: result.data.success,
-      });
-    }
+  async function onSubmit(data: z.infer<typeof supportSchema>) {
+    const res = await fetch("/api/support", {
+      body: JSON.stringify(data),
+      method: "POST",
+      cache: "no-store",
+    });
 
-    if (result.data?.failure) {
+    if (!res.ok) {
+      const data = (await res.json()) as { message: string };
+
       toast({
         title: "Error",
-        description: result.data.failure,
+        description: data.message,
         variant: "destructive",
       });
     }
+
+    toast({
+      title: "Message",
+      description: "Thanks for contacting we will reach out to you ASAP",
+    });
+    form.reset();
   }
   return (
     <div key="1" className="grid gap-12 md:grid-cols-2">
@@ -60,35 +63,74 @@ export function Support() {
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-4">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label className="font-medium" htmlFor="name">
-                    Your Name
-                  </Label>
-                  <Input id="name" placeholder="Enter your name" />
-                </div>
-                <div className="space-y-2">
-                  <Label className="font-medium" htmlFor="email">
-                    Email Address
-                  </Label>
-                  <Input
-                    id="email"
-                    placeholder="Enter your email"
-                    type="email"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label className="font-medium" htmlFor="message">
-                  Your Message
-                </Label>
-                <Textarea
-                  className="min-h-[100px]"
-                  id="message"
-                  placeholder="Enter your message"
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <div className="space-y-2">
+                      <Label className="font-medium" htmlFor="name">
+                        Your Name
+                      </Label>
+                      <FormControl>
+                        <Input
+                          type="name"
+                          id="name"
+                          placeholder="Enter your name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <div className="space-y-2">
+                      <Label className="font-medium" htmlFor="email">
+                        Email Address
+                      </Label>
+                      <FormControl>
+                        <Input
+                          id="email"
+                          placeholder="Enter your email"
+                          type="email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </div>
+                  )}
                 />
               </div>
-
-              <Button className="w-full">Send Message</Button>
+              <FormField
+                control={form.control}
+                name="message"
+                render={({ field }) => (
+                  <div className="space-y-2">
+                    <Label className="font-medium" htmlFor="message">
+                      Your Message
+                    </Label>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        className="min-h-[100px] resize-none"
+                        id="message"
+                        placeholder="Enter your message"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+              <Button
+                disabled={form.formState.isSubmitting}
+                type="submit"
+                className="w-full"
+              >
+                Send Message
+              </Button>
             </div>
           </form>
         </Form>
