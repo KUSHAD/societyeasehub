@@ -1,7 +1,7 @@
 import React from "react";
 import ClientOnly from "~/components/ClientOnly";
-import SettingsDrawer from "~/components/navbar/society/SettingsDrawer";
-import SettingsMobileNav from "~/components/navbar/society/SettingsMobileNav";
+import SettingsDrawer from "~/components/navbar/society/settings/SettingsDrawer";
+import SettingsMobileNav from "~/components/navbar/society/settings/SettingsMobileNav";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
 export default async function SettingsAccessLayout({

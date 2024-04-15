@@ -1,6 +1,6 @@
 "use client";
 
-import { Route, Rss, Settings, Users, Video } from "lucide-react";
+import { Coins, Route, Rss, Settings, Users, Video } from "lucide-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { cn } from "~/lib/utils";
@@ -30,17 +30,18 @@ export default function Contents() {
         <span className="hidden md:block">Feed</span>
       </Link>
       <Link
-        href={`/society/${id}/members`}
+        href={`/society/${id}/accounts/overview`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname === `/society/${id}/members`
+          pathname.includes(`/society/${id}/accounts`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
       >
-        <Users className="mx-2" />
-        <span className="hidden md:block">Members</span>
+        <Coins className="mx-2" />
+        <span className="hidden md:block">Accounts</span>
       </Link>
+
       <Link
         href={`/society/${id}/roadmap`}
         className={cn(
@@ -64,6 +65,18 @@ export default function Contents() {
       >
         <Video className="mx-2" />
         <span className="hidden md:block">Meetings</span>
+      </Link>
+      <Link
+        href={`/society/${id}/members`}
+        className={cn(
+          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+          pathname === `/society/${id}/members`
+            ? "border-b-4 border-primary bg-muted"
+            : "hover:bg-muted",
+        )}
+      >
+        <Users className="mx-2" />
+        <span className="hidden md:block">Members</span>
       </Link>
       {settingsLoading ? (
         <div className="flex flex-row rounded bg-inherit px-4 py-4 opacity-50 transition-colors ease-in-out ">

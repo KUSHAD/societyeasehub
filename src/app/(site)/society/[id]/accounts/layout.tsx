@@ -1,10 +1,10 @@
 import React from "react";
 import ClientOnly from "~/components/ClientOnly";
-import FeedDrawer from "~/components/navbar/society/feed/FeedDrawer";
-import FeedMobileNav from "~/components/navbar/society/feed/FeedMobileNav";
+import AccountsDrawer from "~/components/navbar/society/accounts/AccountsDrawer";
+import AccountsMobileNav from "~/components/navbar/society/accounts/AccountsMobileNav";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
-export default function SocietyFeedLayout({
+export default function SocietyAccountsLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -15,14 +15,14 @@ export default function SocietyFeedLayout({
         <aside className="fixed top-14 z-30 -ml-2 hidden w-full shrink-0 md:sticky md:block">
           <ScrollArea className="h-full py-6 pl-8 pr-6 lg:py-8">
             <ClientOnly>
-              <FeedDrawer />
+              <AccountsDrawer />
             </ClientOnly>
           </ScrollArea>
         </aside>
         <div className="flex flex-col">
           <div className="block md:hidden">
             <ClientOnly>
-              <FeedMobileNav />
+              <AccountsMobileNav />
             </ClientOnly>
           </div>
           {children}
