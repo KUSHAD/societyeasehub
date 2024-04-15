@@ -5,7 +5,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: "https://societyeasehub.vercel.app/",
       lastModified: new Date(),
-      changeFrequency: "yearly",
+      changeFrequency: "always",
       priority: 1,
     },
     {
@@ -17,31 +17,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: "https://societyeasehub.vercel.app/auth",
       lastModified: new Date(),
-      changeFrequency: "daily",
+      changeFrequency: "always",
       priority: 0.8,
     },
     {
       url: "https://societyeasehub.vercel.app/pricing",
       lastModified: new Date(),
-      changeFrequency: "yearly",
+      changeFrequency: "always",
       priority: 0.8,
     },
     {
       url: "https://societyeasehub.vercel.app/tos",
       lastModified: new Date(),
-      changeFrequency: "yearly",
+      changeFrequency: "always",
       priority: 0.4,
     },
     {
       url: "https://societyeasehub.vercel.app/privacy",
       lastModified: new Date(),
-      changeFrequency: "yearly",
+      changeFrequency: "always",
       priority: 0.4,
     },
     {
       url: "https://societyeasehub.vercel.app/cookie",
       lastModified: new Date(),
-      changeFrequency: "yearly",
+      changeFrequency: "always",
+      priority: 0.4,
+    },
+    {
+      url: "https://societyeasehub.vercel.app/refund",
+      lastModified: new Date(),
+      changeFrequency: "always",
+      priority: 0.4,
+    },
+    {
+      url: "https://societyeasehub.vercel.app/support",
+      lastModified: new Date(),
+      changeFrequency: "always",
       priority: 0.4,
     },
   ];
