@@ -57,6 +57,18 @@ export default function UpdateRole({ id }: { id: string }) {
           fieldType: "switch",
           description: "Send Message in Feed Channels",
         },
+        createMeeting: {
+          fieldType: "switch",
+          description: "Can Create Meetings",
+        },
+        manageAccounts: {
+          fieldType: "switch",
+          description: "Can Manage Accounts",
+        },
+        manageRoadmap: {
+          fieldType: "switch",
+          description: "Can Manage Roadmaps",
+        },
       }}
       formSchema={newRole}
       values={role}

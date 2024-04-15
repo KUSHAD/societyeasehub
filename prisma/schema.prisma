@@ -39,12 +39,13 @@ model User {
     emailVerified DateTime?
     image         String?
 
-    accounts    Account[]
-    societies   Society[]
-    memberShips Member[]
-    invites     Invite[]
-    messages    Message[]
-    rooms       MeetingRoom[]
+    accounts     Account[]
+    societies    Society[]
+    memberShips  Member[]
+    invites      Invite[]
+    messages     Message[]
+    rooms        MeetingRoom[]
+    transactions Transaction[]
 }
 
 // App Models
@@ -109,6 +110,7 @@ model Role {
     sendMessage    Boolean  @default(false) // Send Message in Feed Channels
     createMeeting  Boolean  @default(false) // Create Meeting Rooms
     manageRoadmap  Boolean  @default(false) // Manage roadmap cards and list
+    manageAccounts Boolean  @default(false) // Manage Accounts and Transactions
     societyId      String
     createdAt      DateTime @default(now()) @ignore
     updatedAt      DateTime @updatedAt @ignore
@@ -207,4 +209,22 @@ model RoadmapCard {
     updatedAt   DateTime @updatedAt @ignore
 
     list RoadmapList @relation(fields: [listId], references: [id], onDelete: Cascade)
+}
+
+model Transaction {
+    id          String          @id @default(cuid())
+    amount      Float
+    type        TransactionType
+    userId      String
+    description String          @db.VarChar(250)
+    date        DateTime        @default(now())
+    createdAt   DateTime        @default(now()) @ignore
+    member      User            @relation(fields: [userId], references: [id])
+}
+
+enum TransactionType {
+    INCOME
+    EXPENDITURE
+    DUES
+    PAYMENT
 }

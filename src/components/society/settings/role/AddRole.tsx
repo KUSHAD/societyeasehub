@@ -73,15 +73,25 @@ export default function AddRole() {
               fieldType: "switch",
               description: "Send Message in Feed Channels",
             },
+            createMeeting: {
+              fieldType: "switch",
+              description: "Can Create Meetings",
+            },
+            manageAccounts: {
+              fieldType: "switch",
+              description: "Can Manage Accounts",
+            },
+            manageRoadmap: {
+              fieldType: "switch",
+              description: "Can Manage Roadmaps",
+            },
           }}
         >
-          <AutoFormSubmit disabled={isLoading} className="w-full">
-            Create
-          </AutoFormSubmit>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+            <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
+          </AlertDialogFooter>
         </AutoForm>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
-        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );

@@ -30,7 +30,7 @@ export default function Contents() {
         <span className="hidden md:block">Feed</span>
       </Link>
       <Link
-        href={`/society/${id}/accounts/overview`}
+        href={`/society/${id}/accounts`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
           pathname.includes(`/society/${id}/accounts`)

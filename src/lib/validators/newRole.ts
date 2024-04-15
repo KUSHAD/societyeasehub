@@ -13,4 +13,7 @@ export const newRole = z.object({
   kickUser: z.boolean().optional().default(false),
   manageChannel: z.boolean().optional().default(false),
   sendMessage: z.boolean().optional().default(false),
+  createMeeting: z.boolean().optional().default(false),
+  manageRoadmap: z.boolean().optional().default(false),
+  manageAccounts: z.boolean().optional().default(false),
 });
