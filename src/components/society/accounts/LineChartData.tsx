@@ -66,6 +66,8 @@ export default function LineChartData() {
                 existingDatasetIndex !== -1 &&
                 datasets[existingDatasetIndex]
               ) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 datasets[existingDatasetIndex].data.push(item.sum);
               } else {
                 const color = generateRandomColor();
