@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { useParams } from "next/navigation";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -12,9 +13,21 @@ import {
 } from "~/components/ui/alert-dialog";
 import AutoForm, { AutoFormSubmit } from "~/components/ui/auto-form";
 import { Button } from "~/components/ui/button";
+import { toast } from "~/components/ui/use-toast";
 import { transactionSchema } from "~/lib/validators/transaction";
+import { api } from "~/trpc/react";
 
 export default function AddTransactionForm() {
+  const { id } = useParams<{ id: string }>();
+
+  const { isLoading, mutate: create } = api.transaction.create.useMutation({
+    onSuccess() {
+      toast({
+        title: "Message",
+        description: "Transaction Created",
+      });
+    },
+  });
   return (
     <>
       <div className="flex flex-row">
@@ -30,6 +43,12 @@ export default function AddTransactionForm() {
               <AlertDialogTitle>Add Transaction</AlertDialogTitle>
             </AlertDialogHeader>
             <AutoForm
+              onSubmit={(data) =>
+                create({
+                  ...data,
+                  societyId: id,
+                })
+              }
               formSchema={transactionSchema}
               fieldConfig={{
                 description: {
@@ -41,8 +60,10 @@ export default function AddTransactionForm() {
               }}
             >
               <AlertDialogFooter>
-                <AlertDialogCancel>Close</AlertDialogCancel>
-                <AutoFormSubmit>Create</AutoFormSubmit>
+                <AlertDialogCancel disabled={isLoading}>
+                  Close
+                </AlertDialogCancel>
+                <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
               </AlertDialogFooter>
             </AutoForm>
           </AlertDialogContent>

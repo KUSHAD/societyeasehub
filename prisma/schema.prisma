@@ -64,14 +64,15 @@ model Society {
     createdAt     DateTime @default(now()) @ignore
     updatedAt     DateTime @updatedAt @ignore
 
-    owner    User           @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    members  Member[]
-    images   SocietyMedia[]
-    roles    Role[]
-    invites  Invite[]
-    channels Channel[]
-    rooms    MeetingRoom[]
-    roadmaps RoadmapList[]
+    owner        User           @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    members      Member[]
+    images       SocietyMedia[]
+    roles        Role[]
+    invites      Invite[]
+    channels     Channel[]
+    rooms        MeetingRoom[]
+    roadmaps     RoadmapList[]
+    transactions Transaction[]
 }
 
 model SocietyMedia {
@@ -214,12 +215,15 @@ model RoadmapCard {
 model Transaction {
     id          String          @id @default(cuid())
     amount      Float
-    type        TransactionType
+    type        TransactionType @default(INCOME)
     userId      String
-    description String          @db.VarChar(250)
+    societyId   String
+    description String?         @default("") @db.VarChar(250)
     date        DateTime        @default(now())
     createdAt   DateTime        @default(now()) @ignore
-    member      User            @relation(fields: [userId], references: [id])
+
+    member  User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 enum TransactionType {
