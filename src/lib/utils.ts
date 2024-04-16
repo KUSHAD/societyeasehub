@@ -106,3 +106,11 @@ export function generateRandomColor(): string {
 
   return `rgb(${r}, ${g}, ${b})`;
 }
+
+export function getDateRange(start: Date, end: Date): Date[] {
+  const arr: Date[] = [];
+  for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
+    arr.push(new Date(dt));
+  }
+  return arr;
+}

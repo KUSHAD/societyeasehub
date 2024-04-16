@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { Card, CardHeader, CardContent, CardTitle } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { api } from "~/trpc/react";
@@ -15,15 +15,23 @@ import { Pie } from "react-chartjs-2";
 import { useState } from "react";
 import NotFound from "~/components/NotFound";
 import { generateRandomColor } from "~/lib/utils";
+import { startOfMonth, endOfMonth } from "date-fns";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function PieChartData() {
   const { id } = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
   const [pieData, setPieData] = useState<ChartData<"pie"> | null>(null);
   const { data, isLoading } = api.transaction.getPieChart.useQuery(
     {
       societyId: id,
+      from: searchParams.get("from")
+        ? new Date(searchParams.get("from")!)
+        : startOfMonth(new Date()),
+      to: searchParams.get("to")
+        ? new Date(searchParams.get("to")!)
+        : endOfMonth(new Date()),
     },
     {
       refetchInterval: false,

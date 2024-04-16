@@ -1,7 +1,9 @@
 import { canManageAccounts } from "~/actions/checkUserRole";
 import ClientOnly from "~/components/ClientOnly";
 import AddTransactionForm from "~/components/society/accounts/AddTransactionForm";
+import LineChartData from "~/components/society/accounts/LineChartData";
 import PieChartData from "~/components/society/accounts/PieChartData";
+import RangePicker from "~/components/society/accounts/RangePicker";
 import { type PageProps } from "~/lib/types";
 
 export default async function Page({ params: { id } }: PageProps) {
@@ -16,7 +18,9 @@ export default async function Page({ params: { id } }: PageProps) {
         </ClientOnly>
       ) : null}
       <ClientOnly>
+        <RangePicker />
         <PieChartData />
+        <LineChartData />
       </ClientOnly>
     </>
   );
