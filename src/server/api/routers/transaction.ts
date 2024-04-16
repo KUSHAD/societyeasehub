@@ -34,4 +34,18 @@ export const transactionRouter = createTRPCRouter({
         return transaction;
       },
     ),
+  getPieChart: protectedProcedure
+    .input(z.object({ societyId: z.string().cuid() }))
+    .query(async ({ ctx: { db }, input: { societyId } }) => {
+      const pieData = await db.transaction.groupBy({
+        where: { societyId },
+        by: ["type"],
+        _sum: { amount: true },
+      });
+
+      return pieData.map((_data) => ({
+        label: _data.type,
+        data: _data._sum.amount,
+      }));
+    }),
 });

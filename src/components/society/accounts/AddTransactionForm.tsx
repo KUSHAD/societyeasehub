@@ -19,9 +19,11 @@ import { api } from "~/trpc/react";
 
 export default function AddTransactionForm() {
   const { id } = useParams<{ id: string }>();
+  const utils = api.useUtils();
 
   const { isLoading, mutate: create } = api.transaction.create.useMutation({
-    onSuccess() {
+    async onSuccess() {
+      await utils.transaction.invalidate();
       toast({
         title: "Message",
         description: "Transaction Created",
