@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -8,101 +5,111 @@ generator client {
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
-    // uncomment next line if you use Prisma <5.10
-    // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 // Necessary for Next Auth
 model Account {
-    id                String  @id @default(cuid())
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? @db.Text
-    access_token      String? @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? @db.Text
-    session_state     String?
+    id                String  @id @default(cuid()) // Unique identifier for the account
+    userId            String // Index for user ID
+    type              String // Type of account
+    provider          String // Provider of the account
+    providerAccountId String // Provider's account ID
+    refresh_token     String? @db.Text // Refresh token for the account
+    access_token      String? @db.Text // Access token for the account
+    expires_at        Int? // Expiry timestamp for the tokens
+    token_type        String? // Type of token
+    scope             String? // Scope of access
+    id_token          String? @db.Text // ID token
+    session_state     String? // Session state
 
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
+    @@index([userId])
 }
 
+// Model representing a user
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
+    id            String    @id @default(cuid()) // Unique identifier for the user
+    name          String? // User's name
+    email         String?   @unique // Unique email address of the user
+    emailVerified DateTime? // Timestamp for email verification
+    image         String? // URL to user's image
 
-    accounts     Account[]
-    societies    Society[]
-    memberShips  Member[]
-    invites      Invite[]
-    messages     Message[]
-    rooms        MeetingRoom[]
-    transactions Transaction[]
+    accounts     Account[] // Accounts associated with the user
+    societies    Society[] // Societies the user belongs to
+    memberShips  Member[] // Memberships of the user
+    invites      Invite[] // Invitations sent to the user
+    messages     Message[] // Messages sent by the user
+    rooms        MeetingRoom[] // Meeting rooms created by the user
+    transactions Transaction[] // Transactions associated with the user
+
+    @@index([email])
 }
 
-// App Models
-
+// Model representing a society
 model Society {
-    id            String   @id @default(cuid())
-    name          String   @db.VarChar(100)
-    streetAddress String   @db.VarChar(255)
-    addressLine2  String?  @default("") @db.VarChar(150)
-    city          String   @db.VarChar(255)
-    province      String   @db.VarChar(255)
-    zipCode       String   @db.VarChar(15)
-    country       String   @db.VarChar(255)
-    password      String   @db.Text
-    ownerId       String
-    createdAt     DateTime @default(now()) @ignore
-    updatedAt     DateTime @updatedAt @ignore
+    id            String   @id @default(cuid()) // Unique identifier for the society
+    name          String   @db.VarChar(100) // Name of the society
+    streetAddress String   @db.VarChar(255) // Street address of the society
+    addressLine2  String?  @default("") @db.VarChar(150) // Address line 2
+    city          String   @db.VarChar(255) // City of the society
+    province      String   @db.VarChar(255) // Province of the society
+    zipCode       String   @db.VarChar(15) // Zip code of the society
+    country       String   @db.VarChar(255) // Country of the society
+    password      String   @db.Text // Password for the society
+    ownerId       String // Owner ID of the society
+    createdAt     DateTime @default(now()) @ignore // Creation timestamp
+    updatedAt     DateTime @updatedAt @ignore // Last update timestamp
 
-    owner        User           @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    members      Member[]
-    images       SocietyMedia[]
-    roles        Role[]
-    invites      Invite[]
-    channels     Channel[]
-    rooms        MeetingRoom[]
-    roadmaps     RoadmapList[]
-    transactions Transaction[]
+    owner        User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+    members      Member[] // Members of the society
+    images       SocietyMedia[] // Media associated with the society
+    roles        Role[] // Roles within the society
+    invites      Invite[] // Invitations sent to the society
+    channels     Channel[] // Channels within the society
+    rooms        MeetingRoom[] // Meeting rooms associated with the society
+    roadmaps     RoadmapList[] // Roadmaps associated with the society
+    transactions Transaction[] // Transactions associated with the society
+
+    @@index([name])
+    @@index([ownerId])
 }
 
+// Model representing media associated with a society
 model SocietyMedia {
-    id        String   @id @default(cuid())
-    uri       String   @unique @db.Text
-    societyId String
-    createdAt DateTime @default(now()) @ignore
-    updatedAt DateTime @updatedAt @ignore
+    id        String   @id @default(cuid()) // Unique identifier for the media
+    uri       String   @unique @db.Text // URI of the media
+    societyId String // Society ID associated with the media
+    createdAt DateTime @default(now()) @ignore // Creation timestamp
+    updatedAt DateTime @updatedAt @ignore // Last update timestamp
 
-    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade)
+
+    @@index([societyId])
 }
 
+// Model representing a member of a society
 model Member {
-    societyId String
-    userId    String   @unique
-    roleId    String?
-    createdAt DateTime @default(now()) @ignore
-    updatedAt DateTime @updatedAt @ignore
+    societyId String // Society ID
+    userId    String // User ID
+    roleId    String? // Role ID
+    createdAt DateTime @default(now()) @ignore // Creation timestamp
+    updatedAt DateTime @updatedAt @ignore // Last update timestamp
 
-    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    role    Role?   @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade)
+    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    role    Role?   @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
-    @@id(name: "memberId", [societyId, userId])
+    @@id(name: "memberId", fields: [societyId, userId])
     @@unique([societyId, userId])
+    @@index([userId])
 }
 
+// Model representing roles within a society
 model Role {
-    id             String   @id @default(cuid())
-    name           String   @db.VarChar(255)
+    id             String   @id @default(cuid()) // Unique identifier for the role
+    name           String   @db.VarChar(255) // Name of the role
     accessSettings Boolean  @default(false) // Access Settings Page
     createInvite   Boolean  @default(false) // Create and Send Invites
     assignRole     Boolean  @default(false) // Assign Role
@@ -112,120 +119,150 @@ model Role {
     createMeeting  Boolean  @default(false) // Create Meeting Rooms
     manageRoadmap  Boolean  @default(false) // Manage roadmap cards and list
     manageAccounts Boolean  @default(false) // Manage Accounts and Transactions
-    societyId      String
-    createdAt      DateTime @default(now()) @ignore
-    updatedAt      DateTime @updatedAt @ignore
+    societyId      String // Society ID
+    createdAt      DateTime @default(now()) @ignore // Creation timestamp
+    updatedAt      DateTime @updatedAt @ignore // Last update timestamp
 
-    society Society  @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    members Member[]
+    society Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
+    Member  Member[]
+
+    @@index([name])
 }
 
+// Model representing invitations to a society
 model Invite {
-    societyId String
-    userId    String
-    status    INVITE_STATUS @default(PENDING)
-    createdAt DateTime      @default(now()) @ignore
-    updatedAt DateTime      @updatedAt @ignore
+    societyId String // Society ID
+    userId    String // User ID
+    status    INVITE_STATUS @default(PENDING) // Status of the invitation
+    createdAt DateTime      @default(now()) @ignore // Creation timestamp
+    updatedAt DateTime      @updatedAt @ignore // Last update timestamp
 
-    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    to      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade)
+    to      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@id(name: "inviteId", [societyId, userId])
+    @@id(name: "inviteId", fields: [societyId, userId])
+    @@index([userId])
 }
 
+// Enum representing invite status
 enum INVITE_STATUS {
     PENDING
     ACCEPTED
     IGNORED
 }
 
+// Model representing channels within a society
 model Channel {
-    id        String   @id @default(cuid())
-    name      String   @db.VarChar(50)
-    societyId String
-    createdAt DateTime @default(now()) @ignore
-    updatedAt DateTime @updatedAt @ignore
+    id        String   @id @default(cuid()) // Unique identifier for the channel
+    name      String   @db.VarChar(50) // Name of the channel
+    societyId String // Society ID
+    createdAt DateTime @default(now()) @ignore // Creation timestamp
+    updatedAt DateTime @updatedAt @ignore // Last update timestamp
 
-    society  Society   @relation(fields: [societyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    messages Message[]
+    society Society   @relation(fields: [societyId], references: [id], onDelete: Cascade)
+    Message Message[]
+
+    @@index([name])
 }
 
+// Model representing messages
 model Message {
-    id        String   @id @default(cuid())
-    content   String   @default("") @db.Text
-    channelId String
-    userId    String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt @ignore
+    id        String   @id @default(cuid()) // Unique identifier for the message
+    content   String   @default("") @db.Text // Content of the message
+    channelId String // Channel ID
+    userId    String // User ID
+    createdAt DateTime @default(now()) // Creation timestamp
+    updatedAt DateTime @updatedAt @ignore // Last update timestamp
 
-    channel     Channel             @relation(fields: [channelId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    member      User                @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    attachments MessageAttachment[]
+    channel     Channel             @relation(fields: [channelId], references: [id], onDelete: Cascade)
+    member      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+    attachments MessageAttachment[] // Attachments associated with the message
+
+    @@index([channelId])
+    @@index([userId])
 }
 
+// Model representing message attachments
 model MessageAttachment {
-    id        String   @id @default(cuid())
-    uri       String   @unique @db.Text
-    messageId String
-    createdAt DateTime @default(now()) @ignore
-    updatedAt DateTime @updatedAt @ignore
+    id        String   @id @default(cuid()) // Unique identifier for the attachment
+    uri       String   @unique @db.Text // URI of the attachment
+    messageId String // Message ID
+    createdAt DateTime @default(now()) @ignore // Creation timestamp
+    updatedAt DateTime @updatedAt @ignore // Last update timestamp
 
-    message Message @relation(fields: [messageId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+    @@index([messageId])
 }
 
+// Model representing meeting rooms
 model MeetingRoom {
-    id          String   @id @default(cuid())
-    title       String   @db.VarChar(100)
-    description String   @db.VarChar(250)
-    startTime   DateTime
-    endTime     DateTime
-    userId      String
-    societyId   String
-    createdAt   DateTime @default(now()) @ignore
-    updatedAt   DateTime @updatedAt @ignore
+    id          String   @id @default(cuid()) // Unique identifier for the meeting room
+    title       String   @db.VarChar(100) // Title of the meeting room
+    description String   @db.VarChar(250) // Description of the meeting room
+    startTime   DateTime // Start time of the meeting
+    endTime     DateTime // End time of the meeting
+    userId      String // User ID
+    societyId   String // Society ID
+    createdAt   DateTime @default(now()) @ignore // Creation timestamp
+    updatedAt   DateTime @updatedAt @ignore // Last update timestamp
 
     society Society @relation(fields: [societyId], references: [id])
     user    User    @relation(fields: [userId], references: [id])
+
+    @@index([userId])
+    @@index([societyId])
 }
 
+// Model representing roadmap lists
 model RoadmapList {
-    id        String   @id @default(cuid())
-    title     String   @db.VarChar(50)
-    order     Int
-    societyId String
-    createdAt DateTime @default(now()) @ignore
-    updatedAt DateTime @updatedAt @ignore
+    id        String   @id @default(cuid()) // Unique identifier for the roadmap list
+    title     String   @db.VarChar(50) // Title of the roadmap list
+    order     Int // Order of the roadmap list
+    societyId String // Society ID
+    createdAt DateTime @default(now()) @ignore // Creation timestamp
+    updatedAt DateTime @updatedAt @ignore // Last update timestamp
 
-    society Society       @relation(fields: [societyId], references: [id], onDelete: Cascade)
-    cards   RoadmapCard[]
+    society     Society       @relation(fields: [societyId], references: [id], onDelete: Cascade)
+    RoadmapCard RoadmapCard[]
+
+    @@index([societyId])
 }
 
+// Model representing roadmap cards
 model RoadmapCard {
-    id          String   @id @default(cuid())
-    title       String   @db.VarChar(50)
-    order       Int
-    description String?  @db.VarChar(150)
-    listId      String
-    createdAt   DateTime @default(now()) @ignore
-    updatedAt   DateTime @updatedAt @ignore
+    id          String   @id @default(cuid()) // Unique identifier for the roadmap card
+    title       String   @db.VarChar(50) // Title of the roadmap card
+    order       Int // Order of the roadmap card
+    description String?  @db.VarChar(150) // Description of the roadmap card
+    listId      String // List ID
+    createdAt   DateTime @default(now()) @ignore // Creation timestamp
+    updatedAt   DateTime @updatedAt @ignore // Last update timestamp
 
     list RoadmapList @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+    @@index([listId])
 }
 
+// Model representing transactions
 model Transaction {
-    id          String          @id @default(cuid())
-    amount      Float
-    type        TransactionType @default(INCOME)
-    userId      String
-    societyId   String
-    description String?         @default("") @db.VarChar(250)
-    date        DateTime        @default(now())
-    createdAt   DateTime        @default(now()) @ignore
+    id          String          @id @default(cuid()) // Unique identifier for the transaction
+    amount      Float // Amount of the transaction
+    type        TransactionType @default(INCOME) // Type of transaction
+    userId      String // User ID
+    societyId   String // Society ID
+    description String?         @default("") @db.VarChar(250) // Description of the transaction
+    date        DateTime        @default(now()) // Date of the transaction
+    createdAt   DateTime        @default(now()) @ignore // Creation timestamp
 
-    member  User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade)
-    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    member  User    @relation(fields: [userId], references: [id], onDelete: NoAction)
+    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade)
+
+    @@index([userId])
+    @@index([societyId])
 }
 
+// Enum representing transaction types
 enum TransactionType {
     INCOME
     EXPENDITURE
