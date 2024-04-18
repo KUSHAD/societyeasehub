@@ -47,7 +47,6 @@ export default function LineChartData() {
           : endOfMonth(new Date()),
       },
       {
-        refetchInterval: false,
         onSuccess(data) {
           if (data && data.length > 0) {
             const labels = [...new Set(data.map((item) => item.date))];

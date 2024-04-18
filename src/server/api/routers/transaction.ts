@@ -108,7 +108,6 @@ export const transactionRouter = createTRPCRouter({
       const dateSumArray: { date: string; type: string; sum: number }[] = [];
 
       for (const date of dateRange) {
-        // Initialize type sums to 0 for each date
         const typeSumsMap: Record<string, number> = {};
 
         for (const transaction of formattedData) {
@@ -118,7 +117,6 @@ export const transactionRouter = createTRPCRouter({
           }
         }
 
-        // Push an object for each type with sum 0 if not present in the transactions
         for (const type of Object.keys(typeSumsMap)) {
           dateSumArray.push({ date: date, type, sum: typeSumsMap[type] ?? 0 });
         }
@@ -130,5 +128,38 @@ export const transactionRouter = createTRPCRouter({
       }
 
       return dateSumArray;
+    }),
+  getTableData: protectedProcedure
+    .input(commonInput)
+    .query(async ({ ctx: { db }, input: { from, societyId, to } }) => {
+      const data = await db.transaction.findMany({
+        where: {
+          societyId,
+          date: {
+            lte: endOfDay(to),
+            gte: startOfDay(from),
+          },
+        },
+        select: {
+          amount: true,
+          type: true,
+          date: true,
+          id: true,
+          description: true,
+        },
+        orderBy: {
+          date: "asc",
+        },
+      });
+
+      return data.map((_data) => ({
+        ..._data,
+        date: format(_data.date, "dd/MM/yyyy"),
+        description: _data.description
+          ? _data.description.length > 20
+            ? _data.description.slice(0, 19) + " ..."
+            : _data.description
+          : "Not Provided",
+      }));
     }),
 });

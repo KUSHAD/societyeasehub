@@ -222,7 +222,7 @@ model Transaction {
     date        DateTime        @default(now())
     createdAt   DateTime        @default(now()) @ignore
 
-    member  User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    member  User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade)
     society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 

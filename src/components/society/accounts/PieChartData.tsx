@@ -34,7 +34,6 @@ export default function PieChartData() {
         : endOfMonth(new Date()),
     },
     {
-      refetchInterval: false,
       onSuccess(__data) {
         setPieData({
           labels: __data.map((_data) => _data.label),
