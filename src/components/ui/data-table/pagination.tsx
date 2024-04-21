@@ -7,6 +7,7 @@ import {
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
 import { type Table } from "@tanstack/react-table";
+import { useParams } from "next/navigation";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -16,6 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
+import { api } from "~/trpc/react";
+import { toast } from "../use-toast";
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;
@@ -24,11 +27,42 @@ interface DataTablePaginationProps<TData> {
 export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
+  const utils = api.useUtils();
+  const { id } = useParams<{ id: string }>();
+  const { isLoading, mutate: deleteTransaction } =
+    api.transaction.delete.useMutation({
+      async onSuccess(data) {
+        await utils.transaction.invalidate();
+        toast({
+          title: "Message",
+          description: `Deleted ${data} Transaction(s)`,
+        });
+      },
+    });
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
+        {table.getFilteredSelectedRowModel().rows.length ? (
+          <Button
+            disabled={isLoading}
+            onClick={() =>
+              deleteTransaction({
+                societyId: id,
+                transactionID: table.getFilteredSelectedRowModel().rows.map(
+                  (_row) =>
+                    // @ts-expect-error id doesn't exist on  type  any
+                    _row.original.id as string,
+                ),
+              })
+            }
+            className="mx-2"
+            variant="destructive"
+          >
+            Delete
+          </Button>
+        ) : null}
       </div>
       <div className="flex items-center space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">

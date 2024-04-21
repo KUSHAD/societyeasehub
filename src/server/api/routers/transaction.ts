@@ -162,4 +162,26 @@ export const transactionRouter = createTRPCRouter({
           : "Not Provided",
       }));
     }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+        transactionID: z.array(z.string().cuid()),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { societyId, transactionID } }) => {
+      const canManage = await canManageAccounts(societyId);
+      if (!canManage) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const rowsDeleted = await db.transaction.deleteMany({
+        where: {
+          societyId: societyId,
+          id: {
+            in: transactionID,
+          },
+        },
+      });
+
+      return rowsDeleted.count;
+    }),
 });

@@ -11,6 +11,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "~/components/ui/data-table";
 import { DataTableColumnHeader } from "~/components/ui/data-table/column-header";
 import { Checkbox } from "~/components/ui/checkbox";
+import TransactionAction from "./TransactionAction";
 
 type Transaction = RouterOutput["transaction"]["getTableData"][0];
 
@@ -52,12 +53,28 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Amount" />
     ),
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("amount"));
+      const formatted = new Intl.NumberFormat("en-In", {
+        style: "currency",
+        currency: "INR",
+      }).format(amount);
+
+      return <div className="text-right font-medium">{formatted}</div>;
+    },
     enableHiding: false,
   },
   {
     accessorKey: "description",
     header: "Description",
     enableSorting: false,
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const _row = row.original;
+      return <TransactionAction transaction={_row} />;
+    },
   },
 ];
 
