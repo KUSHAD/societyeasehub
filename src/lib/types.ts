@@ -89,7 +89,4 @@ export type CardWithList = RoadmapCard & { list: RoadmapList };
 
 export type ListWithCards = RoadmapList & { cards: RoadmapCard[] };
 
-export type SafeTransaction = Omit<
-  Transaction,
-  "societyId" | "userId" | "date"
-> & { date: string };
+export type SafeTransaction = Omit<Transaction, "societyId" | "userId">;

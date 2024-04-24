@@ -2,7 +2,7 @@
 
 import { useParams, useSearchParams } from "next/navigation";
 import { api } from "~/trpc/react";
-import { startOfMonth, endOfMonth } from "date-fns";
+import { startOfMonth, endOfMonth, format } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import NotFound from "~/components/NotFound";
@@ -43,6 +43,10 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
+    cell: ({ row }) => {
+      const _row = row.original;
+      return format(_row.date, "dd/MM/yyyy");
+    },
   },
   {
     accessorKey: "type",
@@ -60,7 +64,7 @@ const columns: ColumnDef<Transaction>[] = [
         currency: "INR",
       }).format(amount);
 
-      return <div className="text-right font-medium">{formatted}</div>;
+      return formatted;
     },
     enableHiding: false,
   },

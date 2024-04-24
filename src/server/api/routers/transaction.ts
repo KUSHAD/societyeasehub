@@ -154,7 +154,7 @@ export const transactionRouter = createTRPCRouter({
 
       return data.map((_data) => ({
         ..._data,
-        date: format(_data.date, "dd/MM/yyyy"),
+        date: _data.date,
         description: _data.description
           ? _data.description.length > 20
             ? _data.description.slice(0, 19) + " ..."
@@ -183,5 +183,33 @@ export const transactionRouter = createTRPCRouter({
       });
 
       return rowsDeleted.count;
+    }),
+  update: protectedProcedure
+    .input(
+      transactionSchema.and(
+        z.object({
+          societyId: z.string().cuid(),
+          transactionId: z.string().cuid(),
+        }),
+      ),
+    )
+    .mutation(async ({ ctx: { db }, input }) => {
+      const canManage = await canManageAccounts(input.societyId);
+      if (!canManage) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const updatedTransaction = await db.transaction.update({
+        where: {
+          id: input.transactionId,
+          societyId: input.societyId,
+        },
+        data: {
+          amount: input.amount,
+          date: input.date,
+          description: input.description,
+          type: input.type,
+        },
+      });
+
+      return updatedTransaction;
     }),
 });

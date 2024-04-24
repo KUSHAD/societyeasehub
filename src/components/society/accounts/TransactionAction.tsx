@@ -2,6 +2,11 @@
 
 import { MoreHorizontal } from "lucide-react";
 import { useParams } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -13,8 +18,9 @@ import {
 import { toast } from "~/components/ui/use-toast";
 import { type SafeTransaction } from "~/lib/types";
 import { api } from "~/trpc/react";
+import UpdateTransaction from "./UpdateTransaction";
 
-interface TransactionActionProps {
+export interface TransactionActionProps {
   transaction: SafeTransaction;
 }
 
@@ -34,33 +40,41 @@ export default function TransactionAction({
       },
     });
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <MoreHorizontal />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="absolute right-0">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem
-          disabled={isLoading}
-          onClick={() => navigator.clipboard.writeText(transaction.id)}
-        >
-          Copy ID
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          disabled={isLoading}
-          onClick={() =>
-            deleteTransaction({
-              societyId: id,
-              transactionID: [transaction.id],
-            })
-          }
-        >
-          Delete
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled={isLoading}>View</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <AlertDialog>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <MoreHorizontal />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="absolute right-0">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem
+            disabled={isLoading}
+            onClick={() => navigator.clipboard.writeText(transaction.id)}
+          >
+            Copy ID
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            disabled={isLoading}
+            onClick={() =>
+              deleteTransaction({
+                societyId: id,
+                transactionID: [transaction.id],
+              })
+            }
+          >
+            Delete
+          </DropdownMenuItem>
+          <AlertDialogTrigger asChild>
+            <DropdownMenuItem disabled={isLoading}>Update</DropdownMenuItem>
+          </AlertDialogTrigger>
+          <DropdownMenuItem disabled={isLoading}>View Docs</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <AlertDialogContent>
+        <UpdateTransaction transaction={transaction} />
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
