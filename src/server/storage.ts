@@ -4,7 +4,11 @@ import { UTApi, UploadThingError } from "uploadthing/server";
 import { getCurrentUser } from "~/actions/getCurrentUser";
 import { db } from "./db";
 import { z } from "zod";
-import { canAccessSettings, canSendMessages } from "~/actions/checkUserRole";
+import {
+  canAccessSettings,
+  canManageAccounts,
+  canSendMessages,
+} from "~/actions/checkUserRole";
 
 const f = createUploadthing({
   errorFormatter: (err) => {
@@ -153,6 +157,60 @@ export const ourFileRouter = {
     })
     .onUploadComplete(({ file }) => {
       return file;
+    }),
+  transactionDocs: f({
+    image: {
+      maxFileCount: 5,
+      maxFileSize: "4MB",
+    },
+    pdf: {
+      maxFileCount: 5,
+      maxFileSize: "4MB",
+    },
+  })
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+        transactionId: z.string().cuid(),
+      }),
+    )
+    .middleware(async ({ files, input }) => {
+      if (files.length > 5) throw new UploadThingError("Max 5 attachments");
+
+      const currentUser = await getCurrentUser();
+
+      const canAccess = await canManageAccounts(input.societyId);
+
+      if (!currentUser || !canAccess)
+        throw new UploadThingError("Unauthorized");
+
+      const attachments = await db.transactionDocs.findMany({
+        where: {
+          transactionId: input.transactionId,
+        },
+      });
+
+      if (attachments.length >= 5)
+        throw new UploadThingError("Max 5 attachments allowed");
+
+      if (attachments.length + files.length > 5)
+        throw new UploadThingError(
+          "Your  uploaded attachments will  be exceeding 5 atachments  per transaction",
+        );
+
+      return {
+        transactionId: input.transactionId,
+      };
+    })
+    .onUploadComplete(async ({ file, metadata: { transactionId } }) => {
+      const newDoc = await db.transactionDocs.create({
+        data: {
+          uri: file.url,
+          transactionId,
+        },
+      });
+
+      return { id: newDoc.id, uri: newDoc.uri };
     }),
 } satisfies FileRouter;
 
