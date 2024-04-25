@@ -19,8 +19,6 @@ import { toast } from "~/components/ui/use-toast";
 import { type SafeTransaction } from "~/lib/types";
 import { api } from "~/trpc/react";
 import UpdateTransaction from "./UpdateTransaction";
-import { useState } from "react";
-import AddDocs from "./AddDocs";
 
 export interface TransactionActionProps {
   transaction: SafeTransaction;
@@ -29,7 +27,6 @@ export interface TransactionActionProps {
 export default function TransactionAction({
   transaction,
 }: TransactionActionProps) {
-  const [modalContent, setModalContent] = useState<"UPDATE" | "DOCS">("UPDATE");
   const utils = api.useUtils();
   const { id } = useParams<{ id: string }>();
   const { isLoading, mutate: deleteTransaction } =
@@ -50,8 +47,8 @@ export default function TransactionAction({
             <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="absolute right-0">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Transaction Actions</DropdownMenuLabel>
           <DropdownMenuItem
             disabled={isLoading}
             onClick={() => navigator.clipboard.writeText(transaction.id)}
@@ -70,29 +67,12 @@ export default function TransactionAction({
             Delete
           </DropdownMenuItem>
           <AlertDialogTrigger asChild>
-            <DropdownMenuItem
-              onClick={() => setModalContent("UPDATE")}
-              disabled={isLoading}
-            >
-              Update
-            </DropdownMenuItem>
-          </AlertDialogTrigger>
-          <AlertDialogTrigger asChild>
-            <DropdownMenuItem
-              onClick={() => setModalContent("DOCS")}
-              disabled={isLoading}
-            >
-              Add Docs
-            </DropdownMenuItem>
+            <DropdownMenuItem disabled={isLoading}>Update</DropdownMenuItem>
           </AlertDialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
       <AlertDialogContent>
-        {modalContent === "UPDATE" ? (
-          <UpdateTransaction transaction={transaction} />
-        ) : (
-          <AddDocs transactionId={transaction.id} />
-        )}
+        <UpdateTransaction transaction={transaction} />
       </AlertDialogContent>
     </AlertDialog>
   );

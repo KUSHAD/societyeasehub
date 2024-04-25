@@ -10,12 +10,13 @@ import {
 } from "~/components/ui/alert-dialog";
 import { toast } from "~/components/ui/use-toast";
 import { UploadDropzone } from "~/lib/uploadthing";
+import { uploaderClassName } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export default function AddDocs({ transactionId }: { transactionId: string }) {
   const { id } = useParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // const utils = api.useUtils();
+  const utils = api.useUtils();
   return (
     <>
       <AlertDialogHeader>
@@ -34,7 +35,10 @@ export default function AddDocs({ transactionId }: { transactionId: string }) {
         }}
         onClientUploadComplete={async () => {
           setIsLoading(false);
-          // await  utils.transactionDocs.getByTransaction.invalidate({societyId:id,transactionId})
+          await utils.transactionDocs.getByTransaction.invalidate({
+            societyId: id,
+            transactionId,
+          });
           toast({
             title: "Message",
             description: "Documents Uploaded",
@@ -48,6 +52,7 @@ export default function AddDocs({ transactionId }: { transactionId: string }) {
           });
           setIsLoading(false);
         }}
+        className={uploaderClassName}
       />
       <AlertDialogFooter>
         <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>

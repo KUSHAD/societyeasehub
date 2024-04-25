@@ -1,5 +1,5 @@
 import { transactionSchema } from "~/lib/validators/transaction";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { canManageAccounts } from "~/actions/checkUserRole";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";

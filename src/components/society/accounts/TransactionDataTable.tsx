@@ -12,6 +12,7 @@ import { DataTable } from "~/components/ui/data-table";
 import { DataTableColumnHeader } from "~/components/ui/data-table/column-header";
 import { Checkbox } from "~/components/ui/checkbox";
 import TransactionAction from "./TransactionAction";
+import DocAction from "./DocAction";
 
 type Transaction = RouterOutput["transaction"]["getTableData"][0];
 
@@ -74,7 +75,13 @@ const columns: ColumnDef<Transaction>[] = [
     enableSorting: false,
   },
   {
+    id: "docActions",
+    header: "Document Actions",
+    cell: ({ row }) => <DocAction transactionId={row.original.id} />,
+  },
+  {
     id: "actions",
+    header: "Transaction Actions",
     cell: ({ row }) => {
       const _row = row.original;
       return <TransactionAction transaction={_row} />;
