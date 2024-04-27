@@ -54,7 +54,7 @@ export default function UpdateTransaction({
       >
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-          <AlertDialogAction>
+          <AlertDialogAction asChild>
             <AutoFormSubmit disabled={isLoading}>Update</AutoFormSubmit>
           </AlertDialogAction>
         </AlertDialogFooter>

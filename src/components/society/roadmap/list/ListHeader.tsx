@@ -3,6 +3,7 @@
 import { type RoadmapList } from "@prisma/client";
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogFooter,
@@ -64,7 +65,9 @@ export default function ListHeader({ list }: ListHeaderProps) {
         >
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-            <AutoFormSubmit disabled={isLoading}>Update</AutoFormSubmit>
+            <AlertDialogAction asChild>
+              <AutoFormSubmit disabled={isLoading}>Update</AutoFormSubmit>
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>
       </AlertDialogContent>

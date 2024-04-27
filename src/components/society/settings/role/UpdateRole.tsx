@@ -1,6 +1,7 @@
 "use client";
 
 import Skeleton from "react-loading-skeleton";
+import { AlertDialogAction } from "~/components/ui/alert-dialog";
 import AutoForm, { AutoFormSubmit } from "~/components/ui/auto-form";
 import { toast } from "~/components/ui/use-toast";
 import { newRole } from "~/lib/validators/newRole";
@@ -73,9 +74,11 @@ export default function UpdateRole({ id }: { id: string }) {
       formSchema={newRole}
       values={role}
     >
-      <AutoFormSubmit disabled={updating || isLoading} className="w-full">
-        Update
-      </AutoFormSubmit>
+      <AlertDialogAction asChild>
+        <AutoFormSubmit disabled={updating || isLoading} className="w-full">
+          Update
+        </AutoFormSubmit>
+      </AlertDialogAction>
     </AutoForm>
   );
 }

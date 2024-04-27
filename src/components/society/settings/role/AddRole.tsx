@@ -11,6 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   AlertDialogCancel,
+  AlertDialogAction,
 } from "~/components/ui/alert-dialog";
 import AutoForm, { AutoFormSubmit } from "~/components/ui/auto-form";
 import { Button } from "~/components/ui/button";
@@ -89,7 +90,9 @@ export default function AddRole() {
         >
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
-            <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
+            <AlertDialogAction asChild>
+              <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>
       </AlertDialogContent>

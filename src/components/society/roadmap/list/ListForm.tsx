@@ -8,6 +8,7 @@ import { Button } from "../../../ui/button";
 import { Plus } from "lucide-react";
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogFooter,
@@ -65,7 +66,9 @@ export default function ListForm() {
                 <AlertDialogCancel disabled={creating}>
                   Cancel
                 </AlertDialogCancel>
-                <AutoFormSubmit disabled={creating} />
+                <AlertDialogAction asChild>
+                  <AutoFormSubmit disabled={creating} />
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AutoForm>
           </AlertDialogContent>

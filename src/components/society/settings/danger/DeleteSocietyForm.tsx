@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -91,7 +92,9 @@ export default function DeleteSocietyForm() {
         >
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-            <AutoFormSubmit disabled={isLoading}>Delete</AutoFormSubmit>
+            <AlertDialogAction asChild>
+              <AutoFormSubmit disabled={isLoading}>Delete</AutoFormSubmit>
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>
       </AlertDialogContent>

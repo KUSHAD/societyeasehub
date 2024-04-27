@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import {
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogFooter,
 } from "~/components/ui/alert-dialog";
@@ -41,7 +42,9 @@ export default function CardForm({ listId }: CardFormProps) {
       >
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-          <AutoFormSubmit disabled={isLoading} />
+          <AlertDialogAction asChild>
+            <AutoFormSubmit disabled={isLoading} />
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AutoForm>
     </>

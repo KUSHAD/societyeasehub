@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -135,9 +136,11 @@ export default function ChangePasswordForm() {
         >
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
-            <AutoFormSubmit disabled={isLoading}>
-              {isLoading ? "Updating ..." : "Update Password"}
-            </AutoFormSubmit>
+            <AlertDialogAction asChild>
+              <AutoFormSubmit disabled={isLoading}>
+                {isLoading ? "Updating ..." : "Update Password"}
+              </AutoFormSubmit>
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>
       </AlertDialogContent>

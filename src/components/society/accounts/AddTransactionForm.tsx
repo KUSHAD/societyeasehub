@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import { useParams } from "next/navigation";
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogFooter,
@@ -60,7 +61,9 @@ export default function AddTransactionForm() {
         >
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
-            <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
+            <AlertDialogAction asChild>
+              <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>
       </AlertDialogContent>

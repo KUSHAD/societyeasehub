@@ -11,6 +11,7 @@ import Skeleton from "react-loading-skeleton";
 import { Button } from "~/components/ui/button";
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogFooter,
@@ -106,7 +107,9 @@ export default function UpdateDetails() {
                   },
                 }}
               >
-                <AutoFormSubmit disabled={updating} className="w-full" />
+                <AlertDialogAction asChild>
+                  <AutoFormSubmit disabled={updating} className="w-full" />
+                </AlertDialogAction>
               </AutoForm>
             )
           )}

@@ -3,6 +3,7 @@
 import { type RoadmapCard } from "@prisma/client";
 import { useParams } from "next/navigation";
 import {
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogFooter,
 } from "~/components/ui/alert-dialog";
@@ -60,7 +61,9 @@ export default function EditCard({ card }: EditCardProps) {
       >
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-          <AutoFormSubmit disabled={isLoading}>Update</AutoFormSubmit>
+          <AlertDialogAction asChild>
+            <AutoFormSubmit disabled={isLoading}>Update</AutoFormSubmit>
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AutoForm>
     </>

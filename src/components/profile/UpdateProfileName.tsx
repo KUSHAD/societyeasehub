@@ -2,6 +2,7 @@
 
 import {
   AlertDialog,
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogFooter,
@@ -62,13 +63,13 @@ export default function UpdateProfileName({ name }: { name: string }) {
               .min(1, "Required"),
           })}
         >
-          <AutoFormSubmit disabled={isLoading} className="w-full">
-            Update Name
-          </AutoFormSubmit>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <AutoFormSubmit disabled={isLoading}>Update Name</AutoFormSubmit>
+            </AlertDialogAction>
+          </AlertDialogFooter>
         </AutoForm>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
-        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
