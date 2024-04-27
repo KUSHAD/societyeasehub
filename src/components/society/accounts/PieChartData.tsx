@@ -39,6 +39,7 @@ export default function PieChartData() {
           labels: __data.map((_data) => _data.label),
           datasets: [
             {
+              label: "Total Amount",
               data: __data.map((_data) => Number(_data.data)),
               backgroundColor: Array.from(__data).map(() =>
                 generateRandomColor(),

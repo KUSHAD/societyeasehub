@@ -31,46 +31,39 @@ export default function AddTransactionForm() {
     },
   });
   return (
-    <>
-      <div className="flex flex-row">
-        <div className="mr-auto" />
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button>
-              <Plus className="mx-1" /> Add Transaction
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Add Transaction</AlertDialogTitle>
-            </AlertDialogHeader>
-            <AutoForm
-              onSubmit={(data) =>
-                create({
-                  ...data,
-                  societyId: id,
-                })
-              }
-              formSchema={transactionSchema}
-              fieldConfig={{
-                description: {
-                  fieldType: "textarea",
-                  inputProps: {
-                    className: "resize-none",
-                  },
-                },
-              }}
-            >
-              <AlertDialogFooter>
-                <AlertDialogCancel disabled={isLoading}>
-                  Close
-                </AlertDialogCancel>
-                <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
-              </AlertDialogFooter>
-            </AutoForm>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
-    </>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button>
+          <Plus className="mx-1" /> Add Transaction
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Add Transaction</AlertDialogTitle>
+        </AlertDialogHeader>
+        <AutoForm
+          onSubmit={(data) =>
+            create({
+              ...data,
+              societyId: id,
+            })
+          }
+          formSchema={transactionSchema}
+          fieldConfig={{
+            description: {
+              fieldType: "textarea",
+              inputProps: {
+                className: "resize-none",
+              },
+            },
+          }}
+        >
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+            <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
+          </AlertDialogFooter>
+        </AutoForm>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

@@ -7,7 +7,7 @@ import { endOfDay, format, startOfDay } from "date-fns";
 import { getDateRange } from "~/lib/utils";
 import { type $Enums } from "@prisma/client";
 
-const commonInput = z.object({
+export const commonTransactionInput = z.object({
   societyId: z.string().cuid(),
   from: z.coerce.date(),
   to: z.coerce.date(),
@@ -59,7 +59,7 @@ export const transactionRouter = createTRPCRouter({
       },
     ),
   getPieChart: protectedProcedure
-    .input(commonInput)
+    .input(commonTransactionInput)
     .query(async ({ ctx: { db }, input: { societyId, from, to } }) => {
       const pieData = await db.transaction.groupBy({
         where: {
@@ -79,7 +79,7 @@ export const transactionRouter = createTRPCRouter({
       }));
     }),
   getLineChartData: protectedProcedure
-    .input(commonInput)
+    .input(commonTransactionInput)
     .query(async ({ ctx: { db }, input: { from, societyId, to } }) => {
       const data = await db.transaction.findMany({
         where: {
@@ -130,7 +130,7 @@ export const transactionRouter = createTRPCRouter({
       return dateSumArray;
     }),
   getTableData: protectedProcedure
-    .input(commonInput)
+    .input(commonTransactionInput)
     .query(async ({ ctx: { db }, input: { from, societyId, to } }) => {
       const data = await db.transaction.findMany({
         where: {
