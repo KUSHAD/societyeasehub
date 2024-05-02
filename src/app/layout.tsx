@@ -14,6 +14,7 @@ import { NextAuthReactProvider } from "~/next-auth/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import { type Metadata } from "next";
+import NextTopLoader from "nextjs-toploader";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -51,6 +52,7 @@ export default async function RootLayout({
           inter.variable,
         )}
       >
+        <NextTopLoader color="#18181b" />
         <div className="m-auto w-full max-w-screen-lg">
           <TRPCReactProvider cookies={cookies().toString()}>
             <NextAuthReactProvider>

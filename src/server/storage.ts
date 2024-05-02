@@ -23,7 +23,9 @@ const f = createUploadthing({
 export const utapi = new UTApi();
 
 export const ourFileRouter = {
-  profileImage: f({ image: { maxFileSize: "1MB", maxFileCount: 1 } })
+  profileImage: f({
+    image: { maxFileSize: "1MB", maxFileCount: 1, minFileCount: 1 },
+  })
     .middleware(async () => {
       const currentUser = await getCurrentUser();
 
@@ -57,7 +59,7 @@ export const ourFileRouter = {
       };
     }),
   societyMedia: f({
-    image: { maxFileCount: 5, maxFileSize: "4MB" },
+    image: { maxFileCount: 5, maxFileSize: "4MB", minFileCount: 1 },
   })
     .input(
       z.object({
@@ -116,8 +118,8 @@ export const ourFileRouter = {
       return { id: newMedia.id, uri: newMedia.uri };
     }),
   messageAttachments: f({
-    image: { maxFileCount: 5, maxFileSize: "4MB" },
-    video: { maxFileCount: 5, maxFileSize: "16MB" },
+    image: { maxFileCount: 5, maxFileSize: "4MB", minFileCount: 1 },
+    video: { maxFileCount: 5, maxFileSize: "16MB", minFileCount: 1 },
   })
     .input(
       z.object({
@@ -162,10 +164,12 @@ export const ourFileRouter = {
     image: {
       maxFileCount: 5,
       maxFileSize: "4MB",
+      minFileCount: 1,
     },
     pdf: {
       maxFileCount: 5,
       maxFileSize: "4MB",
+      minFileCount: 1,
     },
   })
     .input(

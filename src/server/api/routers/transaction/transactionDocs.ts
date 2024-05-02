@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { canManageAccounts } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
+import { utapi } from "~/server/storage";
 
 export const transactionDocsRouter = createTRPCRouter({
   getByTransaction: protectedProcedure
@@ -53,6 +54,10 @@ export const transactionDocsRouter = createTRPCRouter({
             id: true,
           },
         });
+
+        const fileKey = docToDelete.uri.split("/f/")[1]!;
+
+        await utapi.deleteFiles(fileKey);
 
         return docToDelete;
       },

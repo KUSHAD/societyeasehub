@@ -6,6 +6,7 @@ import { TRPCError } from "@trpc/server";
 import { endOfDay, format, startOfDay } from "date-fns";
 import { getDateRange } from "~/lib/utils";
 import { type $Enums } from "@prisma/client";
+import { utapi } from "~/server/storage";
 
 export const commonTransactionInput = z.object({
   societyId: z.string().cuid(),
@@ -172,6 +173,29 @@ export const transactionRouter = createTRPCRouter({
     .mutation(async ({ ctx: { db }, input: { societyId, transactionID } }) => {
       const canManage = await canManageAccounts(societyId);
       if (!canManage) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const medias = await db.transactionDocs.findMany({
+        where: {
+          transactionId: {
+            in: transactionID,
+          },
+        },
+        select: {
+          uri: true,
+        },
+      });
+
+      const fileKeys = medias.map((_media) => _media.uri.split("/f/")[1]!);
+
+      await utapi.deleteFiles(fileKeys);
+
+      await db.transactionDocs.deleteMany({
+        where: {
+          transactionId: {
+            in: transactionID,
+          },
+        },
+      });
 
       const rowsDeleted = await db.transaction.deleteMany({
         where: {
