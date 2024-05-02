@@ -18,12 +18,19 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
 import AddDocs from "./AddDocs";
 import ViewDocs from "./ViewDocs";
+import { useParams } from "next/navigation";
+import { api } from "~/trpc/react";
 
 export default function DocAction({
   transactionId,
 }: {
   transactionId: string;
 }) {
+  const { id } = useParams<{ id: string }>();
+
+  const { data: canManage, isLoading } = api.member.canManageAccounts.useQuery({
+    societyId: id,
+  });
   return (
     <AlertDialog>
       <Sheet>
@@ -38,9 +45,11 @@ export default function DocAction({
             <SheetTrigger asChild>
               <DropdownMenuItem>View Docs</DropdownMenuItem>
             </SheetTrigger>
-            <AlertDialogTrigger asChild>
-              <DropdownMenuItem>Add Docs</DropdownMenuItem>
-            </AlertDialogTrigger>
+            {isLoading ? null : canManage ? (
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem>Add Docs</DropdownMenuItem>
+              </AlertDialogTrigger>
+            ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
         <AlertDialogContent>

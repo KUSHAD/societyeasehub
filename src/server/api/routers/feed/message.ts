@@ -1,8 +1,9 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { messageSchema } from "~/lib/validators/message";
-import { canSendMessages } from "~/actions/checkUserRole";
+import { canManageChannels, canSendMessages } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
+import { utapi } from "~/server/storage";
 
 export const messageRouter = createTRPCRouter({
   getByChannel: protectedProcedure
@@ -93,4 +94,82 @@ export const messageRouter = createTRPCRouter({
         return newMessage;
       },
     ),
+  userDelete: protectedProcedure
+    .input(
+      z.object({
+        messageId: z.string().cuid(),
+      }),
+    )
+    .mutation(
+      async ({
+        ctx: {
+          db,
+          session: { user },
+        },
+        input: { messageId },
+      }) => {
+        const deletedMessage = await db.message.delete({
+          where: {
+            id: messageId,
+            userId: user.id,
+          },
+          select: {
+            attachments: {
+              select: {
+                uri: true,
+              },
+            },
+          },
+        });
+
+        const fileKeys = deletedMessage.attachments.map(
+          (_media) => _media.uri.split("/f/")[1]!,
+        );
+
+        await utapi.deleteFiles(fileKeys);
+
+        await db.messageAttachment.deleteMany({
+          where: { messageId },
+        });
+
+        return deletedMessage;
+      },
+    ),
+  adminDelete: protectedProcedure
+    .input(
+      z.object({
+        messageId: z.string().cuid(),
+        societyId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { messageId, societyId } }) => {
+      const canManage = await canManageChannels(societyId);
+
+      if (!canManage) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const deletedMessage = await db.message.delete({
+        where: {
+          id: messageId,
+        },
+        select: {
+          attachments: {
+            select: {
+              uri: true,
+            },
+          },
+        },
+      });
+
+      const fileKeys = deletedMessage.attachments.map(
+        (_media) => _media.uri.split("/f/")[1]!,
+      );
+
+      await utapi.deleteFiles(fileKeys);
+
+      await db.messageAttachment.deleteMany({
+        where: { messageId },
+      });
+
+      return deletedMessage;
+    }),
 });

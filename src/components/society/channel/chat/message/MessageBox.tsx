@@ -18,7 +18,7 @@ export default function MessageBox({ message }: MessageBoxProps) {
     <div className="flex flex-row">
       <div className="mr-auto" />
       <div className="my-2 flex w-1/2 flex-col rounded-lg bg-primary">
-        <MessageOptions self />
+        <MessageOptions self messageId={message.id} />
         <Suspense
           fallback={
             <div className="flex justify-center">
@@ -43,7 +43,7 @@ export default function MessageBox({ message }: MessageBoxProps) {
         societyId={message.member.societyId}
       />
       <div className="my-2 flex w-1/2 flex-col rounded-lg bg-muted">
-        <MessageOptions />
+        <MessageOptions messageId={message.id} />
         <Suspense
           fallback={
             <div className="flex justify-center">

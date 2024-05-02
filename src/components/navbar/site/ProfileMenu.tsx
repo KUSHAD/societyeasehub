@@ -78,7 +78,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
     pathname !== "/auth" &&
     pathname !== "/tos" &&
     pathname !== "/privacy" &&
-    pathname !== "/cookie" ? null : (
+    pathname !== "/cookie" &&
+    pathname !== "/refund" &&
+    pathname !== "/support" ? null : (
     <div className="mt-4">
       <Link
         className={buttonVariants({

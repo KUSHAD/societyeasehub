@@ -29,6 +29,10 @@ export default function TransactionAction({
 }: TransactionActionProps) {
   const utils = api.useUtils();
   const { id } = useParams<{ id: string }>();
+  const { data: canManage, isLoading: gettingPerms } =
+    api.member.canManageAccounts.useQuery({
+      societyId: id,
+    });
   const { isLoading, mutate: deleteTransaction } =
     api.transaction.delete.useMutation({
       async onSuccess() {
@@ -55,20 +59,24 @@ export default function TransactionAction({
           >
             Copy ID
           </DropdownMenuItem>
-          <DropdownMenuItem
-            disabled={isLoading}
-            onClick={() =>
-              deleteTransaction({
-                societyId: id,
-                transactionID: [transaction.id],
-              })
-            }
-          >
-            Delete
-          </DropdownMenuItem>
-          <AlertDialogTrigger asChild>
-            <DropdownMenuItem disabled={isLoading}>Update</DropdownMenuItem>
-          </AlertDialogTrigger>
+          {gettingPerms ? null : canManage ? (
+            <>
+              <DropdownMenuItem
+                disabled={isLoading}
+                onClick={() =>
+                  deleteTransaction({
+                    societyId: id,
+                    transactionID: [transaction.id],
+                  })
+                }
+              >
+                Delete
+              </DropdownMenuItem>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem disabled={isLoading}>Update</DropdownMenuItem>
+              </AlertDialogTrigger>
+            </>
+          ) : null}
         </DropdownMenuContent>
       </DropdownMenu>
       <AlertDialogContent>

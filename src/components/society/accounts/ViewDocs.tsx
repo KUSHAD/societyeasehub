@@ -31,6 +31,11 @@ export default function ViewDocs({ transactionId }: { transactionId: string }) {
       transactionId,
       societyId: id,
     });
+
+  const { data: canManage, isLoading: gettingPerms } =
+    api.member.canManageAccounts.useQuery({
+      societyId: id,
+    });
   return (
     <>
       <SheetHeader>
@@ -49,20 +54,22 @@ export default function ViewDocs({ transactionId }: { transactionId: string }) {
         docs?.map((_doc) => (
           <>
             <MediaRenderer key={_doc.id} uri={_doc.uri} />
-            <Button
-              disabled={deleting}
-              variant="destructive"
-              onClick={() => {
-                remove({
-                  docId: _doc.id,
-                  societyId: id,
-                  transactionId,
-                });
-              }}
-              className="mb-2 w-full"
-            >
-              Delete This Doc
-            </Button>
+            {canManage ? (
+              <Button
+                disabled={deleting || gettingPerms}
+                variant="destructive"
+                onClick={() => {
+                  remove({
+                    docId: _doc.id,
+                    societyId: id,
+                    transactionId,
+                  });
+                }}
+                className="mb-2 w-full"
+              >
+                Delete This Doc
+              </Button>
+            ) : null}
           </>
         ))
       )}

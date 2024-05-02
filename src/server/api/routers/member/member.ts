@@ -7,6 +7,7 @@ import {
   isSocietyOwner,
   canAccessSettings,
   canManageRoadmaps,
+  canManageAccounts,
 } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 
@@ -240,5 +241,10 @@ export const memberRouter = createTRPCRouter({
     .input(z.object({ societyId: z.string().cuid() }))
     .query(
       async ({ input: { societyId } }) => await canManageRoadmaps(societyId),
+    ),
+  canManageAccounts: protectedProcedure
+    .input(z.object({ societyId: z.string().cuid() }))
+    .query(
+      async ({ input: { societyId } }) => await canManageAccounts(societyId),
     ),
 });
