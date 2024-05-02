@@ -2,6 +2,7 @@ import React from "react";
 import { checkChannelExists } from "~/actions/checkChannelExists";
 import { canSendMessages } from "~/actions/checkUserRole";
 import ClientOnly from "~/components/ClientOnly";
+import ChannelTopBar from "~/components/society/channel/ChannelTopBar";
 import ChatInput from "~/components/society/channel/chat/ChatInput";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
@@ -16,6 +17,9 @@ export default async function ChannelLayout({
   const canSend = await canSendMessages(id);
   return (
     <div className="overflow-hidden">
+      <ClientOnly>
+        <ChannelTopBar />
+      </ClientOnly>
       <ScrollArea className="flex h-[400px] flex-col overflow-auto lg:h-[525px]">
         {children}
       </ScrollArea>

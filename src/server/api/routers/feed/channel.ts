@@ -4,6 +4,7 @@ import { z } from "zod";
 import { canManageChannels } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 import { utapi } from "~/server/storage";
+import { revalidatePath } from "next/cache";
 
 export const channelRouter = createTRPCRouter({
   create: protectedProcedure
@@ -76,7 +77,34 @@ export const channelRouter = createTRPCRouter({
         data: { name: input.name },
       });
 
+      revalidatePath(`/society/${input.societyId}/channel/${input.channelId}`);
+
       return updatedName;
+    }),
+  getName: protectedProcedure
+    .input(
+      z.object({
+        channelId: z.string().cuid(),
+        societyId: z.string().cuid(),
+      }),
+    )
+    .query(async ({ ctx: { db }, input: { channelId, societyId } }) => {
+      const channel = await db.channel.findUnique({
+        where: {
+          id: channelId,
+          societyId,
+        },
+        select: {
+          name: true,
+        },
+      });
+
+      if (!channel)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+
+      return channel.name;
     }),
   delete: protectedProcedure
     .input(
