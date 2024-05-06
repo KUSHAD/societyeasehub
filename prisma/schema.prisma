@@ -39,13 +39,14 @@ model User {
     emailVerified DateTime?
     image         String?
 
-    accounts     Account[]
-    societies    Society[]
-    memberShips  Member[]
-    invites      Invite[]
-    messages     Message[]
-    rooms        MeetingRoom[]
-    transactions Transaction[]
+    accounts      Account[]
+    societies     Society[]
+    memberShips   Member[]
+    invites       Invite[]
+    messages      Message[]
+    rooms         MeetingRoom[]
+    transactions  Transaction[]
+    announcements Announcement[]
 }
 
 // App Models
@@ -73,7 +74,7 @@ model Society {
     rooms        MeetingRoom[]
     roadmaps     RoadmapList[]
     transactions Transaction[]
-    polls        Poll[]
+    Announcement Announcement[]
 }
 
 model SocietyMedia {
@@ -96,7 +97,6 @@ model Member {
     society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     user    User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     role    Role?   @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    Vote    Vote[]
 
     @@id(name: "memberId", [societyId, userId])
     @@unique([societyId, userId])
@@ -116,6 +116,7 @@ model Role {
     manageAccounts Boolean  @default(false) // Manage Accounts and Transactions
     canCreatePolls Boolean  @default(false) // Create Polls
     canVote        Boolean  @default(false) // Vote in Polls
+    canAnnounce    Boolean  @default(false) // Make announcements
     societyId      String
     createdAt      DateTime @default(now()) @ignore
     updatedAt      DateTime @updatedAt @ignore
@@ -248,49 +249,26 @@ model TransactionDocs {
     transaction Transaction @relation(fields: [transactionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
-model Poll {
-    id         String   @id @default(cuid())
-    societyId  String
-    questionId String   @unique
-    expiresAt  DateTime
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt @ignore
-
-    society  Society  @relation(fields: [societyId], references: [id])
-    options  Option[]
-    question Question @relation(references: [id], fields: [questionId])
-}
-
-model Option {
+model Announcement {
     id        String   @id @default(cuid())
-    text      String
-    pollId    String
+    content   String   @db.VarChar(250)
+    userId    String
+    societyId String
     createdAt DateTime @default(now()) @ignore
     updatedAt DateTime @updatedAt @ignore
 
-    poll  Poll   @relation(fields: [pollId], references: [id])
-    votes Vote[]
+    member      User                      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+    society     Society                   @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    attachments AnnouncementAttachments[]
 }
 
-model Question {
-    id        String   @id @default(cuid())
-    text      String
-    pollId    String
-    createdAt DateTime @default(now()) @ignore
-    updatedAt DateTime @updatedAt @ignore
+model AnnouncementAttachments {
+    id             String   @id @default(cuid())
+    uri            String   @unique @db.Text
+    name           String   @db.VarChar(250)
+    announcementId String
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt @ignore
 
-    Poll Poll?
-}
-
-model Vote {
-    memberId  String
-    optionId  String
-    createdAt DateTime @default(now()) @ignore
-    updatedAt DateTime @updatedAt @ignore
-
-    member Member @relation(fields: [memberId], references: [userId])
-    option Option @relation(fields: [optionId], references: [id])
-
-    @@id(name: "voteId", [optionId, memberId])
-    @@unique([optionId, memberId])
+    transaction Announcement @relation(fields: [announcementId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
