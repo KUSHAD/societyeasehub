@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "./getCurrentUser";
 import { db } from "~/server/db";
+
 export async function isSocietyOwner(societyId: string, userId: string) {
   const currentUser = await getCurrentUser();
 
@@ -278,6 +279,36 @@ export async function canManageAccounts(societyId: string) {
       userId: currentUser.id,
       role: {
         manageAccounts: true,
+      },
+    },
+  });
+
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
+  if (!dbMemberShip) return false;
+
+  return true;
+}
+
+export async function canAnnounce(societyId: string) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) redirect("/api/auth/signin");
+
+  const dbSociety = await db.society.findUnique({
+    where: {
+      id: societyId,
+    },
+  });
+
+  const dbMemberShip = await db.member.findFirst({
+    where: {
+      societyId,
+      userId: currentUser.id,
+      role: {
+        canAnnounce: true,
       },
     },
   });

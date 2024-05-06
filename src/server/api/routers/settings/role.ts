@@ -67,6 +67,9 @@ export const rolesRouter = createTRPCRouter({
           createMeeting: true,
           manageRoadmap: true,
           manageAccounts: true,
+          canAnnounce: true,
+          canCreatePolls: true,
+          canVote: true,
           _count: {
             select: {
               members: true,

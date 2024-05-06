@@ -1,5 +1,5 @@
 import { channelSchema } from "~/lib/validators/channel";
-import { createTRPCRouter, protectedProcedure } from "../../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../../trpc";
 import { z } from "zod";
 import { canManageChannels } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { safeAction } from "~/lib/safe-action";
 import { utapi } from "~/server/storage";
 
-export const deleteDraftMessageAttachment = safeAction(
+export const deleteDraftAttachment = safeAction(
   z.object({
     uri: z.string().url(),
   }),

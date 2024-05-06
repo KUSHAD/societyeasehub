@@ -52,7 +52,7 @@ export default function UpdateRole({ id }: { id: string }) {
         },
         manageChannel: {
           fieldType: "switch",
-          description: "Create Feed Channels",
+          description: "Manage Feed Channels",
         },
         sendMessage: {
           fieldType: "switch",
@@ -69,6 +69,18 @@ export default function UpdateRole({ id }: { id: string }) {
         manageRoadmap: {
           fieldType: "switch",
           description: "Can Manage Roadmaps",
+        },
+        canAnnounce: {
+          fieldType: "switch",
+          description: "Can Make Announcements",
+        },
+        canCreatePolls: {
+          fieldType: "switch",
+          description: "Can Create Polls",
+        },
+        canVote: {
+          fieldType: "switch",
+          description: "Can Vote In Polls",
         },
       }}
       formSchema={newRole}

@@ -5,13 +5,14 @@ import { societyMediaRouter } from "./routers/society/societyMedia";
 import { rolesRouter } from "./routers/settings/role";
 import { memberRouter } from "./routers/member/member";
 import { inviteRouter } from "./routers/member/invite";
-import { channelRouter } from "./routers/feed/channel";
-import { messageRouter } from "./routers/feed/message";
+import { channelRouter } from "./routers/feed/channel/channel";
+import { messageRouter } from "./routers/feed/channel/message";
 import { meetingRoomRouter } from "./routers/meetingRoom";
 import { roadmapListRouter } from "./routers/roadmap/roadmapList";
 import { roadmapCardRouter } from "./routers/roadmap/roadmapCard";
 import { transactionRouter } from "./routers/transaction/transaction";
 import { transactionDocsRouter } from "./routers/transaction/transactionDocs";
+import { announcementRouter } from "./routers/feed/announcement";
 
 /**
  * This is the primary router for your server.
@@ -32,6 +33,7 @@ export const appRouter = createTRPCRouter({
   roadmapCard: roadmapCardRouter,
   transaction: transactionRouter,
   transactionDocs: transactionDocsRouter,
+  announcement: announcementRouter,
 });
 
 // export type definition of API

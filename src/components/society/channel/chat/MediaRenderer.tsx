@@ -7,7 +7,7 @@ import { AspectRatio } from "~/components/ui/aspect-ratio";
 import { Button } from "~/components/ui/button";
 import { getMediaTypeFromURL } from "~/lib/utils";
 import { useAction } from "next-safe-action/hooks";
-import { deleteDraftMessageAttachment } from "~/actions/deleteAttachment";
+import { deleteDraftAttachment } from "~/actions/deleteAttachment";
 import { toast } from "~/components/ui/use-toast";
 import { useMessageAttachmentStore } from "~/store/messageAttachment";
 
@@ -19,7 +19,7 @@ export default function MediaRenderer({
   showDelete?: boolean;
 }) {
   const [type, setType] = useState("");
-  const draftDeleteAction = useAction(deleteDraftMessageAttachment);
+  const draftDeleteAction = useAction(deleteDraftAttachment);
   const messageAttachmentStore = useMessageAttachmentStore();
 
   const getMimeType = useCallback(async () => {
