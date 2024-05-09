@@ -76,8 +76,18 @@ export type DraftMessage = {
   content: string;
 };
 
-export type DraftAttachment = {
+export type DraftMessageAttachment = {
   channelId: string;
+  uri: string;
+};
+
+export type DraftAnnouncement = {
+  societyId: string;
+  content: string;
+};
+
+export type DraftAnnouncementAttachment = {
+  societyId: string;
   uri: string;
 };
 

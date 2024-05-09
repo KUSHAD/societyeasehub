@@ -11,12 +11,16 @@ import {
 } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { toast } from "~/components/ui/use-toast";
+import { useMessageStore } from "~/store/announcement";
+import { useMessageAttachmentStore } from "~/store/messageAttachment";
 import { api } from "~/trpc/react";
 
 export default function DeleteChannel() {
   const { id, channelId } = useParams<{ id: string; channelId: string }>();
   const router = useRouter();
   const utils = api.useUtils();
+  const messageStore = useMessageStore();
+  const messageAttachmentStore = useMessageAttachmentStore();
 
   const { isLoading, mutate: deleteChannel } = api.channel.delete.useMutation({
     onMutate() {
@@ -24,6 +28,9 @@ export default function DeleteChannel() {
     },
     async onSuccess() {
       await utils.channel.getBySociety.invalidate({ societyId: id });
+
+      messageStore.updateBySociety(id, "");
+      messageAttachmentStore.clearByChannel(channelId);
 
       toast({
         title: "Message",

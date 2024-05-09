@@ -21,7 +21,7 @@ export const formattedCountries = countries.map((country) => ({
 }));
 
 export const uploaderClassName =
-  "ut-allowed-content:ut-uploading:text-danger bg-transparent ut-label:text-lg ut-label:text-primary ut-button:ut-uploading:bg-primary/70 ut-button:ut-uploading:after:bg-primary ut-button:bg-primary";
+  "ut-allowed-content:ut-uploading:text-danger bg-transparent ut-label:text-lg ut-label:text-primary ut-button:cursor-pointer ut-button:ut-uploading:cursor-not-allowed ut-button:ut-uploading:bg-primary/70 ut-button:ut-uploading:after:bg-primary ut-button:bg-primary";
 
 export function getAuthErrors(errorCode: string) {
   const errors = {

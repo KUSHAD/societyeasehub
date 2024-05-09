@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { type DraftAttachment } from "~/lib/types";
+import { type DraftMessageAttachment } from "~/lib/types";
 
 interface MessageAttachmentStore {
-  attachments: DraftAttachment[];
+  attachments: DraftMessageAttachment[];
   updateByChannel: (channelId: string, uri: string) => void;
   getByChannel: (channelId: string) => string[];
   clearByChannel: (channelId: string) => void;

@@ -6,6 +6,7 @@ import { db } from "./db";
 import { z } from "zod";
 import {
   canAccessSettings,
+  canAnnounce,
   canManageAccounts,
   canSendMessages,
 } from "~/actions/checkUserRole";
@@ -123,12 +124,18 @@ export const ourFileRouter = {
   })
     .input(
       z.object({
-        messageId: z.string().cuid().optional(),
         societyId: z.string().cuid(),
+        currentFileCount: z.number(),
       }),
     )
-    .middleware(async ({ files, input: { messageId, societyId } }) => {
+    .middleware(async ({ files, input: { societyId, currentFileCount } }) => {
+      if (currentFileCount === 5)
+        throw new UploadThingError("Max 5 attachments");
+
       if (files.length > 5) throw new UploadThingError("Max 5 attachments");
+
+      if (currentFileCount + files.length > 5)
+        throw new UploadThingError("Max 5 attachments");
 
       const currentUser = await getCurrentUser();
 
@@ -137,25 +144,7 @@ export const ourFileRouter = {
       if (!currentUser || !canAccess)
         throw new UploadThingError("Unauthorized");
 
-      if (messageId) {
-        const attachments = await db.messageAttachment.findMany({
-          where: {
-            messageId,
-          },
-        });
-
-        if (attachments.length >= 5)
-          throw new UploadThingError("Max 5 attachments allowed");
-
-        if (attachments.length + files.length > 5)
-          throw new UploadThingError(
-            "Your  uploaded attachments will  be exceeding 5 atachments  per message",
-          );
-      }
-
-      return {
-        messageId: messageId ?? "",
-      };
+      return {};
     })
     .onUploadComplete(({ file }) => {
       return file;
@@ -215,6 +204,37 @@ export const ourFileRouter = {
       });
 
       return { id: newDoc.id, uri: newDoc.uri };
+    }),
+  announcementAttachments: f({
+    image: { maxFileCount: 5, maxFileSize: "4MB", minFileCount: 1 },
+    video: { maxFileCount: 5, maxFileSize: "16MB", minFileCount: 1 },
+    pdf: { maxFileCount: 5, maxFileSize: "4MB", minFileCount: 1 },
+  })
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+        currentFileCount: z.number(),
+      }),
+    )
+    .middleware(async ({ files, input: { societyId, currentFileCount } }) => {
+      if (currentFileCount === 5)
+        throw new UploadThingError("Max 5 attachments");
+
+      if (files.length > 5) throw new UploadThingError("Max 5 attachments");
+
+      if (currentFileCount + files.length > 5)
+        throw new UploadThingError("Max 5 attachments");
+      const currentUser = await getCurrentUser();
+
+      const canAccess = await canAnnounce(societyId);
+
+      if (!currentUser || !canAccess)
+        throw new UploadThingError("Unauthorized");
+
+      return {};
+    })
+    .onUploadComplete(({ file }) => {
+      return file;
     }),
 } satisfies FileRouter;
 

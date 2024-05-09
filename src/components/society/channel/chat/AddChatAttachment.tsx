@@ -15,7 +15,10 @@ export default function AddChatAttachment({
 
   return (
     <UploadDropzone
-      input={{ societyId: id }}
+      input={{
+        societyId: id,
+        currentFileCount: messageAttachmentStore.getByChannel(channelId).length,
+      }}
       className={uploaderClassName}
       endpoint="messageAttachments"
       onUploadBegin={() => {

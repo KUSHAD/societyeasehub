@@ -10,17 +10,21 @@ import { useAction } from "next-safe-action/hooks";
 import { deleteDraftAttachment } from "~/actions/deleteAttachment";
 import { toast } from "~/components/ui/use-toast";
 import { useMessageAttachmentStore } from "~/store/messageAttachment";
+import { useAnnouncementAttachmentStore } from "~/store/announcementAttachment";
 
 export default function MediaRenderer({
   uri,
   showDelete = false,
+  isMessage = true,
 }: {
   uri: string;
   showDelete?: boolean;
+  isMessage?: boolean;
 }) {
   const [type, setType] = useState("");
   const draftDeleteAction = useAction(deleteDraftAttachment);
   const messageAttachmentStore = useMessageAttachmentStore();
+  const announcementAttachmentStore = useAnnouncementAttachmentStore();
 
   const getMimeType = useCallback(async () => {
     const mimeType = await getMediaTypeFromURL(uri);
@@ -49,8 +53,11 @@ export default function MediaRenderer({
           <Button
             onClick={() => {
               draftDeleteAction.execute({ uri });
-              messageAttachmentStore.deleteByUri(uri);
-
+              if (isMessage) {
+                messageAttachmentStore.deleteByUri(uri);
+              } else {
+                announcementAttachmentStore.deleteByUri(uri);
+              }
               if (draftDeleteAction.result.data?.failure) {
                 toast({
                   title: "Error",
