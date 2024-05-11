@@ -74,6 +74,10 @@ export default function UpdateRole({ id }: { id: string }) {
           fieldType: "switch",
           description: "Can Make Announcements",
         },
+        canComment: {
+          fieldType: "switch",
+          description: "Can Comment in announcements",
+        },
         canCreatePolls: {
           fieldType: "switch",
           description: "Can Create Polls",

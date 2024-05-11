@@ -90,6 +90,10 @@ export default function AddRole() {
               fieldType: "switch",
               description: "Can Make Announcements",
             },
+            canComment: {
+              fieldType: "switch",
+              description: "Can Comment in announcements",
+            },
             canCreatePolls: {
               fieldType: "switch",
               description: "Can Create Polls",

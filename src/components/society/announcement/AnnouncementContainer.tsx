@@ -1,0 +1,24 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import { api } from "~/trpc/react";
+import AnnouncementSkeleton from "./AnnouncementSkeleton";
+import Announcement from "./Announcement";
+import NotFound from "~/components/NotFound";
+
+export default function AnnouncementContainer() {
+  const { id } = useParams<{ id: string }>();
+  const { data, isLoading } = api.announcement.getBySociety.useQuery({
+    societyId: id,
+  });
+
+  return isLoading ? (
+    <AnnouncementSkeleton />
+  ) : data && data.length !== 0 ? (
+    data.map((_announcement) => (
+      <Announcement announcement={_announcement} key={_announcement.id} />
+    ))
+  ) : (
+    <NotFound message="No Announcements found" />
+  );
+}

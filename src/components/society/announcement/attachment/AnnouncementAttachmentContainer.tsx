@@ -9,7 +9,7 @@ import { useAnnouncementAttachmentStore } from "~/store/announcementAttachment";
 import { useState } from "react";
 import { toast } from "~/components/ui/use-toast";
 
-import MediaRenderer from "../channel/chat/MediaRenderer";
+import MediaRenderer from "../../channel/chat/MediaRenderer";
 import { AspectRatio } from "~/components/ui/aspect-ratio";
 
 export default function AnnouncementAttachmentContainer() {

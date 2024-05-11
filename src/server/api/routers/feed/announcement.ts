@@ -48,4 +48,25 @@ export const announcementRouter = createTRPCRouter({
         return newAnnouncement;
       },
     ),
+  getBySociety: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+      }),
+    )
+    .query(async ({ ctx: { db }, input: { societyId } }) => {
+      const announcements = await db.announcement.findMany({
+        where: { societyId },
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          member: { select: { image: true, name: true, id: true } },
+          content: true,
+          attachments: { select: { name: true, uri: true } },
+          _count: { select: { comments: true } },
+        },
+      });
+
+      return announcements;
+    }),
 });

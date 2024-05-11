@@ -16,13 +16,11 @@ import { Pencil2Icon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { cn, uploaderClassName } from "~/lib/utils";
-import { useSession } from "next-auth/react";
 
 export default function UpdateProfileImage() {
   const [open, setIsOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
-  const { update } = useSession();
   return (
     <AlertDialog open={open} onOpenChange={(_open) => setIsOpen(_open)}>
       <AlertDialogTrigger asChild>
@@ -50,14 +48,12 @@ export default function UpdateProfileImage() {
             setIsUploading(true);
             return files;
           }}
-          onClientUploadComplete={async (res) => {
+          onClientUploadComplete={async () => {
             toast({
               title: "Success",
               description: "Profile Picture Updated",
             });
-            await update({
-              image: res[0]!.url,
-            });
+
             setIsUploading(false);
             setIsOpen(false);
             router.refresh();

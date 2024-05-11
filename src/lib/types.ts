@@ -37,6 +37,23 @@ export type SafeRole = Omit<Role, "societyId">;
 
 export type SocietyUsersOutput = RouterOutput["member"]["getBySociety"][0];
 
+export type AnnouncementsOutput = {
+  member: {
+    name: string | null;
+    image: string | null;
+    id: string;
+  };
+  id: string;
+  _count: {
+    comments: number;
+  };
+  content: string;
+  attachments: {
+    name: string;
+    uri: string;
+  }[];
+};
+
 export interface PageProps {
   params: {
     id: string;

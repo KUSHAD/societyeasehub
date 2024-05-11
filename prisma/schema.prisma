@@ -39,14 +39,15 @@ model User {
     emailVerified DateTime?
     image         String?
 
-    accounts      Account[]
-    societies     Society[]
-    memberShips   Member[]
-    invites       Invite[]
-    messages      Message[]
-    rooms         MeetingRoom[]
-    transactions  Transaction[]
-    announcements Announcement[]
+    accounts             Account[]
+    societies            Society[]
+    memberShips          Member[]
+    invites              Invite[]
+    messages             Message[]
+    rooms                MeetingRoom[]
+    transactions         Transaction[]
+    announcements        Announcement[]
+    announcementComments AnnouncementComment[]
 }
 
 // App Models
@@ -117,6 +118,7 @@ model Role {
     canCreatePolls Boolean  @default(false) // Create Polls
     canVote        Boolean  @default(false) // Vote in Polls
     canAnnounce    Boolean  @default(false) // Make announcements
+    canComment     Boolean  @default(false) // Comment in Announcements
     societyId      String
     createdAt      DateTime @default(now()) @ignore
     updatedAt      DateTime @updatedAt @ignore
@@ -254,12 +256,13 @@ model Announcement {
     content   String   @db.VarChar(250)
     userId    String
     societyId String
-    createdAt DateTime @default(now()) @ignore
+    createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt @ignore
 
     member      User                      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade)
     society     Society                   @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     attachments AnnouncementAttachments[]
+    comments    AnnouncementComment[]
 }
 
 model AnnouncementAttachments {
@@ -267,8 +270,20 @@ model AnnouncementAttachments {
     uri            String   @unique @db.Text
     name           String   @db.VarChar(250)
     announcementId String
-    createdAt      DateTime @default(now())
+    createdAt      DateTime @default(now()) @ignore
     updatedAt      DateTime @updatedAt @ignore
 
     transaction Announcement @relation(fields: [announcementId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+}
+
+model AnnouncementComment {
+    id             String   @id @default(cuid())
+    content        String   @db.VarChar(200)
+    userId         String
+    announcementId String
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt @ignore
+
+    user         User         @relation(fields: [userId], references: [id])
+    announcement Announcement @relation(fields: [announcementId], references: [id])
 }

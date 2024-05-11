@@ -17,6 +17,7 @@ export const newRole = z.object({
   manageRoadmap: z.boolean().optional().default(false),
   manageAccounts: z.boolean().optional().default(false),
   canAnnounce: z.boolean().optional().default(false),
+  canComment: z.boolean().optional().default(false),
   canCreatePolls: z.boolean().optional().default(false),
   canVote: z.boolean().optional().default(false),
 });

@@ -13,7 +13,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "~/components/ui/drawer";
-import AnnouncementAttachmentContainer from "./AnnouncementAttachmentContainer";
+import AnnouncementAttachmentContainer from "./attachment/AnnouncementAttachmentContainer";
 import { useAnnouncementStore } from "~/store/announcement";
 import { useParams } from "next/navigation";
 import { api } from "~/trpc/react";
@@ -25,13 +25,14 @@ export default function AnnouncementInput() {
   const announcementStore = useAnnouncementStore();
   const announcementAttachmentStore = useAnnouncementAttachmentStore();
   const { id } = useParams<{ id: string }>();
+  const utils = api.useUtils();
   const { mutate: create, isLoading } = api.announcement.create.useMutation({
     async onSuccess() {
       toast({
         title: "Success",
         description: "Announcement Created",
       });
-
+      await utils.announcement.getBySociety.invalidate({});
       announcementStore.updateBySociety(id, "");
       announcementAttachmentStore.clearBySociety(id);
     },

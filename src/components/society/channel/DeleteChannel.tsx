@@ -11,7 +11,7 @@ import {
 } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { toast } from "~/components/ui/use-toast";
-import { useMessageStore } from "~/store/announcement";
+import { useMessageStore } from "~/store/message";
 import { useMessageAttachmentStore } from "~/store/messageAttachment";
 import { api } from "~/trpc/react";
 
@@ -29,7 +29,7 @@ export default function DeleteChannel() {
     async onSuccess() {
       await utils.channel.getBySociety.invalidate({ societyId: id });
 
-      messageStore.updateBySociety(id, "");
+      messageStore.updateByChannel(channelId, "");
       messageAttachmentStore.clearByChannel(channelId);
 
       toast({
