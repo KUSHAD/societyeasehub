@@ -52,6 +52,7 @@ export type AnnouncementsOutput = {
     name: string;
     uri: string;
   }[];
+  createdAt: Date;
 };
 
 export interface PageProps {

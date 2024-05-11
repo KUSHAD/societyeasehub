@@ -12,7 +12,8 @@ import { roadmapListRouter } from "./routers/roadmap/roadmapList";
 import { roadmapCardRouter } from "./routers/roadmap/roadmapCard";
 import { transactionRouter } from "./routers/transaction/transaction";
 import { transactionDocsRouter } from "./routers/transaction/transactionDocs";
-import { announcementRouter } from "./routers/feed/announcement";
+import { announcementRouter } from "./routers/feed/announcement/announcement";
+import { announcementCommentRouter } from "./routers/feed/announcement/announcementComment";
 
 /**
  * This is the primary router for your server.
@@ -34,6 +35,7 @@ export const appRouter = createTRPCRouter({
   transaction: transactionRouter,
   transactionDocs: transactionDocsRouter,
   announcement: announcementRouter,
+  announcementComment: announcementCommentRouter,
 });
 
 // export type definition of API

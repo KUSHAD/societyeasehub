@@ -321,3 +321,93 @@ export async function canAnnounce(societyId: string) {
 
   return true;
 }
+
+export async function canComment(societyId: string) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) redirect("/api/auth/signin");
+
+  const dbSociety = await db.society.findUnique({
+    where: {
+      id: societyId,
+    },
+  });
+
+  const dbMemberShip = await db.member.findFirst({
+    where: {
+      societyId,
+      userId: currentUser.id,
+      role: {
+        canComment: true,
+      },
+    },
+  });
+
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
+  if (!dbMemberShip) return false;
+
+  return true;
+}
+
+export async function canCreatePolls(societyId: string) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) redirect("/api/auth/signin");
+
+  const dbSociety = await db.society.findUnique({
+    where: {
+      id: societyId,
+    },
+  });
+
+  const dbMemberShip = await db.member.findFirst({
+    where: {
+      societyId,
+      userId: currentUser.id,
+      role: {
+        canCreatePolls: true,
+      },
+    },
+  });
+
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
+  if (!dbMemberShip) return false;
+
+  return true;
+}
+
+export async function canVote(societyId: string) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) redirect("/api/auth/signin");
+
+  const dbSociety = await db.society.findUnique({
+    where: {
+      id: societyId,
+    },
+  });
+
+  const dbMemberShip = await db.member.findFirst({
+    where: {
+      societyId,
+      userId: currentUser.id,
+      role: {
+        canVote: true,
+      },
+    },
+  });
+
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
+  if (!dbMemberShip) return false;
+
+  return true;
+}

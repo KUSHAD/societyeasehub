@@ -1,8 +1,9 @@
 import { announcementSchema } from "~/lib/validators/announcement";
-import { createTRPCRouter, protectedProcedure } from "../../trpc";
+import { createTRPCRouter, protectedProcedure } from "../../../trpc";
 import { z } from "zod";
 import { canAnnounce } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
+import { utapi } from "~/server/storage";
 
 export const announcementRouter = createTRPCRouter({
   create: protectedProcedure
@@ -64,9 +65,55 @@ export const announcementRouter = createTRPCRouter({
           content: true,
           attachments: { select: { name: true, uri: true } },
           _count: { select: { comments: true } },
+          createdAt: true,
         },
       });
 
       return announcements;
+    }),
+  delete: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+        announcementId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { announcementId, societyId } }) => {
+      const canAnnouncePerms = await canAnnounce(societyId);
+      if (!canAnnouncePerms) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const deletedAnnouncement = await db.announcement.delete({
+        where: {
+          id: announcementId,
+          societyId,
+        },
+        select: {
+          attachments: {
+            select: {
+              uri: true,
+            },
+          },
+        },
+      });
+
+      await db.announcementAttachments.deleteMany({
+        where: {
+          announcementId,
+        },
+      });
+
+      await db.announcementComment.deleteMany({
+        where: {
+          announcementId,
+        },
+      });
+
+      const fileKeys = deletedAnnouncement.attachments.map(
+        (_item) => _item.uri.split("/f/")[1]!,
+      );
+
+      await utapi.deleteFiles(fileKeys);
+
+      return deletedAnnouncement;
     }),
 });

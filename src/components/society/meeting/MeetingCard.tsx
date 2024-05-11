@@ -33,7 +33,7 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
         </div>
         <div>
           <strong>End Time :-</strong>
-          {format(meeting.endTime, "dd/mm/yy  HH:mm")}
+          {format(meeting.endTime, "dd/MM/yy  HH:mm")}
         </div>
       </CardContent>
       <CardFooter className="flex flex-row">

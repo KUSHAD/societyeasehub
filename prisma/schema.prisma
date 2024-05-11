@@ -285,5 +285,5 @@ model AnnouncementComment {
     updatedAt      DateTime @updatedAt @ignore
 
     user         User         @relation(fields: [userId], references: [id])
-    announcement Announcement @relation(fields: [announcementId], references: [id])
+    announcement Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }

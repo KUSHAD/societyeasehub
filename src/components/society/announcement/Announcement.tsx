@@ -27,6 +27,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { format } from "date-fns";
+import { toast } from "~/components/ui/use-toast";
 
 interface AnnouncementProps {
   announcement: AnnouncementsOutput;
@@ -37,6 +39,21 @@ export default function Announcement({ announcement }: AnnouncementProps) {
   const { isLoading, data } = api.member.canAnnounce.useQuery({
     societyId: id,
   });
+  const utils = api.useUtils();
+
+  const { isLoading: deleting, mutate: deleteAnnouncement } =
+    api.announcement.delete.useMutation({
+      async onSuccess() {
+        await utils.announcement.getBySociety.invalidate({
+          societyId: id,
+        });
+
+        toast({
+          title: "Message",
+          description: "Deleted Announcement",
+        });
+      },
+    });
   return (
     <Card className="my-2">
       <CardHeader className="flex flex-row">
@@ -50,17 +67,30 @@ export default function Announcement({ announcement }: AnnouncementProps) {
             userId={announcement.member.id}
             societyId={id}
           />
+          <small>
+            <em>{format(announcement.createdAt, "dd/MM/yyyy  HH:mm")}</em>
+          </small>
         </div>
         {isLoading ? null : data ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="icon" variant="ghost">
+              <Button disabled={deleting} size="icon" variant="ghost">
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={deleting}
+                onClick={() =>
+                  deleteAnnouncement({
+                    announcementId: announcement.id,
+                    societyId: id,
+                  })
+                }
+              >
+                Delete
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : null}
