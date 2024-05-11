@@ -117,7 +117,10 @@ export default function Announcement({ announcement }: AnnouncementProps) {
               {announcement._count.comments} Comments
             </AccordionTrigger>
             <AccordionContent>
-              <AnnouncementComments announcementId={announcement.id} />
+              <AnnouncementComments
+                announcementId={announcement.id}
+                commentCount={announcement._count.comments}
+              />
             </AccordionContent>
           </AccordionItem>
         </Accordion>

@@ -49,12 +49,15 @@ export const announcementCommentRouter = createTRPCRouter({
           id: true,
           user: {
             select: {
-              id: true,
               image: true,
               name: true,
             },
           },
           content: true,
+          announcementId: true,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       });
 
