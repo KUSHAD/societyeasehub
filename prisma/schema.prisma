@@ -48,6 +48,8 @@ model User {
     transactions         Transaction[]
     announcements        Announcement[]
     announcementComments AnnouncementComment[]
+    polls                Poll[]
+    votes                Vote[]
 }
 
 // App Models
@@ -76,6 +78,7 @@ model Society {
     roadmaps     RoadmapList[]
     transactions Transaction[]
     Announcement Announcement[]
+    polls        Poll[]
 }
 
 model SocietyMedia {
@@ -286,4 +289,42 @@ model AnnouncementComment {
 
     user         User         @relation(fields: [userId], references: [id])
     announcement Announcement @relation(fields: [announcementId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model Poll {
+    id        String   @id @default(cuid())
+    question  String   @db.VarChar(250)
+    userId    String
+    societyId String
+    validTill DateTime
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt @ignore
+
+    user    User          @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    society Society       @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    options PollOptions[]
+}
+
+model PollOptions {
+    id        String   @id @default(cuid())
+    name      String   @db.VarChar(250)
+    pollId    String
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
+
+    poll  Poll   @relation(fields: [pollId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    votes Vote[]
+}
+
+model Vote {
+    userId    String
+    optionId  String
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
+
+    option PollOptions @relation(fields: [optionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    user   User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    @@id(name: "voteId", [userId, optionId])
+    @@unique([userId, optionId])
 }
