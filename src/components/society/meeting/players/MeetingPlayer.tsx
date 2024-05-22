@@ -44,6 +44,7 @@ export default function MeetingPlayer() {
     return (
       <NotFound message="Meeting has ended">
         <Button
+          // eslint-disable-next-line react-compiler/react-compiler
           onClick={() => (window.location.href = `/society/${id}/meeting`)}
         >
           <ChevronLeft className="mx-1" /> Back to Meettings

@@ -56,7 +56,9 @@ export const messageRouter = createTRPCRouter({
         z.object({
           channelId: z.string().cuid(),
           societyId: z.string().cuid(),
-          attachments: z.array(z.string().url()).default([]),
+          attachments: z
+            .array(z.string().url().startsWith(`https://utfs.io/f/`))
+            .default([]),
         }),
       ),
     )
@@ -80,6 +82,12 @@ export const messageRouter = createTRPCRouter({
             userId: id,
           },
         });
+
+        if (attachments.length > 5)
+          throw new TRPCError({
+            code: "PAYLOAD_TOO_LARGE",
+            message: "Max 5 attachments allowed per message",
+          });
 
         if (attachments.length !== 0) {
           await db.messageAttachment.createMany({
