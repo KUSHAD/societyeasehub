@@ -50,7 +50,7 @@ export default function ListContainer({ data }: ListContainerProps) {
   });
 
   const { isLoading: gettingPerms, data: canManage } =
-    api.member.canManageRoadmaps.useQuery({
+    api.perms.canManageRoadmaps.useQuery({
       societyId: id,
     });
 

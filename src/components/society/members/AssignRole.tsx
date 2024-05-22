@@ -54,10 +54,7 @@ export default function AssignRole({ userId }: AssignRoleProps) {
         })
       }
     >
-      <DropdownMenuRadioItem
-        disabled={assigningRole}
-        value={null as unknown as string}
-      >
+      <DropdownMenuRadioItem disabled={assigningRole} value={""}>
         No Role
       </DropdownMenuRadioItem>
       {roles.map((_role) => (

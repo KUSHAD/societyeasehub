@@ -1,6 +1,7 @@
 import { canCreatePolls } from "~/actions/checkUserRole";
 import ClientOnly from "~/components/ClientOnly";
 import CreatePollContainer from "~/components/society/poll/create/CreatePollContainer";
+import PollsViewContainer from "~/components/society/poll/display/PollsViewContainer";
 import { type PageProps } from "~/lib/types";
 
 export default async function Page({ params: { id } }: PageProps) {
@@ -15,6 +16,9 @@ export default async function Page({ params: { id } }: PageProps) {
           </ClientOnly>
         </div>
       ) : null}
+      <ClientOnly>
+        <PollsViewContainer />
+      </ClientOnly>
     </>
   );
 }

@@ -14,7 +14,8 @@ import { transactionRouter } from "./routers/transaction/transaction";
 import { transactionDocsRouter } from "./routers/transaction/transactionDocs";
 import { announcementRouter } from "./routers/feed/announcement/announcement";
 import { announcementCommentRouter } from "./routers/feed/announcement/announcementComment";
-import { pollRouter } from "./routers/feed/poll/poll";
+import { pollRouter } from "./routers/feed/poll";
+import { permsRouter } from "./routers/member/perms";
 
 /**
  * This is the primary router for your server.
@@ -27,6 +28,7 @@ export const appRouter = createTRPCRouter({
   societyMedia: societyMediaRouter,
   role: rolesRouter,
   member: memberRouter,
+  perms: permsRouter,
   invite: inviteRouter,
   channel: channelRouter,
   message: messageRouter,

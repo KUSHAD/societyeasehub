@@ -26,7 +26,7 @@ export interface ChannelActionsProps {
 
 export default function ChannelActions({ channelName }: ChannelActionsProps) {
   const { id } = useParams<{ id: string }>();
-  const { isLoading, data: canManage } = api.member.canManageChannels.useQuery({
+  const { isLoading, data: canManage } = api.perms.canManageChannels.useQuery({
     societyId: id,
   });
   const [modal, setModal] = useState<"EDIT" | "DELETE">("EDIT");

@@ -22,7 +22,7 @@ export async function GET(req: Request) {
 
   return NextResponse.json(
     {
-      message: "Past meetings deleted",
+      message: "Cron Job Ran Successfully",
     },
     { status: 200 },
   );

@@ -30,7 +30,7 @@ export default function TransactionAction({
   const utils = api.useUtils();
   const { id } = useParams<{ id: string }>();
   const { data: canManage, isLoading: gettingPerms } =
-    api.member.canManageAccounts.useQuery({
+    api.perms.canManageAccounts.useQuery({
       societyId: id,
     });
   const { isLoading, mutate: deleteTransaction } =

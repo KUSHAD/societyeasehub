@@ -1,0 +1,336 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Account {
+  id String [pk]
+  userId String [not null]
+  type String [not null]
+  provider String [not null]
+  providerAccountId String [not null]
+  refresh_token String
+  access_token String
+  expires_at Int
+  token_type String
+  scope String
+  id_token String
+  session_state String
+  user User [not null]
+
+  indexes {
+    (provider, providerAccountId) [unique]
+  }
+}
+
+Table User {
+  id String [pk]
+  name String
+  email String [unique]
+  emailVerified DateTime
+  image String
+  accounts Account [not null]
+  societies Society [not null]
+  memberShips Member [not null]
+  invites Invite [not null]
+  messages Message [not null]
+  rooms MeetingRoom [not null]
+  transactions Transaction [not null]
+  announcements Announcement [not null]
+  announcementComments AnnouncementComment [not null]
+  polls Poll [not null]
+  votes Vote [not null]
+}
+
+Table Society {
+  id String [pk]
+  name String [not null]
+  streetAddress String [not null]
+  addressLine2 String [default: '']
+  city String [not null]
+  province String [not null]
+  zipCode String [not null]
+  country String [not null]
+  password String [not null]
+  ownerId String [not null]
+  owner User [not null]
+  members Member [not null]
+  images SocietyMedia [not null]
+  roles Role [not null]
+  invites Invite [not null]
+  channels Channel [not null]
+  rooms MeetingRoom [not null]
+  roadmaps RoadmapList [not null]
+  transactions Transaction [not null]
+  Announcement Announcement [not null]
+  polls Poll [not null]
+}
+
+Table SocietyMedia {
+  id String [pk]
+  uri String [unique, not null]
+  societyId String [not null]
+  society Society [not null]
+}
+
+Table Member {
+  societyId String [not null]
+  userId String [unique, not null]
+  roleId String
+  society Society [not null]
+  user User [not null]
+  role Role
+
+  indexes {
+    (societyId, userId) [pk]
+    (societyId, userId) [unique]
+  }
+}
+
+Table Role {
+  id String [pk]
+  name String [not null]
+  accessSettings Boolean [not null, default: false]
+  createInvite Boolean [not null, default: false]
+  assignRole Boolean [not null, default: false]
+  kickUser Boolean [not null, default: false]
+  manageChannel Boolean [not null, default: false]
+  sendMessage Boolean [not null, default: false]
+  createMeeting Boolean [not null, default: false]
+  manageRoadmap Boolean [not null, default: false]
+  manageAccounts Boolean [not null, default: false]
+  canCreatePolls Boolean [not null, default: false]
+  canVote Boolean [not null, default: false]
+  canAnnounce Boolean [not null, default: false]
+  canComment Boolean [not null, default: false]
+  societyId String [not null]
+  society Society [not null]
+  members Member [not null]
+}
+
+Table Invite {
+  societyId String [not null]
+  userId String [not null]
+  status INVITE_STATUS [not null, default: 'PENDING']
+  society Society [not null]
+  to User [not null]
+
+  indexes {
+    (societyId, userId) [pk]
+  }
+}
+
+Table Channel {
+  id String [pk]
+  name String [not null]
+  societyId String [not null]
+  society Society [not null]
+  messages Message [not null]
+}
+
+Table Message {
+  id String [pk]
+  content String [not null, default: '']
+  channelId String [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  channel Channel [not null]
+  member User [not null]
+  attachments MessageAttachment [not null]
+}
+
+Table MessageAttachment {
+  id String [pk]
+  uri String [unique, not null]
+  messageId String [not null]
+  message Message [not null]
+}
+
+Table MeetingRoom {
+  id String [pk]
+  title String [not null]
+  description String [not null]
+  startTime DateTime [not null]
+  endTime DateTime [not null]
+  userId String [not null]
+  societyId String [not null]
+  society Society [not null]
+  user User [not null]
+}
+
+Table RoadmapList {
+  id String [pk]
+  title String [not null]
+  order Int [not null]
+  societyId String [not null]
+  society Society [not null]
+  cards RoadmapCard [not null]
+}
+
+Table RoadmapCard {
+  id String [pk]
+  title String [not null]
+  order Int [not null]
+  description String
+  listId String [not null]
+  list RoadmapList [not null]
+}
+
+Table Transaction {
+  id String [pk]
+  amount Float [not null]
+  type TransactionType [not null, default: 'INCOME']
+  userId String [not null]
+  societyId String [not null]
+  description String [default: '']
+  date DateTime [default: `now()`, not null]
+  member User [not null]
+  society Society [not null]
+  transactions TransactionDocs [not null]
+}
+
+Table TransactionDocs {
+  id String [pk]
+  uri String [unique, not null]
+  transactionId String [not null]
+  transaction Transaction [not null]
+}
+
+Table Announcement {
+  id String [pk]
+  content String [not null]
+  userId String [not null]
+  societyId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  member User [not null]
+  society Society [not null]
+  attachments AnnouncementAttachments [not null]
+  comments AnnouncementComment [not null]
+}
+
+Table AnnouncementAttachments {
+  id String [pk]
+  uri String [unique, not null]
+  name String [not null]
+  announcementId String [not null]
+  transaction Announcement [not null]
+}
+
+Table AnnouncementComment {
+  id String [pk]
+  content String [not null]
+  userId String [not null]
+  announcementId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+  announcement Announcement [not null]
+}
+
+Table Poll {
+  id String [pk]
+  question String [not null]
+  userId String [not null]
+  societyId String [not null]
+  validTill DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+  society Society [not null]
+  options PollOptions [not null]
+  votes Vote [not null]
+}
+
+Table PollOptions {
+  id String [pk]
+  name String [not null]
+  pollId String [not null]
+  poll Poll [not null]
+  votes Vote [not null]
+}
+
+Table Vote {
+  userId String [not null]
+  optionId String [not null]
+  pollId String [not null]
+  option PollOptions [not null]
+  user User [not null]
+  poll Poll [not null]
+
+  indexes {
+    (userId, optionId, pollId) [pk]
+    (userId, optionId) [unique]
+  }
+}
+
+Enum INVITE_STATUS {
+  PENDING
+  ACCEPTED
+  IGNORED
+}
+
+Enum TransactionType {
+  INCOME
+  EXPENDITURE
+  DUES
+  PAYMENT
+}
+
+Ref: Account.userId > User.id [delete: Cascade]
+
+Ref: Society.ownerId > User.id [delete: Cascade]
+
+Ref: SocietyMedia.societyId > Society.id [delete: Cascade]
+
+Ref: Member.societyId > Society.id [delete: Cascade]
+
+Ref: Member.userId > User.id [delete: Cascade]
+
+Ref: Member.roleId > Role.id [delete: Cascade]
+
+Ref: Role.societyId > Society.id [delete: Cascade]
+
+Ref: Invite.societyId > Society.id [delete: Cascade]
+
+Ref: Invite.userId > User.id [delete: Cascade]
+
+Ref: Channel.societyId > Society.id [delete: Cascade]
+
+Ref: Message.channelId > Channel.id [delete: Cascade]
+
+Ref: Message.userId > User.id [delete: Cascade]
+
+Ref: MessageAttachment.messageId > Message.id [delete: Cascade]
+
+Ref: MeetingRoom.societyId > Society.id
+
+Ref: MeetingRoom.userId > User.id
+
+Ref: RoadmapList.societyId > Society.id [delete: Cascade]
+
+Ref: RoadmapCard.listId > RoadmapList.id [delete: Cascade]
+
+Ref: Transaction.userId > User.id [delete: No Action]
+
+Ref: Transaction.societyId > Society.id [delete: Cascade]
+
+Ref: TransactionDocs.transactionId > Transaction.id [delete: Cascade]
+
+Ref: Announcement.userId > User.id [delete: No Action]
+
+Ref: Announcement.societyId > Society.id [delete: Cascade]
+
+Ref: AnnouncementAttachments.announcementId > Announcement.id [delete: Cascade]
+
+Ref: AnnouncementComment.userId > User.id
+
+Ref: AnnouncementComment.announcementId > Announcement.id [delete: Cascade]
+
+Ref: Poll.userId > User.id [delete: No Action]
+
+Ref: Poll.societyId > Society.id [delete: Cascade]
+
+Ref: PollOptions.pollId > Poll.id [delete: Cascade]
+
+Ref: Vote.optionId > PollOptions.id [delete: Cascade]
+
+Ref: Vote.userId > User.id [delete: Cascade]
+
+Ref: Vote.pollId > Poll.id [delete: Cascade]

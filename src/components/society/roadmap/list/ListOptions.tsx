@@ -35,7 +35,7 @@ export default function ListOptions({ list }: ListOptionsProps) {
   const utils = api.useUtils();
   const { id } = useParams<{ id: string }>();
   const { isLoading: gettingPerms, data: canManage } =
-    api.member.canManageRoadmaps.useQuery({
+    api.perms.canManageRoadmaps.useQuery({
       societyId: id,
     });
   const { isLoading: isDeleting, mutate: deleteList } =

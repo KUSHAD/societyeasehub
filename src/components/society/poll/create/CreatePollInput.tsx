@@ -13,8 +13,10 @@ import { api } from "~/trpc/react";
 
 export default function CreatePollInput() {
   const { id } = useParams<{ id: string }>();
+  const utils = api.useUtils();
   const { mutate: create, isLoading } = api.poll.create.useMutation({
     async onSuccess() {
+      await utils.poll.getBySociety.invalidate({ societyId: id });
       toast({
         title: "Message",
         description: "Poll Created",

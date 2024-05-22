@@ -34,7 +34,7 @@ interface CardItemProps {
 export default function CardItem({ card, index }: CardItemProps) {
   const { id } = useParams<{ id: string }>();
 
-  const { isLoading, data: canAccess } = api.member.canManageRoadmaps.useQuery({
+  const { isLoading, data: canAccess } = api.perms.canManageRoadmaps.useQuery({
     societyId: id,
   });
 

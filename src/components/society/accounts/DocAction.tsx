@@ -28,7 +28,7 @@ export default function DocAction({
 }) {
   const { id } = useParams<{ id: string }>();
 
-  const { data: canManage, isLoading } = api.member.canManageAccounts.useQuery({
+  const { data: canManage, isLoading } = api.perms.canManageAccounts.useQuery({
     societyId: id,
   });
   return (

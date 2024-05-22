@@ -8,7 +8,7 @@ import { api } from "~/trpc/react";
 export default function SettingsDrawerContents() {
   const { id } = useParams<{ id: string }>();
   const pathname = usePathname();
-  const { data: isOwner, isLoading } = api.member.isOwner.useQuery({
+  const { data: isOwner, isLoading } = api.perms.isOwner.useQuery({
     societyId: id,
   });
   return (

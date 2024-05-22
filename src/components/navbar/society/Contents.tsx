@@ -11,7 +11,7 @@ export default function Contents() {
   const pathname = usePathname();
 
   const { data: accessSettings, isLoading: settingsLoading } =
-    api.member.canAccessSettings.useQuery({
+    api.perms.canAccessSettings.useQuery({
       societyId: id,
     });
 

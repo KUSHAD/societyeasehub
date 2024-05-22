@@ -23,7 +23,7 @@ import { toast } from "../../../ui/use-toast";
 export default function ListForm() {
   const { id } = useParams<{ id: string }>();
   const utils = api.useUtils();
-  const { isLoading, data } = api.member.canManageRoadmaps.useQuery({
+  const { isLoading, data } = api.perms.canManageRoadmaps.useQuery({
     societyId: id,
   });
   const { isLoading: creating, mutate: createList } =

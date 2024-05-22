@@ -27,7 +27,7 @@ interface ListItemProps {
 export default function ListItem({ data, index }: ListItemProps) {
   const { id } = useParams<{ id: string }>();
   const { isLoading: gettingPerms, data: canManage } =
-    api.member.canManageRoadmaps.useQuery({
+    api.perms.canManageRoadmaps.useQuery({
       societyId: id,
     });
   return (

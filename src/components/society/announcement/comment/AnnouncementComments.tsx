@@ -14,7 +14,7 @@ export default function AnnouncementComments(props: {
   const { id } = useParams<{ id: string }>();
 
   const { data: perms, isLoading: gettingPerms } =
-    api.member.canComment.useQuery({
+    api.perms.canComment.useQuery({
       societyId: id,
     });
 

@@ -2,16 +2,8 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import {
   canAssignRoles,
-  canManageChannels,
   canKickMember,
   isSocietyOwner,
-  canAccessSettings,
-  canManageRoadmaps,
-  canManageAccounts,
-  canAnnounce,
-  canComment,
-  canVote,
-  canCreatePolls,
 } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 
@@ -73,7 +65,7 @@ export const memberRouter = createTRPCRouter({
         },
       });
 
-      return userRole?.roleId ?? undefined;
+      return userRole?.roleId ?? "";
     }),
   assignRole: protectedProcedure
     .input(
@@ -193,11 +185,7 @@ export const memberRouter = createTRPCRouter({
         }));
       },
     ),
-  canManageChannels: protectedProcedure
-    .input(z.object({ societyId: z.string().cuid() }))
-    .query(
-      async ({ input: { societyId } }) => await canManageChannels(societyId),
-    ),
+
   getDetails: protectedProcedure
     .input(
       z.object({
@@ -219,45 +207,4 @@ export const memberRouter = createTRPCRouter({
 
       return true;
     }),
-  isOwner: protectedProcedure
-    .input(
-      z.object({
-        societyId: z.string().cuid(),
-      }),
-    )
-    .query(
-      async ({
-        input: { societyId },
-        ctx: {
-          session: { user },
-        },
-      }) => await isSocietyOwner(societyId, user.id),
-    ),
-  canManageRoadmaps: protectedProcedure
-    .input(z.object({ societyId: z.string().cuid() }))
-    .query(
-      async ({ input: { societyId } }) => await canManageRoadmaps(societyId),
-    ),
-  canManageAccounts: protectedProcedure
-    .input(z.object({ societyId: z.string().cuid() }))
-    .query(
-      async ({ input: { societyId } }) => await canManageAccounts(societyId),
-    ),
-  canAnnounce: protectedProcedure
-    .input(z.object({ societyId: z.string().cuid() }))
-    .query(async ({ input: { societyId } }) => await canAnnounce(societyId)),
-  canAccessSettings: protectedProcedure
-    .input(z.object({ societyId: z.string().cuid() }))
-    .query(
-      async ({ input: { societyId } }) => await canAccessSettings(societyId),
-    ),
-  canComment: protectedProcedure
-    .input(z.object({ societyId: z.string().cuid() }))
-    .query(async ({ input: { societyId } }) => await canComment(societyId)),
-  canVote: protectedProcedure
-    .input(z.object({ societyId: z.string().cuid() }))
-    .query(async ({ input: { societyId } }) => await canVote(societyId)),
-  canCreatePolls: protectedProcedure
-    .input(z.object({ societyId: z.string().cuid() }))
-    .query(async ({ input: { societyId } }) => await canCreatePolls(societyId)),
 });

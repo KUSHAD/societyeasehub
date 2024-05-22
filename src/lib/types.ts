@@ -37,6 +37,8 @@ export type SafeRole = Omit<Role, "societyId">;
 
 export type SocietyUsersOutput = RouterOutput["member"]["getBySociety"][0];
 
+export type PollForSociety = RouterOutput["poll"]["getBySociety"][0];
+
 export type AnnouncementsOutput = {
   member: {
     name: string | null;

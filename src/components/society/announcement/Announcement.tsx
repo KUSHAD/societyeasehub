@@ -37,7 +37,7 @@ interface AnnouncementProps {
 
 export default function Announcement({ announcement }: AnnouncementProps) {
   const { id } = useParams<{ id: string }>();
-  const { isLoading, data } = api.member.canAnnounce.useQuery({
+  const { isLoading, data } = api.perms.canAnnounce.useQuery({
     societyId: id,
   });
   const utils = api.useUtils();

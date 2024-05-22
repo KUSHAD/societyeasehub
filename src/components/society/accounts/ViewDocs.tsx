@@ -33,7 +33,7 @@ export default function ViewDocs({ transactionId }: { transactionId: string }) {
     });
 
   const { data: canManage, isLoading: gettingPerms } =
-    api.member.canManageAccounts.useQuery({
+    api.perms.canManageAccounts.useQuery({
       societyId: id,
     });
   return (

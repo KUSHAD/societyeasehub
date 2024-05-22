@@ -20,7 +20,7 @@ export default function FeedDrawer() {
   const { id } = useParams<{ id: string }>();
   const pathname = usePathname();
   const { data: manageChannels, isLoading: gettingPerms } =
-    api.member.canManageChannels.useQuery({ societyId: id });
+    api.perms.canManageChannels.useQuery({ societyId: id });
 
   const { data: channels, isLoading } = api.channel.getBySociety.useQuery({
     societyId: id,
