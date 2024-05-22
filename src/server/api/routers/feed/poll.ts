@@ -181,4 +181,96 @@ export const pollRouter = createTRPCRouter({
         return vote;
       },
     ),
+  removeVote: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+        pollId: z.string().cuid(),
+      }),
+    )
+    .mutation(
+      async ({
+        ctx: {
+          db,
+          session: { user },
+        },
+        input: { pollId, societyId },
+      }) => {
+        const canVoteInPolls = await canVote(societyId);
+
+        if (!canVoteInPolls)
+          throw new TRPCError({
+            code: "FORBIDDEN",
+          });
+
+        const vote = await db.vote.deleteMany({
+          where: {
+            pollId,
+            userId: user.id,
+          },
+        });
+
+        return vote;
+      },
+    ),
+  getVotes: protectedProcedure
+    .input(
+      z.object({
+        pollId: z.string().cuid(),
+      }),
+    )
+    .query(async ({ ctx: { db }, input: { pollId } }) => {
+      const votes = await db.vote.findMany({
+        where: {
+          pollId,
+        },
+        select: {
+          option: {
+            select: {
+              name: true,
+              id: true,
+            },
+          },
+          userId: true,
+        },
+      });
+
+      const options = await db.pollOptions.findMany({
+        where: {
+          pollId,
+        },
+        select: {
+          name: true,
+          id: true,
+        },
+      });
+
+      const groupedMap: Record<string, number> = {};
+
+      votes.forEach((userOption) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        const optionName = userOption.option.name;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        if (groupedMap[optionName]) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          groupedMap[optionName]++;
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          groupedMap[optionName] = 1;
+        }
+      });
+
+      const totalVotes = votes.length;
+
+      const percentageResults = options.map((option) => {
+        const count = groupedMap[option.name] ?? 0;
+        return {
+          name: option.name,
+          count,
+          percentage: totalVotes > 0 ? (count / totalVotes) * 100 : 0,
+        };
+      });
+
+      return percentageResults;
+    }),
 });
