@@ -1,14 +1,19 @@
 import { createSafeActionClient } from "next-safe-action";
 import { getCurrentUser } from "~/actions/getCurrentUser";
+import { getUserSubscription } from "~/actions/subscription";
 
 export const safeAction = createSafeActionClient({
   middleware: async () => {
     const currentUser = await getCurrentUser();
 
-    if (!currentUser) throw new Error("Unauthorized");
+    const subscription = await getUserSubscription();
+
+    if (!currentUser || !subscription || !subscription.isActive)
+      throw new Error("Unauthorized");
 
     return {
       currentUserId: currentUser.id,
+      subscription,
     };
   },
 });

@@ -39,6 +39,17 @@ Table User {
   announcementComments AnnouncementComment [not null]
   polls Poll [not null]
   votes Vote [not null]
+  subscriptions UserSubscription [not null]
+}
+
+Table UserSubscription {
+  id String [pk]
+  userId String [not null]
+  stripeCustomerId String [not null]
+  stripeSubscriptionId String [not null]
+  stripePriceId String [not null]
+  stripeCurrentPeriodEnd DateTime [not null]
+  user User [not null]
 }
 
 Table Society {
@@ -274,6 +285,8 @@ Enum TransactionType {
 }
 
 Ref: Account.userId > User.id [delete: Cascade]
+
+Ref: UserSubscription.userId > User.id [delete: Cascade]
 
 Ref: Society.ownerId > User.id [delete: Cascade]
 

@@ -54,9 +54,23 @@ model User {
     announcementComments AnnouncementComment[]
     polls                Poll[]
     votes                Vote[]
+    subscriptions        UserSubscription[]
 }
 
 // App Models
+
+model UserSubscription {
+    id                     String   @id @default(cuid())
+    userId                 String
+    stripeCustomerId       String
+    stripeSubscriptionId   String
+    stripePriceId          String
+    stripeCurrentPeriodEnd DateTime
+    createdAt              DateTime @default(now()) @ignore
+    updatedAt              DateTime @updatedAt @ignore
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
 
 model Society {
     id            String   @id @default(cuid())

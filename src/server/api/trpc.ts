@@ -10,6 +10,7 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+import { getUserSubscription } from "~/actions/subscription";
 
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
@@ -81,8 +82,11 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
-const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session?.user) throw new TRPCError({ code: "UNAUTHORIZED" });
+const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
+  const subscription = await getUserSubscription();
+
+  if (!ctx.session?.user || !subscription || !subscription.isActive)
+    throw new TRPCError({ code: "UNAUTHORIZED" });
 
   return next({
     ctx: {

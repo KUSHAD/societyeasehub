@@ -1,3 +1,5 @@
+import "server-only";
+
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
 

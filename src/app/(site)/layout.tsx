@@ -1,17 +1,19 @@
 import React from "react";
+import { getUserSubscription } from "~/actions/subscription";
 import ClientOnly from "~/components/ClientOnly";
+import PaymentModal from "~/components/PaymentModal";
 import Navbar from "~/components/navbar/site";
 import Tab from "~/components/navbar/site/Tab";
 
 export const revalidate = 0;
-export const dynamic = "force-dynamic";
 
 export default async function AccountLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
+  const subscription = await getUserSubscription();
+  return subscription && subscription.isActive ? (
     <>
       <Navbar />
       <div className="min-h-screen">
@@ -21,5 +23,9 @@ export default async function AccountLayout({
         <Tab />
       </ClientOnly>
     </>
+  ) : (
+    <ClientOnly>
+      <PaymentModal />
+    </ClientOnly>
   );
 }

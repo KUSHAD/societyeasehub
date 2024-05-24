@@ -1,3 +1,5 @@
+import "server-only";
+
 import { db } from "~/server/db";
 import { redirect } from "next/navigation";
 import { checkIsSocietyMember } from "./checkIsSocietyMember";

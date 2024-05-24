@@ -7,7 +7,7 @@ export default function PricingDetails() {
       <div className="flex-1">
         <p className="text-3xl font-semibold text-gray-900 dark:text-gray-100 sm:text-4xl">
           <span className="mr-1">₹</span>
-          125
+          250
         </p>
         <p className="text-base font-semibold text-gray-500 dark:text-gray-400">
           per month

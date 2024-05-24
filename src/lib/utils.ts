@@ -114,3 +114,5 @@ export function getDateRange(start: Date, end: Date): Date[] {
   }
   return arr;
 }
+
+export const DAY_IN_MS = 86_400_000;

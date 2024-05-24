@@ -10,6 +10,7 @@ import {
   canManageAccounts,
   canSendMessages,
 } from "~/actions/checkUserRole";
+import { getUserSubscription } from "~/actions/subscription";
 
 const f = createUploadthing({
   errorFormatter: (err) => {
@@ -30,7 +31,10 @@ export const ourFileRouter = {
     .middleware(async () => {
       const currentUser = await getCurrentUser();
 
-      if (!currentUser) throw new UploadThingError("Unauthorized");
+      const subscription = await getUserSubscription();
+
+      if (!currentUser || !subscription || !subscription.isActive)
+        throw new UploadThingError("Unauthorized");
 
       return { userId: currentUser.id, prevImage: currentUser.image! };
     })
@@ -74,9 +78,11 @@ export const ourFileRouter = {
     .middleware(async ({ input: { societyId }, files }) => {
       const currentUser = await getCurrentUser();
 
+      const subscription = await getUserSubscription();
+
       const canAccess = await canAccessSettings(societyId);
 
-      if (!currentUser || !canAccess)
+      if (!currentUser || !canAccess || !subscription || !subscription.isActive)
         throw new UploadThingError("Unauthorized");
 
       const dbSociety = await db.society.findUnique({
@@ -138,10 +144,11 @@ export const ourFileRouter = {
         throw new UploadThingError("Max 5 attachments");
 
       const currentUser = await getCurrentUser();
+      const subscription = await getUserSubscription();
 
       const canAccess = await canSendMessages(societyId);
 
-      if (!currentUser || !canAccess)
+      if (!currentUser || !canAccess || !subscription || !subscription.isActive)
         throw new UploadThingError("Unauthorized");
 
       return {};
@@ -172,9 +179,11 @@ export const ourFileRouter = {
 
       const currentUser = await getCurrentUser();
 
+      const subscription = await getUserSubscription();
+
       const canAccess = await canManageAccounts(input.societyId);
 
-      if (!currentUser || !canAccess)
+      if (!currentUser || !canAccess || !subscription || !subscription.isActive)
         throw new UploadThingError("Unauthorized");
 
       const attachments = await db.transactionDocs.findMany({
@@ -226,9 +235,11 @@ export const ourFileRouter = {
         throw new UploadThingError("Max 5 attachments");
       const currentUser = await getCurrentUser();
 
+      const subscription = await getUserSubscription();
+
       const canAccess = await canAnnounce(societyId);
 
-      if (!currentUser || !canAccess)
+      if (!currentUser || !canAccess || !subscription || !subscription.isActive)
         throw new UploadThingError("Unauthorized");
 
       return {};

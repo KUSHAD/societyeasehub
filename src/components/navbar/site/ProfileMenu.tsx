@@ -59,6 +59,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
           <Link href="/profile">
             <DropdownMenuItem>Profile</DropdownMenuItem>
           </Link>
+          <Link href="/subscription">
+            <DropdownMenuItem>Subscription</DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           <Link href="/invite">
             <DropdownMenuItem>My Invites</DropdownMenuItem>

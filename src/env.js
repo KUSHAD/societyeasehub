@@ -31,6 +31,7 @@ export const env = createEnv({
     CRON_JOB_SECRET: z.string(),
     GETSTREAM_SECRET_KEY: z.string(),
     RESEND_API_KEY: z.string(),
+    STRIPE_API_KEY: z.string(),
   },
 
   /**
@@ -60,6 +61,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GETSTREAM_API_KEY: process.env.NEXT_PUBLIC_GETSTREAM_API_KEY,
     GETSTREAM_SECRET_KEY: process.env.GETSTREAM_SECRET_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    STRIPE_API_KEY: process.env.STRIPE_API_KEY,
   },
 
   /**
