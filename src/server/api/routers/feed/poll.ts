@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { getTime } from "date-fns";
 import { z } from "zod";
 import { canCreatePolls, canVote } from "~/actions/checkUserRole";
 import { createPollSchema } from "~/lib/validators/createPoll";
@@ -110,6 +111,21 @@ export const pollRouter = createTRPCRouter({
           code: "FORBIDDEN",
         });
 
+      const _poll = await db.poll.findUnique({
+        where: {
+          id: pollId,
+          societyId,
+        },
+      });
+
+      if (!_poll) throw new TRPCError({ code: "NOT_FOUND" });
+
+      if (getTime(_poll.validTill) < getTime(Date.now()))
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Poll has already expired",
+        });
+
       const poll = await db.poll.delete({
         where: {
           id: pollId,
@@ -152,6 +168,21 @@ export const pollRouter = createTRPCRouter({
         if (!canVoteInPolls)
           throw new TRPCError({
             code: "FORBIDDEN",
+          });
+
+        const poll = await db.poll.findUnique({
+          where: {
+            id: pollId,
+            societyId,
+          },
+        });
+
+        if (!poll) throw new TRPCError({ code: "NOT_FOUND" });
+
+        if (getTime(poll.validTill) < getTime(Date.now()))
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Poll has already expired",
           });
 
         const voteExists = await db.vote.findUnique({
@@ -201,6 +232,21 @@ export const pollRouter = createTRPCRouter({
         if (!canVoteInPolls)
           throw new TRPCError({
             code: "FORBIDDEN",
+          });
+
+        const poll = await db.poll.findUnique({
+          where: {
+            id: pollId,
+            societyId,
+          },
+        });
+
+        if (!poll) throw new TRPCError({ code: "NOT_FOUND" });
+
+        if (getTime(poll.validTill) < getTime(Date.now()))
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Poll has already expired",
           });
 
         const vote = await db.vote.deleteMany({

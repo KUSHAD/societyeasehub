@@ -13,11 +13,18 @@ export const societyRouter = createTRPCRouter({
   create: protectedProcedure
     .input(newSocietyValidationSchema)
     .mutation(async ({ ctx: { db, session }, input }) => {
+      const newInput = {
+        ...input,
+        confirmPassword: undefined,
+      };
+
+      delete newInput.confirmPassword;
+
       const passwordHash = await bcrypt.hash(input.password, 12);
 
       const newSociety = await db.society.create({
         data: {
-          ...input,
+          ...newInput,
           password: passwordHash,
           ownerId: session.user.id,
           members: {

@@ -123,7 +123,14 @@ export default function PollViewer({ poll }: PollViewerProps) {
               {isLoading ? null : perms ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button disabled={deleting} size="icon" variant="ghost">
+                    <Button
+                      disabled={
+                        deleting ||
+                        getTime(poll.validTill) < getTime(Date.now())
+                      }
+                      size="icon"
+                      variant="ghost"
+                    >
                       <MoreHorizontal />
                     </Button>
                   </DropdownMenuTrigger>
