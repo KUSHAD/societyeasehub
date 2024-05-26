@@ -46,71 +46,73 @@ export function getAuthErrors(errorCode: string) {
 }
 
 export const pricingFeatures = [
-  "Create unlimited societies",
-  "Assign limitless roles",
-  "Accommodate infinite members",
-  "Send unlimited society invites",
-  "Comprehensive accounts management",
-  "Design unlimited roadmaps",
-  "Host unlimited society meetings",
-  "Broadcast announcements effortlessly",
-  "Conduct engaging polls",
-  "Interactive channel-based chat",
+  "Effortlessly Create Unlimited Societies",
+  "Assign Limitless Roles with Precision",
+  "Seamlessly Accommodate Infinite Members",
+  "Send Unlimited Society Invites Instantly",
+  "Comprehensive Accounts Management",
+  "Design Unlimited Roadmaps for Strategic Success",
+  "Host Unlimited Society Meetings",
+  "Broadcast Announcements with Ease",
+  "Conduct Engaging and Interactive Polls",
+  "Utilize Dynamic Channel-Based Chat",
 ];
 
 export const homeFeatures: HomeFeature[] = [
   {
-    title: "Creating Societies",
+    title: "Create Societies with Ease",
     description:
-      "Effortlessly set up and tailor your society's structure with just a few clicks.",
+      "Effortlessly set up and customize your society's structure with just a few clicks, streamlining your organization’s foundation.",
   },
   {
-    title: "Role-Based Access",
+    title: "Role-Based Access Control",
     description:
-      "Seamlessly control permissions and access for different members within your society.",
+      "Precisely control permissions and access levels for different members within your society, ensuring smooth and secure operations.",
   },
   {
     title: "Accommodate Infinite Members",
     description:
-      "Grow your society without any limitations on the number of members.",
+      "Expand your society without any limitations on member count, allowing for unlimited growth and inclusivity.",
   },
   {
-    title: "Invite-Only Membership",
+    title: "Exclusive Invite-Only Membership",
     description:
-      "Ensure exclusivity and privacy by inviting members to join your society.",
+      "Maintain the exclusivity and privacy of your society by inviting members personally, ensuring a trusted community.",
   },
   {
     title: "Unlimited Society Invites",
     description:
-      "Extend limitless invitations to grow your society without restrictions.",
+      "Grow your society without restrictions by sending unlimited invitations, facilitating effortless expansion.",
   },
   {
-    title: "Managing Accounts",
-    description: "Easily track financial transactions and manage member dues.",
-  },
-  {
-    title: "Managing Roadmaps",
+    title: "Effortless Accounts Management",
     description:
-      "Strategically plan and visualize future projects and maintenance schedules.",
+      "Easily track financial transactions and manage member dues, providing financial clarity and peace of mind.",
   },
   {
-    title: "Host Unlimited Meetings",
+    title: "Strategic Roadmap Planning",
     description:
-      "Conduct an unlimited number of meetings to keep your society engaged and informed.",
+      "Plan and visualize future projects and maintenance schedules with precision, driving your society’s success.",
+  },
+  {
+    title: "Host Unlimited Society Meetings",
+    description:
+      "Keep your society engaged and informed with unlimited meetings, ensuring seamless communication and collaboration.",
   },
   {
     title: "Effortless Announcements",
-    description: "Broadcast announcements seamlessly to all society members.",
+    description:
+      "Broadcast announcements seamlessly to all members, ensuring everyone stays informed and connected.",
   },
   {
-    title: "Engaging Polls",
+    title: "Engaging Interactive Polls",
     description:
-      "Organize interactive polls to gather opinions and make decisions.",
+      "Conduct interactive polls to gather opinions and make informed decisions, promoting active member participation.",
   },
   {
-    title: "Channel-Based Chat",
+    title: "Dynamic Channel-Based Chat",
     description:
-      "Facilitate dynamic and organized communication with channel-based chat.",
+      "Facilitate organized and vibrant communication with our dynamic channel-based chat, enhancing member interaction.",
   },
 ];
 
