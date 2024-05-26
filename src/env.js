@@ -32,7 +32,8 @@ export const env = createEnv({
     GETSTREAM_SECRET_KEY: z.string(),
     RESEND_API_KEY: z.string(),
     STRIPE_API_KEY: z.string(),
-    STRIPE_WEBHHOK_SECRET: z.string(),
+    STRIPE_WEBHOOK_SECRET: z.string(),
+    STRIPE_PRICE_ID: z.string(),
   },
 
   /**
@@ -63,7 +64,8 @@ export const env = createEnv({
     GETSTREAM_SECRET_KEY: process.env.GETSTREAM_SECRET_KEY,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
-    STRIPE_WEBHHOK_SECRET: process.env.STRIPE_WEBHHOK_SECRET,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
   },
 
   /**

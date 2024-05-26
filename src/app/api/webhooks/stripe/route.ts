@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      env.STRIPE_WEBHHOK_SECRET,
+      env.STRIPE_WEBHOOK_SECRET,
     );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

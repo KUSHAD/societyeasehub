@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { getCurrentUser } from "./getCurrentUser";
 import { DAY_IN_MS, absoluteUrl } from "~/lib/utils";
 import { stripe } from "~/lib/stripe";
+import { env } from "~/env";
 
 const returnURL = absoluteUrl(`/subscription`);
 
@@ -53,18 +54,7 @@ export async function createStripeURL() {
     line_items: [
       {
         quantity: 1,
-        price_data: {
-          currency: "INR",
-          recurring: {
-            interval: "month",
-            interval_count: 1,
-          },
-          product_data: {
-            name: "SocietyEaseHub",
-            description: "App Subscription",
-          },
-          unit_amount: 250 * 100,
-        },
+        price: env.STRIPE_PRICE_ID,
       },
     ],
     metadata: {
