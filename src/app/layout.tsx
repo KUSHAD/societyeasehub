@@ -16,6 +16,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { type Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 
+export const revalidate = 0
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
