@@ -51,6 +51,10 @@ export async function createStripeURL() {
     mode: "subscription",
     payment_method_types: ["card"],
     customer_email: currentUser.email!,
+    billing_address_collection: "required",
+    saved_payment_method_options: {
+      payment_method_save: "enabled",
+    },
     line_items: [
       {
         quantity: 1,
