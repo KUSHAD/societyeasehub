@@ -23,7 +23,7 @@ export default async function Page() {
         <CardDescription>View your Subscription</CardDescription>
       </CardHeader>
       <CardContent>
-        Your Subscription Ends on 27/9/24
+        Your Subscription Ends on{" "}
         {format(subscription!.stripeCurrentPeriodEnd, "dd/MM/yyyy")}
       </CardContent>
       <CardFooter>
