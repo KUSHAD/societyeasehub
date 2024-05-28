@@ -13,6 +13,12 @@ export async function getUserSubscription() {
 
   if (!currentUser) return null;
 
+  if (env.NODE_ENV === "development")
+    return {
+      isActive: true,
+      stripeCustomerId: `cus_${currentUser.id}`,
+    };
+
   const data = await db.userSubscription.findFirst({
     where: {
       userId: currentUser.id,

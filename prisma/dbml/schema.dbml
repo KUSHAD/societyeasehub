@@ -34,7 +34,6 @@ Table User {
   invites Invite [not null]
   messages Message [not null]
   rooms MeetingRoom [not null]
-  transactions Transaction [not null]
   announcements Announcement [not null]
   announcementComments AnnouncementComment [not null]
   polls Poll [not null]
@@ -71,7 +70,6 @@ Table Society {
   channels Channel [not null]
   rooms MeetingRoom [not null]
   roadmaps RoadmapList [not null]
-  transactions Transaction [not null]
   Announcement Announcement [not null]
   polls Poll [not null]
 }
@@ -186,26 +184,6 @@ Table RoadmapCard {
   list RoadmapList [not null]
 }
 
-Table Transaction {
-  id String [pk]
-  amount Float [not null]
-  type TransactionType [not null, default: 'INCOME']
-  userId String [not null]
-  societyId String [not null]
-  description String [default: '']
-  date DateTime [default: `now()`, not null]
-  member User [not null]
-  society Society [not null]
-  transactions TransactionDocs [not null]
-}
-
-Table TransactionDocs {
-  id String [pk]
-  uri String [unique, not null]
-  transactionId String [not null]
-  transaction Transaction [not null]
-}
-
 Table Announcement {
   id String [pk]
   content String [not null]
@@ -277,13 +255,6 @@ Enum INVITE_STATUS {
   IGNORED
 }
 
-Enum TransactionType {
-  INCOME
-  EXPENDITURE
-  DUES
-  PAYMENT
-}
-
 Ref: Account.userId > User.id [delete: Cascade]
 
 Ref: UserSubscription.userId > User.id [delete: Cascade]
@@ -319,12 +290,6 @@ Ref: MeetingRoom.userId > User.id
 Ref: RoadmapList.societyId > Society.id [delete: Cascade]
 
 Ref: RoadmapCard.listId > RoadmapList.id [delete: Cascade]
-
-Ref: Transaction.userId > User.id [delete: No Action]
-
-Ref: Transaction.societyId > Society.id [delete: Cascade]
-
-Ref: TransactionDocs.transactionId > Transaction.id [delete: Cascade]
 
 Ref: Announcement.userId > User.id [delete: No Action]
 
