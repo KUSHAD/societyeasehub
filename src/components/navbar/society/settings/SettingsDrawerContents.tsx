@@ -14,11 +14,11 @@ export default function SettingsDrawerContents() {
   return (
     <>
       <Link
-        href={`/society/${id}/settings/general`}
+        href={`/society/${societyId}/settings/general`}
         className={buttonVariants({
           className: "my-2",
           variant:
-            pathname === `/society/${id}/settings/general`
+            pathname === `/society/${societyId}/settings/general`
               ? "outline"
               : "ghost",
         })}
@@ -27,11 +27,13 @@ export default function SettingsDrawerContents() {
         General
       </Link>
       <Link
-        href={`/society/${id}/settings/role`}
+        href={`/society/${societyId}/settings/role`}
         className={buttonVariants({
           className: "my-2",
           variant:
-            pathname === `/society/${id}/settings/role` ? "outline" : "ghost",
+            pathname === `/society/${societyId}/settings/role`
+              ? "outline"
+              : "ghost",
         })}
       >
         <UserCog className="mx-2 my-1" />
@@ -45,11 +47,11 @@ export default function SettingsDrawerContents() {
       ) : (
         isOwner && (
           <Link
-            href={`/society/${id}/settings/danger`}
+            href={`/society/${societyId}/settings/danger`}
             className={buttonVariants({
               className: "my-2",
               variant:
-                pathname === `/society/${id}/settings/danger`
+                pathname === `/society/${societyId}/settings/danger`
                   ? "destructive"
                   : "ghost",
             })}

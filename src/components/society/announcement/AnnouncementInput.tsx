@@ -33,8 +33,8 @@ export default function AnnouncementInput() {
         description: "Announcement Created",
       });
       await utils.announcement.getBySociety.invalidate({});
-      announcementStore.updateBySociety(id, "");
-      announcementAttachmentStore.clearBySociety(id);
+      announcementStore.updateBySociety(societyId, "");
+      announcementAttachmentStore.clearBySociety(societyId);
     },
   });
   return (
@@ -58,14 +58,15 @@ export default function AnnouncementInput() {
                 create({
                   content,
                   societyId,
-                  attachments: announcementAttachmentStore.getBySociety(id),
+                  attachments:
+                    announcementAttachmentStore.getBySociety(societyId),
                 })
               }
               values={{
-                content: announcementStore.getBySociety(id) ?? "",
+                content: announcementStore.getBySociety(societyId) ?? "",
               }}
               onValuesChange={({ content }) =>
-                announcementStore.updateBySociety(id, content!)
+                announcementStore.updateBySociety(societyId, content!)
               }
               className="ml-2 w-full"
               formSchema={announcementSchema}

@@ -15,7 +15,10 @@ import { toast } from "~/components/ui/use-toast";
 import { type ChannelActionsProps } from "./ChannelActions";
 
 export default function EditChannel({ channelName }: ChannelActionsProps) {
-  const { channelId, id } = useParams<{ id: string; channelId: string }>();
+  const { channelId, societyId } = useParams<{
+    societyId: string;
+    channelId: string;
+  }>();
   const utils = api.useUtils();
   const { isLoading, mutate: editChannel } = api.channel.updateName.useMutation(
     {

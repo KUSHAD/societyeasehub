@@ -27,7 +27,7 @@ export default function DeleteChannel() {
 
   const { isLoading, mutate: deleteChannel } = api.channel.delete.useMutation({
     onMutate() {
-      router.push(`/society/${id}/feed/announcement`);
+      router.push(`/society/${societyId}/feed/announcement`);
     },
     async onSuccess() {
       await utils.channel.getBySociety.invalidate({ societyId });

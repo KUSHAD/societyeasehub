@@ -29,7 +29,7 @@ export default function CreateChannel() {
         title: "Success",
         description: "Channel Created",
       });
-      router.push(`/society/${id}/feed/channel/${data.id}`);
+      router.push(`/society/${societyId}/feed/channel/${data.id}`);
     },
   });
   return (

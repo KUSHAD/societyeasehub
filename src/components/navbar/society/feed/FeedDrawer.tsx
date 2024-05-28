@@ -32,11 +32,11 @@ export default function FeedDrawer() {
         className={buttonVariants({
           className: "my-2 w-full",
           variant:
-            pathname === `/society/${id}/feed/announcement`
+            pathname === `/society/${societyId}/feed/announcement`
               ? "outline"
               : "ghost",
         })}
-        href={`/society/${id}/feed/announcement`}
+        href={`/society/${societyId}/feed/announcement`}
       >
         <Megaphone className="mx-2 my-1" />
         Announcement
@@ -45,9 +45,11 @@ export default function FeedDrawer() {
         className={buttonVariants({
           className: "my-2 w-full",
           variant:
-            pathname === `/society/${id}/feed/poll` ? "outline" : "ghost",
+            pathname === `/society/${societyId}/feed/poll`
+              ? "outline"
+              : "ghost",
         })}
-        href={`/society/${id}/feed/poll`}
+        href={`/society/${societyId}/feed/poll`}
       >
         <Vote className="mx-2 my-1" />
         Poll

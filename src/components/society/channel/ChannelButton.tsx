@@ -24,11 +24,11 @@ export default function ChannelButton({ channel }: ChannelButtonProps) {
     <div ref={ref}>
       {entry?.isIntersecting ? (
         <Link
-          href={`/society/${id}/feed/channel/${channel.id}`}
+          href={`/society/${societyId}/feed/channel/${channel.id}`}
           className={buttonVariants({
             className: "my-2 w-full",
             variant:
-              pathname === `/society/${id}/feed/channel/${channel.id}`
+              pathname === `/society/${societyId}/feed/channel/${channel.id}`
                 ? "outline"
                 : "ghost",
           })}

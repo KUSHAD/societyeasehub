@@ -40,7 +40,7 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
         <div className="mr-auto" />
         {meeting.status === "ONGOING" ? (
           <Link
-            href={`/society/${id}/meeting/${meeting.id}`}
+            href={`/society/${societyId}/meeting/${meeting.id}`}
             className={buttonVariants()}
           >
             Join Meeting

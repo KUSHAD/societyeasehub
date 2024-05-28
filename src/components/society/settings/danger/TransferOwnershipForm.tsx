@@ -69,7 +69,7 @@ export default function TransferOwnershipForm() {
           title: "Success",
           description: "Transferred",
         });
-        router.push(`/society/${id}/feed`);
+        router.push(`/society/${societyId}/feed`);
         router.refresh();
       },
     });

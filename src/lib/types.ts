@@ -4,7 +4,6 @@ import type {
   RoadmapCard,
   RoadmapList,
   Role,
-  Transaction,
   User,
 } from "@prisma/client";
 import { type TRPCClientErrorLike } from "@trpc/client";
@@ -118,5 +117,3 @@ export type SafeMeeting = Omit<MeetingRoom, "societyId" | "userId"> & {
 export type CardWithList = RoadmapCard & { list: RoadmapList };
 
 export type ListWithCards = RoadmapList & { cards: RoadmapCard[] };
-
-export type SafeTransaction = Omit<Transaction, "societyId" | "userId">;

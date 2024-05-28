@@ -75,7 +75,7 @@ export default function Announcement({ announcement }: AnnouncementProps) {
                 }
                 name={announcement.member.name ?? "User"}
                 userId={announcement.member.id}
-                societyId={id}
+                societyId={societyId}
               />
               <small>
                 <em>{format(announcement.createdAt, "dd/MM/yyyy  HH:mm")}</em>

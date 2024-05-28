@@ -18,10 +18,10 @@ export default function Contents() {
   return (
     <>
       <Link
-        href={`/society/${id}/feed`}
+        href={`/society/${societyId}/feed`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname.includes(`/society/${id}/feed`)
+          pathname.includes(`/society/${societyId}/feed`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
@@ -30,10 +30,10 @@ export default function Contents() {
         <span className="hidden md:block">Feed</span>
       </Link>
       <Link
-        href={`/society/${id}/accounts`}
+        href={`/society/${societyId}/accounts`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname.includes(`/society/${id}/accounts`)
+          pathname.includes(`/society/${societyId}/accounts`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
@@ -43,10 +43,10 @@ export default function Contents() {
       </Link>
 
       <Link
-        href={`/society/${id}/roadmap`}
+        href={`/society/${societyId}/roadmap`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname === `/society/${id}/roadmap`
+          pathname === `/society/${societyId}/roadmap`
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
@@ -55,10 +55,10 @@ export default function Contents() {
         <span className="hidden md:block">Roadmap</span>
       </Link>
       <Link
-        href={`/society/${id}/meeting`}
+        href={`/society/${societyId}/meeting`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname.includes(`/society/${id}/meeting`)
+          pathname.includes(`/society/${societyId}/meeting`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
@@ -67,10 +67,10 @@ export default function Contents() {
         <span className="hidden md:block">Meetings</span>
       </Link>
       <Link
-        href={`/society/${id}/members`}
+        href={`/society/${societyId}/members`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname === `/society/${id}/members`
+          pathname === `/society/${societyId}/members`
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
@@ -87,12 +87,12 @@ export default function Contents() {
         <Link
           href={
             accessSettings
-              ? `/society/${id}/settings/general`
-              : `/society/${id}/settings`
+              ? `/society/${societyId}/settings/general`
+              : `/society/${societyId}/settings`
           }
           className={cn(
             "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-            pathname.includes(`/society/${id}/settings`)
+            pathname.includes(`/society/${societyId}/settings`)
               ? "border-b-4 border-primary bg-muted"
               : "hover:bg-muted",
           )}

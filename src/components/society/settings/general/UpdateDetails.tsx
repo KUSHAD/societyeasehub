@@ -43,7 +43,7 @@ export default function UpdateDetails() {
       },
     });
   const { data: societyDetails, isLoading } = api.society.getInfo.useQuery({
-    id,
+    id: societyId,
   });
 
   return (
@@ -92,7 +92,7 @@ export default function UpdateDetails() {
                 onSubmit={(data) =>
                   update({
                     ...data,
-                    id,
+                    id: societyId,
                   })
                 }
                 values={{

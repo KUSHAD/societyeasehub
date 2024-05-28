@@ -12,9 +12,9 @@ export default async function SocietyLayout({
   params,
 }: {
   children: React.ReactNode;
-  params: { id: string };
+  params: { societyId: string };
 }) {
-  const societyExists = await checkIsSocietyMember(params.id);
+  const societyExists = await checkIsSocietyMember(params.societyId);
 
   if (!societyExists) redirect("/dashboard");
 

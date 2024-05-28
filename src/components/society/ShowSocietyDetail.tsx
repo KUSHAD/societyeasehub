@@ -21,7 +21,7 @@ export default function ShowSocietyDetail() {
 
   const { data: societyDetails, isLoading } = api.society.getInfo.useQuery(
     {
-      id,
+      id: societyId,
     },
     {
       onSuccess(data) {
