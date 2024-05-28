@@ -7,9 +7,9 @@ import { api } from "~/trpc/react";
 import PollViewer from "./PollViewer";
 
 export default function PollsViewContainer() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { data: polls, isLoading } = api.poll.getBySociety.useQuery({
-    societyId: id,
+    societyId,
   });
   return isLoading ? (
     <Skeleton className="my-2 h-[200px] w-full" count={5} />

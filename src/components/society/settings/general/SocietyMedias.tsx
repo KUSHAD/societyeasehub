@@ -8,9 +8,9 @@ import SocietyImageUploader from "./SocietyImageUploader";
 import NotFound from "~/components/NotFound";
 
 export default function SocietyMedias() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { data: medias, isLoading } = api.societyMedia.getBySociety.useQuery({
-    societyId: id,
+    societyId,
   });
   return (
     <Card>

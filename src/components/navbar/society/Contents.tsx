@@ -7,12 +7,12 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export default function Contents() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const pathname = usePathname();
 
   const { data: accessSettings, isLoading: settingsLoading } =
     api.perms.canAccessSettings.useQuery({
-      societyId: id,
+      societyId,
     });
 
   return (

@@ -30,7 +30,7 @@ import { api } from "~/trpc/react";
 
 export default function ChangePasswordForm() {
   const [isOpen, setIsOpen] = useState(false);
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { mutate: changePassword, isLoading } =
     api.society.changePassword.useMutation({
       onSuccess() {
@@ -56,7 +56,7 @@ export default function ChangePasswordForm() {
           onSubmit={(data) =>
             changePassword({
               ...data,
-              societyId: id,
+              societyId,
             })
           }
           fieldConfig={{

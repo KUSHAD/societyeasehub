@@ -10,10 +10,10 @@ generator dbml {
 }
 
 datasource db {
-    provider  = "postgresql"
-    url       = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
     // uncomment next line if you use Prisma <5.10
-    directUrl = env("DATABASE_URL_UNPOOLED")
+    // directUrl = env("DATABASE_URL_UNPOOLED")
 }
 
 // Necessary for Next Auth
@@ -49,7 +49,6 @@ model User {
     invites              Invite[]
     messages             Message[]
     rooms                MeetingRoom[]
-    transactions         Transaction[]
     announcements        Announcement[]
     announcementComments AnnouncementComment[]
     polls                Poll[]
@@ -94,7 +93,6 @@ model Society {
     channels     Channel[]
     rooms        MeetingRoom[]
     roadmaps     RoadmapList[]
-    transactions Transaction[]
     Announcement Announcement[]
     polls        Poll[]
 }
@@ -238,38 +236,6 @@ model RoadmapCard {
     updatedAt   DateTime @updatedAt @ignore
 
     list RoadmapList @relation(fields: [listId], references: [id], onDelete: Cascade)
-}
-
-model Transaction {
-    id          String          @id @default(cuid())
-    amount      Float
-    type        TransactionType @default(INCOME)
-    userId      String
-    societyId   String
-    description String?         @default("") @db.VarChar(250)
-    date        DateTime        @default(now())
-    createdAt   DateTime        @default(now()) @ignore
-
-    member       User              @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade)
-    society      Society           @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    transactions TransactionDocs[]
-}
-
-enum TransactionType {
-    INCOME
-    EXPENDITURE
-    DUES
-    PAYMENT
-}
-
-model TransactionDocs {
-    id            String   @id @default(cuid())
-    uri           String   @unique @db.Text
-    transactionId String
-    createdAt     DateTime @default(now()) @ignore
-    updatedAt     DateTime @updatedAt @ignore
-
-    transaction Transaction @relation(fields: [transactionId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model Announcement {

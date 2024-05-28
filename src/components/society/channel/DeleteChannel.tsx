@@ -16,7 +16,10 @@ import { useMessageAttachmentStore } from "~/store/messageAttachment";
 import { api } from "~/trpc/react";
 
 export default function DeleteChannel() {
-  const { id, channelId } = useParams<{ id: string; channelId: string }>();
+  const { societyId, channelId } = useParams<{
+    societyId: string;
+    channelId: string;
+  }>();
   const router = useRouter();
   const utils = api.useUtils();
   const messageStore = useMessageStore();
@@ -27,7 +30,7 @@ export default function DeleteChannel() {
       router.push(`/society/${id}/feed/announcement`);
     },
     async onSuccess() {
-      await utils.channel.getBySociety.invalidate({ societyId: id });
+      await utils.channel.getBySociety.invalidate({ societyId });
 
       messageStore.updateByChannel(channelId, "");
       messageAttachmentStore.clearByChannel(channelId);
@@ -57,7 +60,7 @@ export default function DeleteChannel() {
             onClick={() =>
               deleteChannel({
                 channelId,
-                societyId: id,
+                societyId,
               })
             }
           >

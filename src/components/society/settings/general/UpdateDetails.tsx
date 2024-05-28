@@ -28,7 +28,7 @@ import {
 } from "~/components/ui/card";
 
 export default function UpdateDetails() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const [open, setOpen] = useState(false);
   const { mutate: update, isLoading: updating } =

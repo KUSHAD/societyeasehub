@@ -18,7 +18,7 @@ import { Button } from "~/components/ui/button";
 import { useState } from "react";
 
 export default function SocietyImageUploader() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const [isUploading, setIsUploading] = useState(false);
   const [open, setIsOpen] = useState(false);
@@ -36,7 +36,7 @@ export default function SocietyImageUploader() {
         </AlertDialogHeader>
         <UploadDropzone
           input={{
-            societyId: id,
+            societyId,
           }}
           onBeforeUploadBegin={(files) => {
             setIsUploading(true);

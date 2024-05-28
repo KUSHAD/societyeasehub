@@ -12,7 +12,7 @@ interface ChannelButtonProps {
 }
 
 export default function ChannelButton({ channel }: ChannelButtonProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const pathname = usePathname();
   const [ref, entry] = useIntersectionObserver({
     threshold: 0,

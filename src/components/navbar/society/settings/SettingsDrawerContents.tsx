@@ -6,10 +6,10 @@ import { UserCog, Cog, AlertCircle } from "lucide-react";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 export default function SettingsDrawerContents() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const pathname = usePathname();
   const { data: isOwner, isLoading } = api.perms.isOwner.useQuery({
-    societyId: id,
+    societyId,
   });
   return (
     <>

@@ -11,12 +11,15 @@ export default function AddChatAttachment({
   setIsUploading: Dispatch<SetStateAction<boolean>>;
 }) {
   const messageAttachmentStore = useMessageAttachmentStore();
-  const { id, channelId } = useParams<{ id: string; channelId: string }>();
+  const { societyId, channelId } = useParams<{
+    societyId: string;
+    channelId: string;
+  }>();
 
   return (
     <UploadDropzone
       input={{
-        societyId: id,
+        societyId,
         currentFileCount: messageAttachmentStore.getByChannel(channelId).length,
       }}
       className={uploaderClassName}

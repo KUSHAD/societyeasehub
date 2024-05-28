@@ -19,7 +19,7 @@ import { channelSchema } from "~/lib/validators/channel";
 import { api } from "~/trpc/react";
 
 export default function CreateChannel() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const router = useRouter();
   const { mutate: create, isLoading } = api.channel.create.useMutation({
@@ -48,7 +48,7 @@ export default function CreateChannel() {
           onSubmit={(data) =>
             create({
               ...data,
-              societyId: id,
+              societyId,
             })
           }
           formSchema={channelSchema}

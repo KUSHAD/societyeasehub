@@ -20,7 +20,7 @@ import { api } from "~/trpc/react";
 
 export default function AddRole() {
   const [open, setOpen] = useState(false);
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const { mutate, isLoading } = api.role.create.useMutation({
     onSuccess: async () => {
@@ -44,7 +44,7 @@ export default function AddRole() {
           onSubmit={(data) =>
             mutate({
               ...data,
-              societyId: id,
+              societyId,
             })
           }
           formSchema={newRole}

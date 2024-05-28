@@ -20,7 +20,10 @@ export default function MessageOptions({
   self,
   messageId,
 }: MessageOptionsProps) {
-  const { id, channelId } = useParams<{ id: string; channelId: string }>();
+  const { societyId, channelId } = useParams<{
+    societyId: string;
+    channelId: string;
+  }>();
 
   const utils = api.useUtils();
 
@@ -68,7 +71,7 @@ export default function MessageOptions({
                 })
               : adminDelete({
                   messageId,
-                  societyId: id,
+                  societyId,
                 })
           }
         >

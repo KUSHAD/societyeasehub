@@ -7,9 +7,9 @@ import { api } from "~/trpc/react";
 import MeetingCard from "./MeetingCard";
 
 export default function ShowMeetingContainer() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { data: meetings, isLoading } = api.meetingRoom.getBySociety.useQuery({
-    societyId: id,
+    societyId,
   });
   return (
     <>

@@ -10,8 +10,6 @@ import { messageRouter } from "./routers/feed/channel/message";
 import { meetingRoomRouter } from "./routers/meetingRoom";
 import { roadmapListRouter } from "./routers/roadmap/roadmapList";
 import { roadmapCardRouter } from "./routers/roadmap/roadmapCard";
-import { transactionRouter } from "./routers/transaction/transaction";
-import { transactionDocsRouter } from "./routers/transaction/transactionDocs";
 import { announcementRouter } from "./routers/feed/announcement/announcement";
 import { announcementCommentRouter } from "./routers/feed/announcement/announcementComment";
 import { pollRouter } from "./routers/feed/poll";
@@ -35,8 +33,6 @@ export const appRouter = createTRPCRouter({
   meetingRoom: meetingRoomRouter,
   roadmapList: roadmapListRouter,
   roadmapCard: roadmapCardRouter,
-  transaction: transactionRouter,
-  transactionDocs: transactionDocsRouter,
   announcement: announcementRouter,
   announcementComment: announcementCommentRouter,
   poll: pollRouter,

@@ -11,11 +11,11 @@ export default function AnnouncementComments(props: {
   announcementId: string;
   commentCount: number;
 }) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
 
   const { data: perms, isLoading: gettingPerms } =
     api.perms.canComment.useQuery({
-      societyId: id,
+      societyId,
     });
 
   const { data: comments, isLoading } =

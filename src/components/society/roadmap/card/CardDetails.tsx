@@ -9,10 +9,10 @@ interface CardDetailsProps {
 }
 
 export default function CardDetails({ cardId }: CardDetailsProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { isLoading, data: card } = api.roadmapCard.getById.useQuery({
     cardId,
-    societyId: id,
+    societyId,
   });
   return isLoading ? (
     <Skeleton className="my-2 h-[200px] w-full rounded" />

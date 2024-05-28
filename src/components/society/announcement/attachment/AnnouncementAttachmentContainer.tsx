@@ -13,7 +13,7 @@ import MediaRenderer from "../../channel/chat/MediaRenderer";
 import { AspectRatio } from "~/components/ui/aspect-ratio";
 
 export default function AnnouncementAttachmentContainer() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const announcementAttachmentStore = useAnnouncementAttachmentStore();
   const [uploading, setUploading] = useState<boolean>(false);
   return (
@@ -22,7 +22,7 @@ export default function AnnouncementAttachmentContainer() {
         className={uploaderClassName}
         endpoint="announcementAttachments"
         input={{
-          societyId: id,
+          societyId,
           currentFileCount: announcementAttachmentStore.getBySociety(id).length,
         }}
         config={{

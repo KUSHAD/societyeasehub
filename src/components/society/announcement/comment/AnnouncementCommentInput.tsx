@@ -9,7 +9,7 @@ import { api } from "~/trpc/react";
 export default function AnnouncementCommentInput(props: {
   announcementId: string;
 }) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const { isLoading, mutate: create } =
     api.announcementComment.create.useMutation({
@@ -18,7 +18,7 @@ export default function AnnouncementCommentInput(props: {
           announcementId: props.announcementId,
         });
         await utils.announcement.getBySociety.invalidate({
-          societyId: id,
+          societyId,
         });
         toast({
           title: "Message",
@@ -36,7 +36,7 @@ export default function AnnouncementCommentInput(props: {
         create({
           ...data,
           announcementId: props.announcementId,
-          societyId: id,
+          societyId,
         })
       }
       fieldConfig={{

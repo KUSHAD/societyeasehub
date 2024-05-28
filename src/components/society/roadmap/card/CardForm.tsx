@@ -16,12 +16,12 @@ interface CardFormProps {
 }
 
 export default function CardForm({ listId }: CardFormProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
 
   const { isLoading, mutate: create } = api.roadmapCard.create.useMutation({
     async onSuccess() {
-      await utils.roadmapList.getBySociety.invalidate({ societyId: id });
+      await utils.roadmapList.getBySociety.invalidate({ societyId });
       toast({
         title: "Message",
         description: "Card Created",
@@ -36,7 +36,7 @@ export default function CardForm({ listId }: CardFormProps) {
           create({
             ..._data,
             listId,
-            societyId: id,
+            societyId,
           })
         }
       >

@@ -36,9 +36,9 @@ interface AnnouncementProps {
 }
 
 export default function Announcement({ announcement }: AnnouncementProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { isLoading, data } = api.perms.canAnnounce.useQuery({
-    societyId: id,
+    societyId,
   });
   const utils = api.useUtils();
 
@@ -46,7 +46,7 @@ export default function Announcement({ announcement }: AnnouncementProps) {
     api.announcement.delete.useMutation({
       async onSuccess() {
         await utils.announcement.getBySociety.invalidate({
-          societyId: id,
+          societyId,
         });
 
         toast({
@@ -95,7 +95,7 @@ export default function Announcement({ announcement }: AnnouncementProps) {
                     onClick={() =>
                       deleteAnnouncement({
                         announcementId: announcement.id,
-                        societyId: id,
+                        societyId,
                       })
                     }
                   >

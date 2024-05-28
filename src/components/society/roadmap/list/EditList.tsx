@@ -17,13 +17,13 @@ interface EditListProps {
 }
 
 export default function EditList({ title, listId }: EditListProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const { isLoading, mutate: updateTitle } =
     api.roadmapList.updateTitle.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({
-          societyId: id,
+          societyId,
         });
         toast({
           title: "Message",
@@ -37,7 +37,7 @@ export default function EditList({ title, listId }: EditListProps) {
         updateTitle({
           ...data,
           listId,
-          societyId: id,
+          societyId,
         })
       }
       formSchema={createListSchema}

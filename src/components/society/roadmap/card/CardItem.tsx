@@ -32,10 +32,10 @@ interface CardItemProps {
 }
 
 export default function CardItem({ card, index }: CardItemProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
 
   const { isLoading, data: canAccess } = api.perms.canManageRoadmaps.useQuery({
-    societyId: id,
+    societyId,
   });
 
   const utils = api.useUtils();
@@ -44,7 +44,7 @@ export default function CardItem({ card, index }: CardItemProps) {
     api.roadmapCard.delete.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({
-          societyId: id,
+          societyId,
         });
         toast({
           title: "Message",
@@ -57,7 +57,7 @@ export default function CardItem({ card, index }: CardItemProps) {
     api.roadmapCard.copy.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({
-          societyId: id,
+          societyId,
         });
         toast({
           title: "Message",
@@ -99,7 +99,7 @@ export default function CardItem({ card, index }: CardItemProps) {
                           copyCard({
                             cardId: card.id,
                             listId: card.listId,
-                            societyId: id,
+                            societyId,
                           })
                         }
                         variant="outline"
@@ -113,7 +113,7 @@ export default function CardItem({ card, index }: CardItemProps) {
                           deleteCard({
                             cardId: card.id,
                             listId: card.listId,
-                            societyId: id,
+                            societyId,
                           })
                         }
                         size="icon"

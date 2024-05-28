@@ -19,7 +19,7 @@ interface ListContainerProps {
 }
 
 export default function ListContainer({ data }: ListContainerProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
 
   const [orderedData, setOrderedData] = useState(data);
 
@@ -28,7 +28,7 @@ export default function ListContainer({ data }: ListContainerProps) {
   const { mutate: listReorder } = api.roadmapList.reorder.useMutation({
     async onSuccess() {
       await utils.roadmapList.getBySociety.invalidate({
-        societyId: id,
+        societyId,
       });
       toast({
         title: "Message",
@@ -40,7 +40,7 @@ export default function ListContainer({ data }: ListContainerProps) {
   const { mutate: cardReorder } = api.roadmapCard.reorder.useMutation({
     async onSuccess() {
       await utils.roadmapList.getBySociety.invalidate({
-        societyId: id,
+        societyId,
       });
       toast({
         title: "Message",
@@ -51,7 +51,7 @@ export default function ListContainer({ data }: ListContainerProps) {
 
   const { isLoading: gettingPerms, data: canManage } =
     api.perms.canManageRoadmaps.useQuery({
-      societyId: id,
+      societyId,
     });
 
   useEffect(() => {
@@ -80,7 +80,7 @@ export default function ListContainer({ data }: ListContainerProps) {
       );
 
       setOrderedData(items);
-      listReorder({ items, societyId: id });
+      listReorder({ items, societyId });
     }
 
     // User moves a card
@@ -126,7 +126,7 @@ export default function ListContainer({ data }: ListContainerProps) {
         setOrderedData(newOrderedData);
         cardReorder({
           items: reorderedCards,
-          societyId: id,
+          societyId,
         });
 
         // User moves the card to another list
@@ -151,7 +151,7 @@ export default function ListContainer({ data }: ListContainerProps) {
 
         setOrderedData(newOrderedData);
         cardReorder({
-          societyId: id,
+          societyId,
           items: destList.cards,
         });
       }

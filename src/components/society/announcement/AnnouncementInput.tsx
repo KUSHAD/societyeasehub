@@ -24,7 +24,7 @@ export default function AnnouncementInput() {
   const { data } = useSession();
   const announcementStore = useAnnouncementStore();
   const announcementAttachmentStore = useAnnouncementAttachmentStore();
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const { mutate: create, isLoading } = api.announcement.create.useMutation({
     async onSuccess() {
@@ -57,7 +57,7 @@ export default function AnnouncementInput() {
               onSubmit={({ content }) =>
                 create({
                   content,
-                  societyId: id,
+                  societyId,
                   attachments: announcementAttachmentStore.getBySociety(id),
                 })
               }

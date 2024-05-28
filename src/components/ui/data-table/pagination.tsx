@@ -28,7 +28,7 @@ export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
   const utils = api.useUtils();
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { isLoading, mutate: deleteTransaction } =
     api.transaction.delete.useMutation({
       async onSuccess(data) {
@@ -49,7 +49,7 @@ export function DataTablePagination<TData>({
             disabled={isLoading}
             onClick={() =>
               deleteTransaction({
-                societyId: id,
+                societyId,
                 transactionID: table.getFilteredSelectedRowModel().rows.map(
                   (_row) =>
                     // @ts-expect-error id doesn't exist on  type  any

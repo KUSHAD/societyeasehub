@@ -12,9 +12,9 @@ export interface MembersProps {
 }
 
 export default function Members({ canAssignRoles, canKick }: MembersProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { isLoading, data: members } = api.member.getBySociety.useQuery({
-    societyId: id,
+    societyId,
   });
 
   return isLoading ? (

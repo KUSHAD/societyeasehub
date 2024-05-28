@@ -54,11 +54,11 @@ export default function TransferOwnershipForm() {
 
   const router = useRouter();
 
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
 
   const { data: members, isLoading: gettingMembers } =
     api.member.getBySocietyWithoutOwner.useQuery({
-      societyId: id,
+      societyId,
     });
 
   const { mutate: transferOwnership, isLoading: isTransferring } =
@@ -76,7 +76,7 @@ export default function TransferOwnershipForm() {
 
   function onSubmit(data: z.infer<typeof transferOwnershipSchema>) {
     transferOwnership({
-      societyId: id,
+      societyId,
       password: data.password,
       userId: data.transferringTo,
     });
