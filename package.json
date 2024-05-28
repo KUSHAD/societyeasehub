@@ -16,7 +16,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "postinstall": "prisma generate",
+    "postinstall": "prisma db push",
     "react-compiler-healthcheck": "react-compiler-healthcheck"
   },
   "dependencies": {
