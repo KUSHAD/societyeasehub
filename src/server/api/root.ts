@@ -14,6 +14,7 @@ import { announcementRouter } from "./routers/feed/announcement/announcement";
 import { announcementCommentRouter } from "./routers/feed/announcement/announcementComment";
 import { pollRouter } from "./routers/feed/poll";
 import { permsRouter } from "./routers/member/perms";
+import { transactionAccountsRouter } from "./routers/transaction/transactionAccounts";
 
 /**
  * This is the primary router for your server.
@@ -36,6 +37,7 @@ export const appRouter = createTRPCRouter({
   announcement: announcementRouter,
   announcementComment: announcementCommentRouter,
   poll: pollRouter,
+  transactionAccounts: transactionAccountsRouter,
 });
 
 // export type definition of API

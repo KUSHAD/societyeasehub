@@ -72,6 +72,7 @@ Table Society {
   roadmaps RoadmapList [not null]
   Announcement Announcement [not null]
   polls Poll [not null]
+  transactionAccounts TransactionAccount [not null]
 }
 
 Table SocietyMedia {
@@ -249,6 +250,13 @@ Table Vote {
   }
 }
 
+Table TransactionAccount {
+  id String [pk]
+  name String [not null]
+  societyId String [not null]
+  society Society [not null]
+}
+
 Enum INVITE_STATUS {
   PENDING
   ACCEPTED
@@ -312,3 +320,5 @@ Ref: Vote.optionId > PollOptions.id [delete: Cascade]
 Ref: Vote.userId > User.id [delete: Cascade]
 
 Ref: Vote.pollId > Poll.id [delete: Cascade]
+
+Ref: TransactionAccount.societyId > Society.id [delete: Cascade]
