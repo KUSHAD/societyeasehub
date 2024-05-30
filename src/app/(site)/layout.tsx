@@ -5,8 +5,6 @@ import PaymentModal from "~/components/PaymentModal";
 import Navbar from "~/components/navbar/site";
 import Tab from "~/components/navbar/site/Tab";
 
-export const revalidate = 0;
-
 export default async function AccountLayout({
   children,
 }: {

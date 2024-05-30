@@ -1,10 +1,10 @@
 import "server-only";
 
-import { getServerAuthSession } from "~/server/auth";
+import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 
 export async function getCurrentUser() {
-  const session = await getServerAuthSession();
+  const session = await auth();
   if (!session?.user?.email) {
     return null;
   }

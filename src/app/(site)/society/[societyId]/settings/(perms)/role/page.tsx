@@ -5,7 +5,6 @@ import AddRole from "~/components/society/settings/role/AddRole";
 import ViewRoles from "~/components/society/settings/role/ViewRoles";
 import { type PageProps } from "~/lib/types";
 
-export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 export default async function Page({ params: { id } }: PageProps) {

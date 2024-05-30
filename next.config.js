@@ -13,9 +13,9 @@ const nextConfig = {
   },
   experimental: {
     ppr: true,
-    typedRoutes: true,
     useWasmBinary: true,
     cssChunking: "strict",
+    typedRoutes: true,
   },
   images: {
     remotePatterns: [

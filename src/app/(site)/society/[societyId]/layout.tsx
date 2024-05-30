@@ -5,8 +5,6 @@ import ClientOnly from "~/components/ClientOnly";
 import SocietyTabs from "~/components/navbar/society";
 import BackBar from "~/components/navbar/society/BackBar";
 
-export const revalidate = 0;
-
 export default async function SocietyLayout({
   children,
   params,
