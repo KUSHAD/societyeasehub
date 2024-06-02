@@ -79,7 +79,10 @@ export default function AccountSheet(props: { id?: string }) {
   );
 
   return (
-    <Sheet open={newAccountSheetStore.isOpen}>
+    <Sheet
+      open={newAccountSheetStore.isOpen}
+      onOpenChange={newAccountSheetStore.onClose}
+    >
       <SheetContent side="right">
         <SheetHeader>
           <SheetTitle>{props.id ? "Update" : "New"}Account</SheetTitle>
