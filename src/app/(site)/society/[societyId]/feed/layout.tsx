@@ -12,7 +12,7 @@ export default function SocietyFeedLayout({
   return (
     <div className="flex flex-row">
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
-        <aside className="fixed top-14 z-30 -ml-2 hidden w-full shrink-0 md:sticky md:block">
+        <aside className="fixed top-14 -ml-2 hidden w-full shrink-0 md:sticky md:block">
           <ScrollArea className="h-full py-6 pl-8 pr-6 lg:py-8">
             <ClientOnly>
               <FeedDrawer />

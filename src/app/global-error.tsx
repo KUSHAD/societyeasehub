@@ -1,13 +1,16 @@
 "use client";
 
 import * as Sentry from "@sentry/nextjs";
-import NextError from "next/error";
 import { useEffect } from "react";
+import NotFound from "~/components/NotFound";
+import { Button } from "~/components/ui/button";
 
 export default function GlobalError({
   error,
+  reset,
 }: {
   error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
     Sentry.captureException(error);
@@ -16,8 +19,9 @@ export default function GlobalError({
   return (
     <html>
       <body>
-        {/* This is the default Next.js error component but it doesn't allow omitting the statusCode property yet. */}
-        <NextError statusCode={undefined as unknown as never} />
+        <NotFound message="Something Went Wrong" description={error.message}>
+          <Button onClick={reset}>Retry</Button>
+        </NotFound>
       </body>
     </html>
   );

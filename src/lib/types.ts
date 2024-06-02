@@ -58,7 +58,7 @@ export type AnnouncementsOutput = {
 
 export interface PageProps {
   params: {
-    id: string;
+    societyId: string;
   };
 }
 

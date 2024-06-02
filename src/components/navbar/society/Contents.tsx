@@ -15,6 +15,11 @@ export default function Contents() {
       societyId,
     });
 
+  const { data: accessFinance, isLoading: financeLoading } =
+    api.perms.canManageAccounts.useQuery({
+      societyId,
+    });
+
   return (
     <>
       <Link
@@ -29,18 +34,43 @@ export default function Contents() {
         <Rss className="mx-2" />
         <span className="hidden md:block">Feed</span>
       </Link>
-      <Link
-        href={`/society/${societyId}/accounts`}
-        className={cn(
-          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname.includes(`/society/${societyId}/accounts`)
-            ? "border-b-4 border-primary bg-muted"
-            : "hover:bg-muted",
-        )}
-      >
-        <Coins className="mx-2" />
-        <span className="hidden md:block">Accounts</span>
-      </Link>
+
+      {financeLoading ? (
+        <div
+          className={cn(
+            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out hover:bg-muted",
+          )}
+        >
+          <Coins className="mx-2" />
+          <span className="hidden md:block">Finance</span>
+        </div>
+      ) : accessFinance ? (
+        <Link
+          href={`/society/${societyId}/finance/overview`}
+          className={cn(
+            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+            pathname.includes(`/society/${societyId}/finance`)
+              ? "border-b-4 border-primary bg-muted"
+              : "hover:bg-muted",
+          )}
+        >
+          <Coins className="mx-2" />
+          <span className="hidden md:block">Finance</span>
+        </Link>
+      ) : (
+        <Link
+          href={`/society/${societyId}/finance`}
+          className={cn(
+            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+            pathname.includes(`/society/${societyId}/finance`)
+              ? "border-b-4 border-primary bg-muted"
+              : "hover:bg-muted",
+          )}
+        >
+          <Coins className="mx-2" />
+          <span className="hidden md:block">Finance</span>
+        </Link>
+      )}
 
       <Link
         href={`/society/${societyId}/roadmap`}

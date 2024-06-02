@@ -8,12 +8,10 @@ import CreateInvite from "~/components/society/members/invite/CreateInvite";
 import Members from "~/components/society/members/Members";
 import { type PageProps } from "~/lib/types";
 
-export const dynamic = "force-dynamic";
-
-export default async function Page({ params: { id } }: PageProps) {
-  const canCreate = await canCreateInvites(id);
-  const canKick = await canKickMember(id);
-  const assignRole = await canAssignRoles(id);
+export default async function Page({ params: { societyId } }: PageProps) {
+  const canCreate = await canCreateInvites(societyId);
+  const canKick = await canKickMember(societyId);
+  const assignRole = await canAssignRoles(societyId);
   return (
     <>
       <div className="flex flex-row">

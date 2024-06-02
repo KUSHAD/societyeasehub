@@ -5,12 +5,10 @@ import AddRole from "~/components/society/settings/role/AddRole";
 import ViewRoles from "~/components/society/settings/role/ViewRoles";
 import { type PageProps } from "~/lib/types";
 
-export const dynamic = "force-dynamic";
+export default async function Page({ params: { societyId } }: PageProps) {
+  const canAccess = await canAccessSettings(societyId);
 
-export default async function Page({ params: { id } }: PageProps) {
-  const canAccess = await canAccessSettings(id);
-
-  if (!canAccess) redirect(`/society/${id}/settings`);
+  if (!canAccess) redirect(`/society/${societyId}/settings`);
   return (
     <>
       <div className="flex flex-row">

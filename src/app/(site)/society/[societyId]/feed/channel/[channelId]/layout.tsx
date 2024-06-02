@@ -8,13 +8,13 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 
 export default async function ChannelLayout({
   children,
-  params: { id, channelId },
+  params: { societyId, channelId },
 }: {
   children: React.ReactNode;
-  params: { id: string; channelId: string };
+  params: { societyId: string; channelId: string };
 }) {
-  await checkChannelExists(channelId, id);
-  const canSend = await canSendMessages(id);
+  await checkChannelExists(channelId, societyId);
+  const canSend = await canSendMessages(societyId);
   return (
     <div className="overflow-hidden">
       <ClientOnly>

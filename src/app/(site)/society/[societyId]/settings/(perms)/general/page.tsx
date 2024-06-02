@@ -13,15 +13,13 @@ import {
 } from "~/components/ui/accordion";
 import { type PageProps } from "~/lib/types";
 
-export const dynamic = "force-dynamic";
-
-export default async function Page({ params: { id } }: PageProps) {
-  const canAccess = await canAccessSettings(id);
+export default async function Page({ params: { societyId } }: PageProps) {
+  const canAccess = await canAccessSettings(societyId);
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect("/api/auth/signin");
-  const isOwner = await isSocietyOwner(id, currentUser.id);
+  const isOwner = await isSocietyOwner(societyId, currentUser.id);
 
-  if (!canAccess) redirect(`/society/${id}/settings`);
+  if (!canAccess) redirect(`/society/${societyId}/settings`);
   return (
     <div className="px-4 py-2">
       <ClientOnly>

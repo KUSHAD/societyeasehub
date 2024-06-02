@@ -4,8 +4,8 @@ import AnnouncementContainer from "~/components/society/announcement/Announcemen
 import AnnouncementInput from "~/components/society/announcement/AnnouncementInput";
 import { type PageProps } from "~/lib/types";
 
-export default async function Page({ params: { id } }: PageProps) {
-  const canAccess = await canAnnounce(id);
+export default async function Page({ params: { societyId } }: PageProps) {
+  const canAccess = await canAnnounce(societyId);
   return (
     <>
       {canAccess ? (

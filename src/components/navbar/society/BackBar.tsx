@@ -21,16 +21,19 @@ import ShowSocietyDetail from "~/components/society/ShowSocietyDetail";
 import { toast } from "~/components/ui/use-toast";
 
 export default function BackBar() {
-  const params = useParams<{ id: string }>();
-  const { data: name, isLoading } = api.society.getName.useQuery(params, {
-    onError(err) {
-      toast({
-        title: "Error",
-        description: err.message,
-        variant: "destructive",
-      });
+  const params = useParams<{ societyId: string }>();
+  const { data: name, isLoading } = api.society.getName.useQuery(
+    { id: params.societyId },
+    {
+      onError(err) {
+        toast({
+          title: "Error",
+          description: err.message,
+          variant: "destructive",
+        });
+      },
     },
-  });
+  );
   return (
     <div className="flex flex-row border-y px-2 py-4">
       <Link

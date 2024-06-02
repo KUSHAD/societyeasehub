@@ -6,15 +6,13 @@ import DeleteSocietyCard from "~/components/society/settings/danger/DeleteSociet
 import TransferOwnershipCard from "~/components/society/settings/danger/TransferOwnershipCard";
 import { type PageProps } from "~/lib/types";
 
-export const dynamic = "force-dynamic";
-
-export default async function Page({ params: { id } }: PageProps) {
+export default async function Page({ params: { societyId } }: PageProps) {
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect("/api/auth/signin");
 
-  const isOwner = await isSocietyOwner(id, currentUser.id);
+  const isOwner = await isSocietyOwner(societyId, currentUser.id);
 
-  if (!isOwner) redirect(`/society/${id}/settings`);
+  if (!isOwner) redirect(`/society/${societyId}/settings`);
   return (
     <>
       <ChangePasswordCard />
