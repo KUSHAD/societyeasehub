@@ -130,7 +130,7 @@ export default function AccountSheet(props: { id?: string }) {
           <Button
             onClick={() =>
               remove({
-                accountId: props.id!,
+                accountId: [props.id!],
                 societyId,
               })
             }

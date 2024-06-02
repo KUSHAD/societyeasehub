@@ -78,7 +78,7 @@ export const transactionAccountsRouter = createTRPCRouter({
     .input(
       z.object({
         societyId: z.string().cuid(),
-        accountId: z.string().cuid(),
+        accountId: z.array(z.string().cuid()),
       }),
     )
     .mutation(async ({ ctx: { db }, input: { societyId, accountId } }) => {
@@ -89,8 +89,8 @@ export const transactionAccountsRouter = createTRPCRouter({
           code: "FORBIDDEN",
         });
 
-      const data = await db.transactionAccount.delete({
-        where: { id: accountId, societyId },
+      const data = await db.transactionAccount.deleteMany({
+        where: { id: { in: accountId }, societyId },
       });
 
       return data;

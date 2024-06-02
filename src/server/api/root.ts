@@ -14,7 +14,7 @@ import { announcementRouter } from "./routers/feed/announcement/announcement";
 import { announcementCommentRouter } from "./routers/feed/announcement/announcementComment";
 import { pollRouter } from "./routers/feed/poll";
 import { permsRouter } from "./routers/member/perms";
-import { transactionAccountsRouter } from "./routers/transaction/transactionAccounts";
+import { transactionAccountsRouter } from "./routers/finance/transactionAccounts";
 
 /**
  * This is the primary router for your server.
