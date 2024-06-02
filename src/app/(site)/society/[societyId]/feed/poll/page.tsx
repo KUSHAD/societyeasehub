@@ -4,8 +4,8 @@ import CreatePollContainer from "~/components/society/poll/create/CreatePollCont
 import PollsViewContainer from "~/components/society/poll/display/PollsViewContainer";
 import { type PageProps } from "~/lib/types";
 
-export default async function Page({ params: { id } }: PageProps) {
-  const canCreate = await canCreatePolls(id);
+export default async function Page({ params: { societyId } }: PageProps) {
+  const canCreate = await canCreatePolls(societyId);
   return (
     <>
       {canCreate ? (

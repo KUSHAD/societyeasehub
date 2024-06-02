@@ -13,31 +13,12 @@ import {
   SheetTitle,
 } from "~/components/ui/sheet";
 import { toast } from "~/components/ui/use-toast";
-import { useNewAccountSheetStore } from "~/store/finance/newAccountSheet";
 import { api } from "~/trpc/react";
 
-export default function AccountSheet(props: { id?: string }) {
+export default function NewAccountSheet(props: { id: string }) {
   const { societyId } = useParams<{ societyId: string }>();
 
   const utils = api.useUtils();
-
-  const newAccountSheetStore = useNewAccountSheetStore();
-
-  const { mutate: create, isLoading } =
-    api.transactionAccounts.create.useMutation({
-      async onSuccess() {
-        await utils.transactionAccounts.getBySociety.invalidate({
-          societyId,
-        });
-
-        toast({
-          title: "Message",
-          description: "Account Created",
-        });
-
-        newAccountSheetStore.onClose();
-      },
-    });
 
   const { mutate: update, isLoading: updating } =
     api.transactionAccounts.update.useMutation({
@@ -50,7 +31,6 @@ export default function AccountSheet(props: { id?: string }) {
           title: "Message",
           description: "Account Updated",
         });
-        newAccountSheetStore.onClose();
       },
     });
 
@@ -65,24 +45,18 @@ export default function AccountSheet(props: { id?: string }) {
           title: "Message",
           description: "Account Deleted",
         });
-
-        newAccountSheetStore.onClose();
       },
     });
 
   const { data, isLoading: getting } = api.transactionAccounts.getById.useQuery(
     {
-      accountId: props.id!,
+      accountId: props.id,
       societyId,
     },
-    { enabled: Boolean(props.id) },
   );
 
   return (
-    <Sheet
-      open={newAccountSheetStore.isOpen}
-      onOpenChange={newAccountSheetStore.onClose}
-    >
+    <Sheet>
       <SheetContent side="right">
         <SheetHeader>
           <SheetTitle>{props.id ? "Update" : "New"}Account</SheetTitle>
@@ -94,16 +68,11 @@ export default function AccountSheet(props: { id?: string }) {
         </SheetHeader>
         <AutoForm
           onSubmit={(data) =>
-            props.id
-              ? update({
-                  name: data.name,
-                  societyId,
-                  accountId: props.id,
-                })
-              : create({
-                  name: data.name,
-                  societyId,
-                })
+            update({
+              name: data.name,
+              societyId,
+              accountId: props.id,
+            })
           }
           formSchema={z.object({
             name: z.string().min(1, "Required").max(100, "Max 100 Characters"),
@@ -119,22 +88,19 @@ export default function AccountSheet(props: { id?: string }) {
             },
           }}
         >
-          <AutoFormSubmit
-            className="w-full"
-            disabled={isLoading || updating || deleting}
-          >
-            {props.id ? "Update" : "Create"}
+          <AutoFormSubmit className="w-full" disabled={updating || deleting}>
+            Update
           </AutoFormSubmit>
         </AutoForm>
         {props.id && (
           <Button
             onClick={() =>
               remove({
-                accountId: [props.id!],
+                accountId: [props.id],
                 societyId,
               })
             }
-            disabled={updating || isLoading || deleting}
+            disabled={updating || deleting}
             className="my-2 w-full"
             variant="destructive"
           >
