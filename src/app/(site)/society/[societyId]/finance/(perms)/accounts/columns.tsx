@@ -3,12 +3,11 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
+import AccountActions from "~/components/society/finance/accounts/AccountActions";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { type RouterOutput } from "~/lib/types";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
 type ResponseType = RouterOutput["transactionAccounts"]["getBySociety"][0];
 
 export const columns: ColumnDef<ResponseType>[] = [
@@ -47,6 +46,15 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
+    enableHiding: false,
+  },
+  {
+    id: "actions",
+    cell: ({
+      row: {
+        original: { id },
+      },
+    }) => <AccountActions accountId={id} />,
     enableHiding: false,
   },
 ];

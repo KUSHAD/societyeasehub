@@ -7,7 +7,7 @@ import { api } from "~/trpc/react";
 import { useParams } from "next/navigation";
 import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
-import NewAccountSheet from "~/components/society/finance/NewAccountSheet";
+import NewAccountSheet from "~/components/society/finance/accounts/NewAccountSheet";
 
 export default function Page() {
   const { societyId } = useParams<{ societyId: string }>();
