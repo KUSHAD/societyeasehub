@@ -3,12 +3,12 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { ArrowUpDown } from "lucide-react";
-import AccountActions from "~/components/society/finance/accounts/AccountActions";
+import CategoryActions from "~/components/society/finance/categories/CategoryActions";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { type RouterOutput } from "~/lib/types";
 
-type ResponseType = RouterOutput["financeAccounts"]["getBySociety"][0];
+type ResponseType = RouterOutput["financeCategories"]["getBySociety"][0];
 
 export const columns: ColumnDef<ResponseType>[] = [
   {
@@ -54,7 +54,7 @@ export const columns: ColumnDef<ResponseType>[] = [
       row: {
         original: { id },
       },
-    }) => <AccountActions accountId={id} />,
+    }) => <CategoryActions categoryId={id} />,
     enableHiding: false,
   },
 ];

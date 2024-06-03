@@ -50,7 +50,7 @@ export const pricingFeatures = [
   "Assign Limitless Roles with Precision",
   "Seamlessly Accommodate Infinite Members",
   "Send Unlimited Society Invites Instantly",
-  "Comprehensive Accounts Management",
+  "Comprehensive Finance Management",
   "Design Unlimited Roadmaps for Strategic Success",
   "Host Unlimited Society Meetings",
   "Broadcast Announcements with Ease",
@@ -85,7 +85,7 @@ export const homeFeatures: HomeFeature[] = [
       "Grow your society without restrictions by sending unlimited invitations, facilitating effortless expansion.",
   },
   {
-    title: "Effortless Accounts Management",
+    title: "Effortless Finance Management",
     description:
       "Easily track financial transactions and manage member dues, providing financial clarity and peace of mind.",
   },

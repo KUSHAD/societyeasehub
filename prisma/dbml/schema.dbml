@@ -72,7 +72,8 @@ Table Society {
   roadmaps RoadmapList [not null]
   Announcement Announcement [not null]
   polls Poll [not null]
-  transactionAccounts TransactionAccount [not null]
+  financeAccounts FinanceAccount [not null]
+  financeCategories FinanceCategory [not null]
 }
 
 Table SocietyMedia {
@@ -250,7 +251,14 @@ Table Vote {
   }
 }
 
-Table TransactionAccount {
+Table FinanceAccount {
+  id String [pk]
+  name String [not null]
+  societyId String [not null]
+  society Society [not null]
+}
+
+Table FinanceCategory {
   id String [pk]
   name String [not null]
   societyId String [not null]
@@ -321,4 +329,6 @@ Ref: Vote.userId > User.id [delete: Cascade]
 
 Ref: Vote.pollId > Poll.id [delete: Cascade]
 
-Ref: TransactionAccount.societyId > Society.id [delete: Cascade]
+Ref: FinanceAccount.societyId > Society.id [delete: Cascade]
+
+Ref: FinanceCategory.societyId > Society.id [delete: Cascade]

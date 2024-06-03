@@ -3,7 +3,7 @@ import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { canManageAccounts } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 
-export const transactionAccountsRouter = createTRPCRouter({
+export const financeAccountsRouter = createTRPCRouter({
   getBySociety: protectedProcedure
     .input(
       z.object({
@@ -11,7 +11,7 @@ export const transactionAccountsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx: { db }, input: { societyId } }) => {
-      const transactionAccounts = await db.transactionAccount.findMany({
+      const financeAccounts = await db.financeAccount.findMany({
         where: {
           societyId,
         },
@@ -21,7 +21,7 @@ export const transactionAccountsRouter = createTRPCRouter({
         },
       });
 
-      return transactionAccounts;
+      return financeAccounts;
     }),
   create: protectedProcedure
     .input(
@@ -38,7 +38,7 @@ export const transactionAccountsRouter = createTRPCRouter({
           code: "FORBIDDEN",
         });
 
-      const data = await db.transactionAccount.create({
+      const data = await db.financeAccount.create({
         data: {
           name,
           societyId,
@@ -64,7 +64,7 @@ export const transactionAccountsRouter = createTRPCRouter({
             code: "FORBIDDEN",
           });
 
-        const data = await db.transactionAccount.update({
+        const data = await db.financeAccount.update({
           where: { id: accountId, societyId },
           data: {
             name,
@@ -89,7 +89,7 @@ export const transactionAccountsRouter = createTRPCRouter({
           code: "FORBIDDEN",
         });
 
-      const data = await db.transactionAccount.deleteMany({
+      const data = await db.financeAccount.deleteMany({
         where: { id: { in: accountId }, societyId },
       });
 
@@ -110,7 +110,7 @@ export const transactionAccountsRouter = createTRPCRouter({
           code: "FORBIDDEN",
         });
 
-      const data = await db.transactionAccount.findUnique({
+      const data = await db.financeAccount.findUnique({
         where: { id: accountId, societyId },
         select: {
           name: true,

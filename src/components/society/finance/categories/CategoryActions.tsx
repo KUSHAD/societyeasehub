@@ -9,39 +9,47 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import EditAccountSheet from "./EditAccountSheet";
 import useConfirm from "~/hooks/use-confirm";
 import { api } from "~/trpc/react";
 import { toast } from "~/components/ui/use-toast";
 import { useParams } from "next/navigation";
+import EditCategorySheet from "./EditCategorySheet";
 
-export default function AccountActions({ accountId }: { accountId: string }) {
+export default function CategoryActions({
+  categoryId,
+}: {
+  categoryId: string;
+}) {
   const { societyId } = useParams<{ societyId: string }>();
 
   const [isOpen, setIsOpen] = useState(false);
   const [ConfirmDialog, confirm] = useConfirm(
     "Are you sure ?",
-    "You are going to delete this account",
+    "You are going to delete this category",
   );
   const utils = api.useUtils();
 
   const { mutate: remove, isLoading: deleting } =
-    api.financeAccounts.delete.useMutation({
+    api.financeCategories.delete.useMutation({
       async onSuccess() {
-        await utils.financeAccounts.getBySociety.invalidate({
+        await utils.financeCategories.getBySociety.invalidate({
           societyId,
         });
 
         toast({
           title: "Message",
-          description: "Account Deleted",
+          description: "Category Deleted",
         });
       },
     });
   return (
     <>
       <ConfirmDialog />
-      <EditAccountSheet id={accountId} isOpen={isOpen} setIsOpen={setIsOpen} />
+      <EditCategorySheet
+        id={categoryId}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost">
@@ -58,7 +66,7 @@ export default function AccountActions({ accountId }: { accountId: string }) {
               const ok = await confirm();
               if (ok) {
                 remove({
-                  accountId: [accountId],
+                  categoryId: [categoryId],
                   societyId,
                 });
               }

@@ -16,7 +16,7 @@ import { toast } from "~/components/ui/use-toast";
 import useConfirm from "~/hooks/use-confirm";
 import { api } from "~/trpc/react";
 
-export default function EditAccountSheet(props: {
+export default function EditCategorySheet(props: {
   id: string;
   isOpen: boolean;
   setIsOpen: React.Dispatch<boolean>;
@@ -25,41 +25,41 @@ export default function EditAccountSheet(props: {
 
   const [ConfirmDialog, confirm] = useConfirm(
     "Are you sure ?",
-    "You are going to delete this account",
+    "You are going to delete this category",
   );
 
   const utils = api.useUtils();
 
   const { mutate: update, isLoading: updating } =
-    api.financeAccounts.update.useMutation({
+    api.financeCategories.update.useMutation({
       async onSuccess() {
-        await utils.financeAccounts.getBySociety.invalidate({
+        await utils.financeCategories.getBySociety.invalidate({
           societyId,
         });
 
         toast({
           title: "Message",
-          description: "Account Updated",
+          description: "Category Updated",
         });
       },
     });
 
   const { mutate: remove, isLoading: deleting } =
-    api.financeAccounts.delete.useMutation({
+    api.financeCategories.delete.useMutation({
       async onSuccess() {
-        await utils.financeAccounts.getBySociety.invalidate({
+        await utils.financeCategories.getBySociety.invalidate({
           societyId,
         });
 
         toast({
           title: "Message",
-          description: "Account Deleted",
+          description: "Category Deleted",
         });
       },
     });
 
-  const { data, isLoading: getting } = api.financeAccounts.getById.useQuery({
-    accountId: props.id,
+  const { data, isLoading: getting } = api.financeCategories.getById.useQuery({
+    categoryId: props.id,
     societyId,
   });
 
@@ -69,14 +69,14 @@ export default function EditAccountSheet(props: {
       <Sheet open={props.isOpen} onOpenChange={() => props.setIsOpen(false)}>
         <SheetContent side="right">
           <SheetHeader>
-            <SheetTitle>Edit Account</SheetTitle>
+            <SheetTitle>Update Category</SheetTitle>
           </SheetHeader>
           <AutoForm
             onSubmit={(data) =>
               update({
                 name: data.name,
                 societyId,
-                accountId: props.id,
+                categoryId: props.id,
               })
             }
             formSchema={z.object({
@@ -106,7 +106,7 @@ export default function EditAccountSheet(props: {
                 const ok = await confirm();
                 if (ok) {
                   remove({
-                    accountId: [props.id],
+                    categoryId: [props.id],
                     societyId,
                   });
                 }

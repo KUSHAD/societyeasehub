@@ -14,14 +14,14 @@ export default function Page() {
 
   const utils = api.useUtils();
 
-  const { data, isLoading } = api.transactionAccounts.getBySociety.useQuery({
+  const { data, isLoading } = api.financeAccounts.getBySociety.useQuery({
     societyId,
   });
 
   const { mutate: remove, isLoading: deleting } =
-    api.transactionAccounts.delete.useMutation({
+    api.financeAccounts.delete.useMutation({
       async onSuccess() {
-        await utils.transactionAccounts.getBySociety.invalidate({
+        await utils.financeAccounts.getBySociety.invalidate({
           societyId,
         });
 

@@ -16,23 +16,24 @@ import {
 import { toast } from "~/components/ui/use-toast";
 import { api } from "~/trpc/react";
 
-export default function NewAccountSheet() {
+export default function NewCategorySheet() {
   const { societyId } = useParams<{ societyId: string }>();
 
   const utils = api.useUtils();
 
-  const { mutate: create, isLoading } = api.financeAccounts.create.useMutation({
-    async onSuccess() {
-      await utils.financeAccounts.getBySociety.invalidate({
-        societyId,
-      });
+  const { mutate: create, isLoading } =
+    api.financeCategories.create.useMutation({
+      async onSuccess() {
+        await utils.financeCategories.getBySociety.invalidate({
+          societyId,
+        });
 
-      toast({
-        title: "Message",
-        description: "Account Created",
-      });
-    },
-  });
+        toast({
+          title: "Message",
+          description: "Category Created",
+        });
+      },
+    });
 
   return (
     <Sheet>
@@ -43,9 +44,10 @@ export default function NewAccountSheet() {
       </SheetTrigger>
       <SheetContent side="right">
         <SheetHeader>
-          <SheetTitle>New Account</SheetTitle>
+          <SheetTitle>New Category</SheetTitle>
+
           <SheetDescription>
-            Create a new account to keep track of your transactions
+            Create a new category to keep track of your transactions
           </SheetDescription>
         </SheetHeader>
         <AutoForm
