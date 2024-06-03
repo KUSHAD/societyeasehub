@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     status: "in_progress",
   });
   try {
-    if (req.headers.get("Authorization") !== `Bearer ${env.CRON_JOB_SECRET}`) {
+    if (req.headers.get("Authorization") !== `Bearer ${env.CRON_SECRET}`) {
       Sentry.captureCheckIn({
         checkInId,
         monitorSlug: "cron-jobs",
