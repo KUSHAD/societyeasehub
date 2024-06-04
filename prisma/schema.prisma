@@ -85,18 +85,19 @@ model Society {
     createdAt     DateTime @default(now()) @ignore
     updatedAt     DateTime @updatedAt @ignore
 
-    owner             User              @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    members           Member[]
-    images            SocietyMedia[]
-    roles             Role[]
-    invites           Invite[]
-    channels          Channel[]
-    rooms             MeetingRoom[]
-    roadmaps          RoadmapList[]
-    Announcement      Announcement[]
-    polls             Poll[]
-    financeAccounts   FinanceAccount[]
-    financeCategories FinanceCategory[]
+    owner               User                 @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    members             Member[]
+    images              SocietyMedia[]
+    roles               Role[]
+    invites             Invite[]
+    channels            Channel[]
+    rooms               MeetingRoom[]
+    roadmaps            RoadmapList[]
+    Announcement        Announcement[]
+    polls               Poll[]
+    financeAccounts     FinanceAccount[]
+    financeCategories   FinanceCategory[]
+    financeTransactions FinanceTransaction[]
 }
 
 model SocietyMedia {
@@ -325,7 +326,8 @@ model FinanceAccount {
     createdAt DateTime @default(now()) @ignore
     updatedAt DateTime @updatedAt @ignore
 
-    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    society      Society              @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    transactions FinanceTransaction[]
 }
 
 model FinanceCategory {
@@ -335,5 +337,23 @@ model FinanceCategory {
     createdAt DateTime @default(now()) @ignore
     updatedAt DateTime @updatedAt @ignore
 
-    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    society      Society              @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    transactions FinanceTransaction[]
+}
+
+model FinanceTransaction {
+    id         String   @id @default(cuid())
+    amount     Int
+    payee      String   @db.VarChar(250)
+    notes      String?  @db.VarChar(250)
+    date       DateTime
+    societyId  String
+    accountId  String
+    categoryId String?
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt @ignore
+
+    society  Society          @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    account  FinanceAccount   @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    category FinanceCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 }

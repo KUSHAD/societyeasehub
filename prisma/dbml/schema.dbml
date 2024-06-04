@@ -74,6 +74,7 @@ Table Society {
   polls Poll [not null]
   financeAccounts FinanceAccount [not null]
   financeCategories FinanceCategory [not null]
+  financeTransactions FinanceTransaction [not null]
 }
 
 Table SocietyMedia {
@@ -256,6 +257,7 @@ Table FinanceAccount {
   name String [not null]
   societyId String [not null]
   society Society [not null]
+  transactions FinanceTransaction [not null]
 }
 
 Table FinanceCategory {
@@ -263,6 +265,22 @@ Table FinanceCategory {
   name String [not null]
   societyId String [not null]
   society Society [not null]
+  transactions FinanceTransaction [not null]
+}
+
+Table FinanceTransaction {
+  id String [pk]
+  amount Int [not null]
+  payee String [not null]
+  notes String
+  date DateTime [not null]
+  societyId String [not null]
+  accountId String [not null]
+  categoryId String
+  createdAt DateTime [default: `now()`, not null]
+  society Society [not null]
+  account FinanceAccount [not null]
+  category FinanceCategory
 }
 
 Enum INVITE_STATUS {
@@ -332,3 +350,9 @@ Ref: Vote.pollId > Poll.id [delete: Cascade]
 Ref: FinanceAccount.societyId > Society.id [delete: Cascade]
 
 Ref: FinanceCategory.societyId > Society.id [delete: Cascade]
+
+Ref: FinanceTransaction.societyId > Society.id [delete: Cascade]
+
+Ref: FinanceTransaction.accountId > FinanceAccount.id [delete: Cascade]
+
+Ref: FinanceTransaction.categoryId > FinanceCategory.id [delete: Set Null]
