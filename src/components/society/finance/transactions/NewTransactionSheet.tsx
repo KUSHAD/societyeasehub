@@ -1,0 +1,241 @@
+"use client";
+
+import { Plus } from "lucide-react";
+import { useParams } from "next/navigation";
+import AutoForm, { AutoFormSubmit } from "~/components/ui/auto-form";
+import { type AutoFormInputComponentProps } from "~/components/ui/auto-form/types";
+import {
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "~/components/ui/form";
+import { Button } from "~/components/ui/button";
+import { CreatableSelect } from "~/components/ui/creatable-select";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "~/components/ui/sheet";
+import { toast } from "~/components/ui/use-toast";
+import { financeTransactionSchema } from "~/lib/validators/financeTransaction";
+import { api } from "~/trpc/react";
+import CurrencyInput from "~/components/ui/currency-input";
+import { convertAmountToMiliUnits } from "~/lib/utils";
+
+export default function NewTransactionSheet() {
+  const { societyId } = useParams<{ societyId: string }>();
+
+  const utils = api.useUtils();
+
+  const { mutate: create, isLoading } =
+    api.financeTransaction.create.useMutation({
+      async onSuccess() {
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+          societyId,
+        });
+
+        toast({
+          title: "Message",
+          description: "Transaction Created",
+        });
+      },
+    });
+
+  const { data: categories, isLoading: gettingCategories } =
+    api.financeCategories.getBySociety.useQuery({
+      societyId,
+    });
+
+  const { data: accounts, isLoading: gettingAccounts } =
+    api.financeAccounts.getBySociety.useQuery({
+      societyId,
+    });
+
+  const { mutate: createAccount, isLoading: accountCreating } =
+    api.financeAccounts.create.useMutation({
+      async onSuccess() {
+        await utils.financeAccounts.getBySociety.invalidate({
+          societyId,
+        });
+
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+          societyId,
+        });
+
+        toast({
+          title: "Message",
+          description: "Account Created",
+        });
+      },
+    });
+
+  const { mutate: createCategory, isLoading: categoryCreating } =
+    api.financeCategories.create.useMutation({
+      async onSuccess() {
+        await utils.financeCategories.getBySociety.invalidate({
+          societyId,
+        });
+
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+          societyId,
+        });
+
+        toast({
+          title: "Message",
+          description: "Category Created",
+        });
+      },
+    });
+
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button size="sm">
+          <Plus className="mr-2 size-4" /> Add New
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="right">
+        <SheetHeader>
+          <SheetTitle>New Transaction</SheetTitle>
+        </SheetHeader>
+        <AutoForm
+          onSubmit={(data) => {
+            const amountInMiliUnits = convertAmountToMiliUnits(data.amount);
+            create({
+              ...data,
+              societyId,
+              amount: amountInMiliUnits,
+            });
+          }}
+          formSchema={financeTransactionSchema}
+          fieldConfig={{
+            categoryId: {
+              fieldType: ({
+                label,
+                isRequired,
+                field,
+                fieldConfigItem,
+              }: AutoFormInputComponentProps) => (
+                <FormItem>
+                  <FormLabel>
+                    {label}
+                    {isRequired && <span className="text-destructive">*</span>}
+                  </FormLabel>
+                  <FormControl>
+                    <CreatableSelect
+                      {...field}
+                      options={
+                        categories?.map((_c) => ({
+                          label: _c.name,
+                          value: _c.id,
+                        })) ?? []
+                      }
+                      onCreate={(name) =>
+                        createCategory({
+                          name: name!,
+                          societyId,
+                        })
+                      }
+                    />
+                  </FormControl>
+                  {fieldConfigItem.description && (
+                    <FormDescription>
+                      {fieldConfigItem.description}
+                    </FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              ),
+            },
+            accountId: {
+              fieldType: ({
+                label,
+                isRequired,
+                field,
+                fieldConfigItem,
+              }: AutoFormInputComponentProps) => (
+                <FormItem>
+                  <FormLabel>
+                    {label}
+                    {isRequired && <span className="text-destructive">*</span>}
+                  </FormLabel>
+                  <FormControl>
+                    <CreatableSelect
+                      {...field}
+                      options={
+                        accounts?.map((_c) => ({
+                          label: _c.name,
+                          value: _c.id,
+                        })) ?? []
+                      }
+                      onCreate={(name) =>
+                        createAccount({
+                          name: name!,
+                          societyId,
+                        })
+                      }
+                    />
+                  </FormControl>
+                  {fieldConfigItem.description && (
+                    <FormDescription>
+                      {fieldConfigItem.description}
+                    </FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              ),
+            },
+            notes: {
+              fieldType: "textarea",
+              inputProps: {
+                className: "resize-none",
+                placeholder: "Optional notes",
+              },
+            },
+            amount: {
+              fieldType: ({
+                label,
+                isRequired,
+                field,
+                fieldConfigItem,
+              }: AutoFormInputComponentProps) => (
+                <FormItem>
+                  <FormLabel>
+                    {label}
+                    {isRequired && <span className="text-destructive">*</span>}
+                  </FormLabel>
+                  <FormControl>
+                    <CurrencyInput {...field} />
+                  </FormControl>
+                  {fieldConfigItem.description && (
+                    <FormDescription>
+                      {fieldConfigItem.description}
+                    </FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              ),
+            },
+          }}
+        >
+          <AutoFormSubmit
+            className="w-full"
+            disabled={
+              isLoading ||
+              gettingCategories ||
+              gettingAccounts ||
+              accountCreating ||
+              categoryCreating
+            }
+          >
+            Create
+          </AutoFormSubmit>
+        </AutoForm>
+      </SheetContent>
+    </Sheet>
+  );
+}

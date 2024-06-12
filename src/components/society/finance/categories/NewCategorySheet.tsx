@@ -28,6 +28,10 @@ export default function NewCategorySheet() {
           societyId,
         });
 
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Category Created",
@@ -63,7 +67,7 @@ export default function NewCategorySheet() {
           fieldConfig={{
             name: {
               inputProps: {
-                placeholder: "eg. Bank, Cash, Credit Card",
+                placeholder: "eg. Food, Travel, etc.",
               },
             },
           }}

@@ -36,11 +36,7 @@ export default function Contents() {
       </Link>
 
       {financeLoading ? (
-        <div
-          className={cn(
-            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out hover:bg-muted",
-          )}
-        >
+        <div className="flex flex-row rounded bg-inherit px-4 py-4 opacity-50 transition-colors ease-in-out ">
           <Coins className="mx-2" />
           <span className="hidden md:block">Finance</span>
         </div>

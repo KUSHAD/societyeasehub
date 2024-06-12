@@ -27,6 +27,10 @@ export default function NewAccountSheet() {
         societyId,
       });
 
+      await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+        societyId,
+      });
+
       toast({
         title: "Message",
         description: "Account Created",

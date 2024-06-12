@@ -8,12 +8,21 @@ import { parse, subDays } from "date-fns";
 export const financeTransactionRouter = createTRPCRouter({
   getBySocietyAndAccounts: protectedProcedure
     .input(
-      z.object({
-        societyId: z.string().cuid(),
-        from: z.string().optional(),
-        to: z.string().optional(),
-        accountId: z.string().cuid(),
-      }),
+      z
+        .object({
+          societyId: z.string().cuid(),
+          from: z.string().optional(),
+          to: z.string().optional(),
+          accountId: z.string().cuid(),
+        })
+        .or(
+          z.object({
+            societyId: z.string().cuid(),
+            from: z.string().optional(),
+            to: z.string().optional(),
+            accountId: z.string(),
+          }),
+        ),
     )
     .query(async ({ ctx: { db }, input }) => {
       const defaultTo = new Date();

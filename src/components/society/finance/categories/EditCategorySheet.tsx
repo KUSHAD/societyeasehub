@@ -37,6 +37,10 @@ export default function EditCategorySheet(props: {
           societyId,
         });
 
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Category Updated",
@@ -48,6 +52,10 @@ export default function EditCategorySheet(props: {
     api.financeCategories.delete.useMutation({
       async onSuccess() {
         await utils.financeCategories.getBySociety.invalidate({
+          societyId,
+        });
+
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
           societyId,
         });
 
@@ -91,7 +99,7 @@ export default function EditCategorySheet(props: {
             fieldConfig={{
               name: {
                 inputProps: {
-                  placeholder: "eg. Bank, Cash, Credit Card",
+                  placeholder: "eg. Food, Travel, etc.",
                 },
               },
             }}

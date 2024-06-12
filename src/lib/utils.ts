@@ -134,20 +134,13 @@ export function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 
   return result;
 }
-export function generateRandomColor(): string {
-  const r = Math.floor(Math.random() * 256); // Random number between 0 and 255 for red
-  const g = Math.floor(Math.random() * 256); // Random number between 0 and 255 for green
-  const b = Math.floor(Math.random() * 256); // Random number between 0 and 255 for blue
-
-  return `rgb(${r}, ${g}, ${b})`;
-}
-
-export function getDateRange(start: Date, end: Date): Date[] {
-  const arr: Date[] = [];
-  for (let dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
-    arr.push(new Date(dt));
-  }
-  return arr;
-}
 
 export const DAY_IN_MS = 86_400_000;
+
+export function convertAmountFromMiliUnits(amount: number) {
+  return amount / 100;
+}
+
+export function convertAmountToMiliUnits(amount: number) {
+  return Math.round(amount * 100);
+}
