@@ -130,8 +130,6 @@ export const financeTransactionRouter = createTRPCRouter({
     .input(
       z.object({
         societyId: z.string().cuid(),
-        from: z.string().optional(),
-        to: z.string().optional(),
         transactionId: z.string().cuid(),
       }),
     )
@@ -147,9 +145,6 @@ export const financeTransactionRouter = createTRPCRouter({
         where: {
           id: input.transactionId,
           societyId: input.societyId,
-        },
-        include: {
-          account: true,
         },
       });
 

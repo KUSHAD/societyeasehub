@@ -17,14 +17,16 @@ export function TRPCReactProvider(props: {
   children: React.ReactNode;
   cookies: string;
 }) {
+  const isProduction = process.env.NODE_ENV === "production";
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
           queries: {
             abortOnUnmount: true,
-            staleTime: 5 * 1000, // 5 seconds
-            refetchInterval: 5 * 1000, // 5 seconds
+            staleTime: isProduction ? 5 * 1000 : undefined, // 5 seconds for production
+            refetchInterval: isProduction ? 5 * 1000 : undefined, // 5 seconds for production
             retry: (failureCount) => failureCount <= 3,
             retryDelay: 500,
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -81,11 +83,13 @@ export function TRPCReactProvider(props: {
     <QueryClientProvider client={queryClient}>
       <api.Provider client={trpcClient} queryClient={queryClient}>
         {props.children}
-        <ReactQueryDevtools
-          initialIsOpen
-          buttonPosition="bottom-left"
-          position="left"
-        />
+        {process.env.NODE_ENV === "development" && (
+          <ReactQueryDevtools
+            initialIsOpen
+            buttonPosition="bottom-left"
+            position="left"
+          />
+        )}
       </api.Provider>
     </QueryClientProvider>
   );

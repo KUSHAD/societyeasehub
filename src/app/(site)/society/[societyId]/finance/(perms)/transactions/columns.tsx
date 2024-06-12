@@ -4,10 +4,12 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
 import { ArrowUpDown } from "lucide-react";
-import AccountActions from "~/components/society/finance/accounts/AccountActions";
+import TransactionActions from "~/components/society/finance/transactions/TransactionActions";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { type RouterOutput } from "~/lib/types";
+import { convertAmountFromMiliUnits, formatCurrency } from "~/lib/utils";
 
 type ResponseType =
   RouterOutput["financeTransaction"]["getBySocietyAndAccounts"][0];
@@ -55,7 +57,7 @@ export const columns: ColumnDef<ResponseType>[] = [
     }) => format(date, "dd MMM, yyyy"),
   },
   {
-    accessorKey: "category.name",
+    id: "category",
     header: ({ column }) => {
       return (
         <Button
@@ -67,6 +69,7 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => row.original.category?.name,
   },
   {
     accessorKey: "payee",
@@ -95,9 +98,17 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => (
+      <Badge
+        variant={row.original.amount < 0 ? "destructive" : "default"}
+        className="rounded-xl p-2 text-xs font-medium"
+      >
+        {formatCurrency(convertAmountFromMiliUnits(row.original.amount))}
+      </Badge>
+    ),
   },
   {
-    accessorKey: "account.name",
+    id: "account",
     header: ({ column }) => {
       return (
         <Button
@@ -109,14 +120,15 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => row.original.account?.name,
   },
-  // {
-  //   id: "actions",
-  //   cell: ({
-  //     row: {
-  //       original: { id },
-  //     },
-  //   }) => <AccountActions accountId={id} />,
-  //   enableHiding: false,
-  // },
+  {
+    id: "actions",
+    cell: ({
+      row: {
+        original: { id },
+      },
+    }) => <TransactionActions transactionId={id} />,
+    enableHiding: false,
+  },
 ];
