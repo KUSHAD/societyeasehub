@@ -11,12 +11,12 @@
   },
   "scripts": {
     "build": "next build",
-    "db:push": "prisma db push --accept-data-loss",
+    "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "postinstall": "prisma db push",
+    "postinstall": "prisma db push --accept-data-loss",
     "react-compiler-healthcheck": "react-compiler-healthcheck"
   },
   "dependencies": {
@@ -46,6 +46,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@sentry/nextjs": "^8",
     "@simplewebauthn/browser": "9.0.1",
     "@simplewebauthn/server": "9.0.3",
     "@stream-io/video-react-sdk": "^0.5.6",
