@@ -48,6 +48,7 @@ export const financeTransactionRouter = createTRPCRouter({
         include: {
           account: true,
           category: true,
+          payee: true,
         },
         orderBy: {
           date: "desc",

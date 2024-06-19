@@ -98,6 +98,7 @@ model Society {
     financeAccounts     FinanceAccount[]
     financeCategories   FinanceCategory[]
     financeTransactions FinanceTransaction[]
+    financePayees       FinancePayee[]
 }
 
 model SocietyMedia {
@@ -344,7 +345,7 @@ model FinanceCategory {
 model FinanceTransaction {
     id         String   @id @default(cuid())
     amount     Int
-    payee      String   @db.VarChar(250)
+    payeeId    String
     notes      String?  @db.VarChar(250)
     date       DateTime
     societyId  String
@@ -356,4 +357,35 @@ model FinanceTransaction {
     society  Society          @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     account  FinanceAccount   @relation(fields: [accountId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     category FinanceCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+    payee    FinancePayee     @relation(fields: [payeeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model FinancePayee {
+    id          String     @id @default(cuid())
+    name        String     @db.VarChar(250)
+    type        PAYEE_TYPE @default(INDIVIDUAL)
+    address     String?    @db.Text
+    identity    String?    @db.Text
+    phoneNumber String?    @db.VarChar(10)
+    email       String?    @default("")
+    notes       String?    @db.VarChar(250)
+    societyId   String
+    createdAt   DateTime   @default(now()) @ignore
+    updatedAt   DateTime   @updatedAt @ignore
+
+    society      Society              @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    transactions FinanceTransaction[]
+}
+
+enum PAYEE_TYPE {
+    INDIVIDUAL
+    BUSINESS
+    GOVERNMENT
+    NONPROFIT
+    FINANCIAL_INSTITUTION
+    UTILITY
+    VENDOR
+    EMPLOYEE
+    CONTRACTOR
+    FAMILY
 }

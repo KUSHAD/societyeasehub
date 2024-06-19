@@ -75,6 +75,7 @@ Table Society {
   financeAccounts FinanceAccount [not null]
   financeCategories FinanceCategory [not null]
   financeTransactions FinanceTransaction [not null]
+  financePayees FinancePayee [not null]
 }
 
 Table SocietyMedia {
@@ -271,7 +272,7 @@ Table FinanceCategory {
 Table FinanceTransaction {
   id String [pk]
   amount Int [not null]
-  payee String [not null]
+  payeeId String [not null]
   notes String
   date DateTime [not null]
   societyId String [not null]
@@ -281,12 +282,40 @@ Table FinanceTransaction {
   society Society [not null]
   account FinanceAccount [not null]
   category FinanceCategory
+  payee FinancePayee [not null]
+}
+
+Table FinancePayee {
+  id String [pk]
+  name String [not null]
+  type PAYEE_TYPE [not null, default: 'INDIVIDUAL']
+  address String
+  identity String
+  phoneNumber String
+  email String [default: '']
+  notes String
+  societyId String [not null]
+  society Society [not null]
+  transactions FinanceTransaction [not null]
 }
 
 Enum INVITE_STATUS {
   PENDING
   ACCEPTED
   IGNORED
+}
+
+Enum PAYEE_TYPE {
+  INDIVIDUAL
+  BUSINESS
+  GOVERNMENT
+  NONPROFIT
+  FINANCIAL_INSTITUTION
+  UTILITY
+  VENDOR
+  EMPLOYEE
+  CONTRACTOR
+  FAMILY
 }
 
 Ref: Account.userId > User.id [delete: Cascade]
@@ -356,3 +385,7 @@ Ref: FinanceTransaction.societyId > Society.id [delete: Cascade]
 Ref: FinanceTransaction.accountId > FinanceAccount.id [delete: Cascade]
 
 Ref: FinanceTransaction.categoryId > FinanceCategory.id [delete: Set Null]
+
+Ref: FinanceTransaction.payeeId > FinancePayee.id [delete: Cascade]
+
+Ref: FinancePayee.societyId > Society.id [delete: Cascade]

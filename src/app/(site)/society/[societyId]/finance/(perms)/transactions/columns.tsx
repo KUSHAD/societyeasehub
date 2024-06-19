@@ -69,10 +69,10 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => row.original.category?.name,
+    cell: ({ row }) => row.original.category?.name ?? "Uncategorized",
   },
   {
-    accessorKey: "payee",
+    id: "payee",
     header: ({ column }) => {
       return (
         <Button
@@ -84,6 +84,7 @@ export const columns: ColumnDef<ResponseType>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => row.original.payee.name,
   },
   {
     accessorKey: "amount",

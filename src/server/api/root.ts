@@ -17,6 +17,7 @@ import { permsRouter } from "./routers/member/perms";
 import { financeAccountsRouter } from "./routers/finance/financeAccount";
 import { financeCategoriesRouter } from "./routers/finance/financeCategories";
 import { financeTransactionRouter } from "./routers/finance/financeTransaction";
+import { financePayeeRouter } from "./routers/finance/financePayee";
 
 /**
  * This is the primary router for your server.
@@ -42,6 +43,7 @@ export const appRouter = createTRPCRouter({
   financeAccounts: financeAccountsRouter,
   financeCategories: financeCategoriesRouter,
   financeTransaction: financeTransactionRouter,
+  financePayee: financePayeeRouter,
 });
 
 // export type definition of API

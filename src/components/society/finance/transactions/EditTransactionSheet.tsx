@@ -57,6 +57,29 @@ export default function EditTransactionSheet(props: {
       },
     });
 
+  const { data: payees, isLoading: gettingPayees } =
+    api.financePayee.getBySociety.useQuery({
+      societyId,
+    });
+
+  const { mutate: createPayee, isLoading: payeeCreating } =
+    api.financePayee.create.useMutation({
+      async onSuccess() {
+        await utils.financePayee.getBySociety.invalidate({
+          societyId,
+        });
+
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+          societyId,
+        });
+
+        toast({
+          title: "Message",
+          description: "Payee Created",
+        });
+      },
+    });
+
   const { mutate: remove, isLoading: deleting } =
     api.financeTransaction.delete.useMutation({
       async onSuccess() {
@@ -232,6 +255,46 @@ export default function EditTransactionSheet(props: {
                   </FormItem>
                 ),
               },
+              payeeId: {
+                fieldType: ({
+                  label,
+                  isRequired,
+                  field,
+                  fieldConfigItem,
+                }: AutoFormInputComponentProps) => (
+                  <FormItem>
+                    <FormLabel>
+                      {label}
+                      {isRequired && (
+                        <span className="text-destructive">*</span>
+                      )}
+                    </FormLabel>
+                    <FormControl>
+                      <CreatableSelect
+                        {...field}
+                        options={
+                          payees?.map((_p) => ({
+                            label: _p.name,
+                            value: _p.id,
+                          })) ?? []
+                        }
+                        onCreate={(name) =>
+                          createPayee({
+                            name: name!,
+                            societyId,
+                          })
+                        }
+                      />
+                    </FormControl>
+                    {fieldConfigItem.description && (
+                      <FormDescription>
+                        {fieldConfigItem.description}
+                      </FormDescription>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                ),
+              },
               notes: {
                 fieldType: "textarea",
                 inputProps: {
@@ -274,7 +337,9 @@ export default function EditTransactionSheet(props: {
                 gettingCategories ||
                 gettingAccounts ||
                 accountCreating ||
-                categoryCreating
+                categoryCreating ||
+                payeeCreating ||
+                gettingPayees
               }
             >
               Update

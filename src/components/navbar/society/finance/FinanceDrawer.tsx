@@ -58,6 +58,18 @@ export default function FinanceDrawer() {
       >
         Categories
       </Link>
+      <Link
+        className={buttonVariants({
+          className: "my-2 w-full",
+          variant:
+            pathname === `/society/${societyId}/finance/payees`
+              ? "outline"
+              : "ghost",
+        })}
+        href={`/society/${societyId}/finance/payees`}
+      >
+        Payees
+      </Link>
     </>
   );
 }

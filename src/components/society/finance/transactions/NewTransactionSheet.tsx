@@ -55,6 +55,29 @@ export default function NewTransactionSheet() {
       societyId,
     });
 
+  const { data: payees, isLoading: gettingPayees } =
+    api.financePayee.getBySociety.useQuery({
+      societyId,
+    });
+
+  const { mutate: createPayee, isLoading: payeeCreating } =
+    api.financePayee.create.useMutation({
+      async onSuccess() {
+        await utils.financePayee.getBySociety.invalidate({
+          societyId,
+        });
+
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+          societyId,
+        });
+
+        toast({
+          title: "Message",
+          description: "Payee Created",
+        });
+      },
+    });
+
   const { mutate: createAccount, isLoading: accountCreating } =
     api.financeAccounts.create.useMutation({
       async onSuccess() {
@@ -189,6 +212,44 @@ export default function NewTransactionSheet() {
                 </FormItem>
               ),
             },
+            payeeId: {
+              fieldType: ({
+                label,
+                isRequired,
+                field,
+                fieldConfigItem,
+              }: AutoFormInputComponentProps) => (
+                <FormItem>
+                  <FormLabel>
+                    {label}
+                    {isRequired && <span className="text-destructive">*</span>}
+                  </FormLabel>
+                  <FormControl>
+                    <CreatableSelect
+                      {...field}
+                      options={
+                        payees?.map((_p) => ({
+                          label: _p.name,
+                          value: _p.id,
+                        })) ?? []
+                      }
+                      onCreate={(name) =>
+                        createPayee({
+                          name: name!,
+                          societyId,
+                        })
+                      }
+                    />
+                  </FormControl>
+                  {fieldConfigItem.description && (
+                    <FormDescription>
+                      {fieldConfigItem.description}
+                    </FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              ),
+            },
             notes: {
               fieldType: "textarea",
               inputProps: {
@@ -229,7 +290,9 @@ export default function NewTransactionSheet() {
               gettingCategories ||
               gettingAccounts ||
               accountCreating ||
-              categoryCreating
+              categoryCreating ||
+              gettingPayees ||
+              payeeCreating
             }
           >
             Create
