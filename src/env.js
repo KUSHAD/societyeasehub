@@ -43,6 +43,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_GETSTREAM_API_KEY: z.string(),
+    NEXT_PUBLIC_ABSOLUTE_URL: z.string(),
   },
 
   /**
@@ -66,6 +67,7 @@ export const env = createEnv({
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
+    NEXT_PUBLIC_ABSOLUTE_URL: process.env.NEXT_PUBLIC_ABSOLUTE_URL,
   },
 
   /**

@@ -1,10 +1,20 @@
 import { NextResponse } from "next/server";
 import { env } from "~/env";
 import { db } from "~/server/db";
+import * as Sentry from "@sentry/nextjs";
 
 export async function GET(req: Request) {
+  const checkInId = Sentry.captureCheckIn({
+    monitorSlug: "cron-jobs",
+    status: "in_progress",
+  });
   try {
     if (req.headers.get("Authorization") !== `Bearer ${env.CRON_SECRET}`) {
+      Sentry.captureCheckIn({
+        checkInId,
+        monitorSlug: "cron-jobs",
+        status: "error",
+      });
       return NextResponse.json(
         {
           message: "Unauthorized",
@@ -20,6 +30,11 @@ export async function GET(req: Request) {
         },
       },
     });
+    Sentry.captureCheckIn({
+      checkInId,
+      monitorSlug: "cron-jobs",
+      status: "ok",
+    });
 
     return NextResponse.json(
       {
@@ -28,6 +43,11 @@ export async function GET(req: Request) {
       { status: 200 },
     );
   } catch (error) {
+    Sentry.captureCheckIn({
+      checkInId,
+      monitorSlug: "cron-jobs",
+      status: "error",
+    });
     if (error instanceof Error)
       return NextResponse.json(
         {
