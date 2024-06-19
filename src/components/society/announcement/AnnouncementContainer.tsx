@@ -7,9 +7,9 @@ import Announcement from "./Announcement";
 import NotFound from "~/components/NotFound";
 
 export default function AnnouncementContainer() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { data, isLoading } = api.announcement.getBySociety.useQuery({
-    societyId: id,
+    societyId,
   });
 
   return isLoading ? (

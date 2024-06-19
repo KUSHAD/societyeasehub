@@ -30,7 +30,7 @@ interface ViewCommmentContainerProps {
 export default function ViewCommmentContainer({
   comment,
 }: ViewCommmentContainerProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const { isLoading: deleting, mutate: deleteComment } =
     api.announcementComment.delete.useMutation({
@@ -39,7 +39,7 @@ export default function ViewCommmentContainer({
           announcementId: comment.announcementId,
         });
         await utils.announcement.getBySociety.invalidate({
-          societyId: id,
+          societyId,
         });
         toast({
           title: "Message",
@@ -88,7 +88,7 @@ export default function ViewCommmentContainer({
                     deleteComment({
                       announcementId: comment.announcementId,
                       commentId: comment.id,
-                      societyId: id,
+                      societyId,
                     })
                   }
                 >

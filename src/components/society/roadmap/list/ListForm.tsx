@@ -21,15 +21,15 @@ import { createListSchema } from "~/lib/validators/createList";
 import { toast } from "../../../ui/use-toast";
 
 export default function ListForm() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const { isLoading, data } = api.perms.canManageRoadmaps.useQuery({
-    societyId: id,
+    societyId,
   });
   const { isLoading: creating, mutate: createList } =
     api.roadmapList.createList.useMutation({
       async onSuccess() {
-        await utils.roadmapList.getBySociety.invalidate({ societyId: id });
+        await utils.roadmapList.getBySociety.invalidate({ societyId });
 
         toast({
           title: "Message",
@@ -57,7 +57,7 @@ export default function ListForm() {
               onSubmit={(data) =>
                 createList({
                   ...data,
-                  societyId: id,
+                  societyId,
                 })
               }
               formSchema={createListSchema}

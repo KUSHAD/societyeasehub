@@ -5,6 +5,7 @@ import { getCurrentUser } from "./getCurrentUser";
 import { DAY_IN_MS, absoluteUrl } from "~/lib/utils";
 import { stripe } from "~/lib/stripe";
 import { env } from "~/env";
+import { addDays } from "date-fns";
 
 const returnURL = absoluteUrl(`/subscription`);
 
@@ -12,6 +13,13 @@ export async function getUserSubscription() {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) return null;
+
+  if (env.NODE_ENV === "development")
+    return {
+      isActive: true,
+      stripeCustomerId: `cus_${currentUser.id}`,
+      stripeCurrentPeriodEnd: addDays(Date.now(), 30),
+    };
 
   const data = await db.userSubscription.findFirst({
     where: {

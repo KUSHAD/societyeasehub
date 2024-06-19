@@ -6,11 +6,14 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { api } from "~/trpc/react";
 
 export default function ChannelTopBar() {
-  const { id, channelId } = useParams<{ id: string; channelId: string }>();
+  const { societyId, channelId } = useParams<{
+    societyId: string;
+    channelId: string;
+  }>();
 
   const { isLoading, data: name } = api.channel.getName.useQuery({
     channelId,
-    societyId: id,
+    societyId,
   });
   return (
     <div className="w-full bg-muted">

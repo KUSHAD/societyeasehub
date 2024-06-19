@@ -18,7 +18,10 @@ export default function ChatInput() {
   const messageStore = useMessageStore();
   const messageAttachmentStore = useMessageAttachmentStore();
   const utils = api.useUtils();
-  const { channelId, id } = useParams<{ channelId: string; id: string }>();
+  const { channelId, societyId } = useParams<{
+    channelId: string;
+    societyId: string;
+  }>();
   const { mutate: create, isLoading: isSending } =
     api.message.create.useMutation({
       onSuccess: async () => {
@@ -42,7 +45,7 @@ export default function ChatInput() {
     create({
       ...data,
       channelId,
-      societyId: id,
+      societyId,
       attachments: messageAttachmentStore.getByChannel(channelId),
     });
   };

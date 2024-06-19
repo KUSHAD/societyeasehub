@@ -13,15 +13,15 @@ import { beautifyObjectName } from "../ui/auto-form/utils";
 import CarouselPlayer, { CarouselPlayerSkeleton } from "./CarouselPlayer";
 
 export default function ShowSocietyDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { data: medias, isLoading: mediaLoading } =
     api.societyMedia.getBySociety.useQuery({
-      societyId: id,
+      societyId,
     });
 
   const { data: societyDetails, isLoading } = api.society.getInfo.useQuery(
     {
-      id,
+      id: societyId,
     },
     {
       onSuccess(data) {

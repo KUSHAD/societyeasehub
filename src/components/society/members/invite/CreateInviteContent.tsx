@@ -10,14 +10,14 @@ import UserInviteCard from "./UserInviteCard";
 import NotFound from "~/components/NotFound";
 
 export default function CreateInviteContent() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const [searchString, setSearchString] = useState("");
   const debouncedSearchSring = useDebounce(searchString, 500);
 
   const { data: users, isLoading } = api.invite.search.useQuery(
     {
       searchString: debouncedSearchSring,
-      societyId: id,
+      societyId,
     },
     {
       enabled: !!debouncedSearchSring,

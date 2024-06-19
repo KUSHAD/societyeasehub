@@ -13,7 +13,7 @@ import MediaRenderer from "../../channel/chat/MediaRenderer";
 import { AspectRatio } from "~/components/ui/aspect-ratio";
 
 export default function AnnouncementAttachmentContainer() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const announcementAttachmentStore = useAnnouncementAttachmentStore();
   const [uploading, setUploading] = useState<boolean>(false);
   return (
@@ -22,8 +22,9 @@ export default function AnnouncementAttachmentContainer() {
         className={uploaderClassName}
         endpoint="announcementAttachments"
         input={{
-          societyId: id,
-          currentFileCount: announcementAttachmentStore.getBySociety(id).length,
+          societyId,
+          currentFileCount:
+            announcementAttachmentStore.getBySociety(societyId).length,
         }}
         config={{
           appendOnPaste: true,
@@ -34,7 +35,7 @@ export default function AnnouncementAttachmentContainer() {
         }}
         onClientUploadComplete={(files) => {
           files.forEach((_file) => {
-            announcementAttachmentStore.updateBySociety(id, _file.url);
+            announcementAttachmentStore.updateBySociety(societyId, _file.url);
           });
           setUploading(false);
           toast({
@@ -51,11 +52,11 @@ export default function AnnouncementAttachmentContainer() {
           setUploading(false);
         }}
       />
-      {announcementAttachmentStore.getBySociety(id).length > 0 && (
+      {announcementAttachmentStore.getBySociety(societyId).length > 0 && (
         <>
           <strong className="my-2 ">View Attachments</strong>
           <div className="flex flex-row overflow-x-auto">
-            {announcementAttachmentStore.getBySociety(id).map((_uri) => (
+            {announcementAttachmentStore.getBySociety(societyId).map((_uri) => (
               <AspectRatio className="h-[200px] w-[200px]" ratio={1 / 1}>
                 <MediaRenderer
                   uri={_uri}

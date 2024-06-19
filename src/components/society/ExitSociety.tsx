@@ -14,7 +14,7 @@ import { useParams, useRouter } from "next/navigation";
 import { RefreshCcw } from "lucide-react";
 
 export default function ExitSociety() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const router = useRouter();
   const utils = api.useUtils();
   const { mutate: exitSociety, isLoading } = api.member.exitSociety.useMutation(
@@ -41,7 +41,7 @@ export default function ExitSociety() {
         <Button
           disabled={isLoading}
           variant="destructive"
-          onClick={() => exitSociety({ societyId: id })}
+          onClick={() => exitSociety({ societyId })}
         >
           {isLoading ? <RefreshCcw className="animate-spin" /> : "Exit"}
         </Button>

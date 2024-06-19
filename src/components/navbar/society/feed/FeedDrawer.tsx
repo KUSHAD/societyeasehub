@@ -17,13 +17,13 @@ import {
 import ChannelButton from "~/components/society/channel/ChannelButton";
 
 export default function FeedDrawer() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const pathname = usePathname();
   const { data: manageChannels, isLoading: gettingPerms } =
-    api.perms.canManageChannels.useQuery({ societyId: id });
+    api.perms.canManageChannels.useQuery({ societyId });
 
   const { data: channels, isLoading } = api.channel.getBySociety.useQuery({
-    societyId: id,
+    societyId,
   });
 
   return (
@@ -32,11 +32,11 @@ export default function FeedDrawer() {
         className={buttonVariants({
           className: "my-2 w-full",
           variant:
-            pathname === `/society/${id}/feed/announcement`
+            pathname === `/society/${societyId}/feed/announcement`
               ? "outline"
               : "ghost",
         })}
-        href={`/society/${id}/feed/announcement`}
+        href={`/society/${societyId}/feed/announcement`}
       >
         <Megaphone className="mx-2 my-1" />
         Announcement
@@ -45,9 +45,11 @@ export default function FeedDrawer() {
         className={buttonVariants({
           className: "my-2 w-full",
           variant:
-            pathname === `/society/${id}/feed/poll` ? "outline" : "ghost",
+            pathname === `/society/${societyId}/feed/poll`
+              ? "outline"
+              : "ghost",
         })}
-        href={`/society/${id}/feed/poll`}
+        href={`/society/${societyId}/feed/poll`}
       >
         <Vote className="mx-2 my-1" />
         Poll

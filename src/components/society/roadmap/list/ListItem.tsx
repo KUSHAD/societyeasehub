@@ -25,10 +25,10 @@ interface ListItemProps {
 }
 
 export default function ListItem({ data, index }: ListItemProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { isLoading: gettingPerms, data: canManage } =
     api.perms.canManageRoadmaps.useQuery({
-      societyId: id,
+      societyId,
     });
   return (
     <Draggable

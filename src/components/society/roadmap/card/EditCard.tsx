@@ -17,17 +17,17 @@ interface EditCardProps {
 }
 
 export default function EditCard({ card }: EditCardProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
 
   const utils = api.useUtils();
   const { mutate: edit, isLoading } = api.roadmapCard.edit.useMutation({
     async onSuccess() {
       await utils.roadmapList.getBySociety.invalidate({
-        societyId: id,
+        societyId,
       });
       await utils.roadmapCard.getById.invalidate({
         cardId: card.id,
-        societyId: id,
+        societyId,
       });
       toast({
         title: "Message",
@@ -45,7 +45,7 @@ export default function EditCard({ card }: EditCardProps) {
         onSubmit={(data) =>
           edit({
             ...data,
-            societyId: id,
+            societyId,
             cardId: card.id,
           })
         }

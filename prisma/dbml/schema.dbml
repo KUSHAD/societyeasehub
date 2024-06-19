@@ -34,7 +34,6 @@ Table User {
   invites Invite [not null]
   messages Message [not null]
   rooms MeetingRoom [not null]
-  transactions Transaction [not null]
   announcements Announcement [not null]
   announcementComments AnnouncementComment [not null]
   polls Poll [not null]
@@ -71,9 +70,12 @@ Table Society {
   channels Channel [not null]
   rooms MeetingRoom [not null]
   roadmaps RoadmapList [not null]
-  transactions Transaction [not null]
   Announcement Announcement [not null]
   polls Poll [not null]
+  financeAccounts FinanceAccount [not null]
+  financeCategories FinanceCategory [not null]
+  financeTransactions FinanceTransaction [not null]
+  financePayees FinancePayee [not null]
 }
 
 Table SocietyMedia {
@@ -186,26 +188,6 @@ Table RoadmapCard {
   list RoadmapList [not null]
 }
 
-Table Transaction {
-  id String [pk]
-  amount Float [not null]
-  type TransactionType [not null, default: 'INCOME']
-  userId String [not null]
-  societyId String [not null]
-  description String [default: '']
-  date DateTime [default: `now()`, not null]
-  member User [not null]
-  society Society [not null]
-  transactions TransactionDocs [not null]
-}
-
-Table TransactionDocs {
-  id String [pk]
-  uri String [unique, not null]
-  transactionId String [not null]
-  transaction Transaction [not null]
-}
-
 Table Announcement {
   id String [pk]
   content String [not null]
@@ -271,17 +253,69 @@ Table Vote {
   }
 }
 
+Table FinanceAccount {
+  id String [pk]
+  name String [not null]
+  societyId String [not null]
+  society Society [not null]
+  transactions FinanceTransaction [not null]
+}
+
+Table FinanceCategory {
+  id String [pk]
+  name String [not null]
+  societyId String [not null]
+  society Society [not null]
+  transactions FinanceTransaction [not null]
+}
+
+Table FinanceTransaction {
+  id String [pk]
+  amount Int [not null]
+  payeeId String [not null]
+  notes String
+  date DateTime [not null]
+  societyId String [not null]
+  accountId String [not null]
+  categoryId String
+  createdAt DateTime [default: `now()`, not null]
+  society Society [not null]
+  account FinanceAccount [not null]
+  category FinanceCategory
+  payee FinancePayee [not null]
+}
+
+Table FinancePayee {
+  id String [pk]
+  name String [not null]
+  type PAYEE_TYPE [not null, default: 'INDIVIDUAL']
+  address String
+  identity String
+  phoneNumber String
+  email String [default: '']
+  notes String
+  societyId String [not null]
+  society Society [not null]
+  transactions FinanceTransaction [not null]
+}
+
 Enum INVITE_STATUS {
   PENDING
   ACCEPTED
   IGNORED
 }
 
-Enum TransactionType {
-  INCOME
-  EXPENDITURE
-  DUES
-  PAYMENT
+Enum PAYEE_TYPE {
+  INDIVIDUAL
+  BUSINESS
+  GOVERNMENT
+  NONPROFIT
+  FINANCIAL_INSTITUTION
+  UTILITY
+  VENDOR
+  EMPLOYEE
+  CONTRACTOR
+  FAMILY
 }
 
 Ref: Account.userId > User.id [delete: Cascade]
@@ -320,12 +354,6 @@ Ref: RoadmapList.societyId > Society.id [delete: Cascade]
 
 Ref: RoadmapCard.listId > RoadmapList.id [delete: Cascade]
 
-Ref: Transaction.userId > User.id [delete: No Action]
-
-Ref: Transaction.societyId > Society.id [delete: Cascade]
-
-Ref: TransactionDocs.transactionId > Transaction.id [delete: Cascade]
-
 Ref: Announcement.userId > User.id [delete: No Action]
 
 Ref: Announcement.societyId > Society.id [delete: Cascade]
@@ -347,3 +375,17 @@ Ref: Vote.optionId > PollOptions.id [delete: Cascade]
 Ref: Vote.userId > User.id [delete: Cascade]
 
 Ref: Vote.pollId > Poll.id [delete: Cascade]
+
+Ref: FinanceAccount.societyId > Society.id [delete: Cascade]
+
+Ref: FinanceCategory.societyId > Society.id [delete: Cascade]
+
+Ref: FinanceTransaction.societyId > Society.id [delete: Cascade]
+
+Ref: FinanceTransaction.accountId > FinanceAccount.id [delete: Cascade]
+
+Ref: FinanceTransaction.categoryId > FinanceCategory.id [delete: Set Null]
+
+Ref: FinanceTransaction.payeeId > FinancePayee.id [delete: Cascade]
+
+Ref: FinancePayee.societyId > Society.id [delete: Cascade]

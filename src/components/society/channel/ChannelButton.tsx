@@ -12,7 +12,7 @@ interface ChannelButtonProps {
 }
 
 export default function ChannelButton({ channel }: ChannelButtonProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const pathname = usePathname();
   const [ref, entry] = useIntersectionObserver({
     threshold: 0,
@@ -24,11 +24,11 @@ export default function ChannelButton({ channel }: ChannelButtonProps) {
     <div ref={ref}>
       {entry?.isIntersecting ? (
         <Link
-          href={`/society/${id}/feed/channel/${channel.id}`}
+          href={`/society/${societyId}/feed/channel/${channel.id}`}
           className={buttonVariants({
             className: "my-2 w-full",
             variant:
-              pathname === `/society/${id}/feed/channel/${channel.id}`
+              pathname === `/society/${societyId}/feed/channel/${channel.id}`
                 ? "outline"
                 : "ghost",
           })}

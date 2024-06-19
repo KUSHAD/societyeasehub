@@ -33,15 +33,15 @@ export default function ListOptions({ list }: ListOptionsProps) {
   const [modalType, setModalType] = useState<"CARD" | "EDIT">("CARD");
 
   const utils = api.useUtils();
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { isLoading: gettingPerms, data: canManage } =
     api.perms.canManageRoadmaps.useQuery({
-      societyId: id,
+      societyId,
     });
   const { isLoading: isDeleting, mutate: deleteList } =
     api.roadmapList.delete.useMutation({
       async onSuccess() {
-        await utils.roadmapList.getBySociety.invalidate({ societyId: id });
+        await utils.roadmapList.getBySociety.invalidate({ societyId });
         toast({
           title: "Message",
           description: "List Deleted",
@@ -52,7 +52,7 @@ export default function ListOptions({ list }: ListOptionsProps) {
   const { isLoading: copying, mutate: copyList } =
     api.roadmapList.copy.useMutation({
       async onSuccess() {
-        await utils.roadmapList.getBySociety.invalidate({ societyId: id });
+        await utils.roadmapList.getBySociety.invalidate({ societyId });
         toast({
           title: "Message",
           description: "List Copied",
@@ -90,7 +90,7 @@ export default function ListOptions({ list }: ListOptionsProps) {
             onClick={() =>
               copyList({
                 listId: list.id,
-                societyId: id,
+                societyId,
               })
             }
             disabled={isDeleting || copying}
@@ -103,7 +103,7 @@ export default function ListOptions({ list }: ListOptionsProps) {
             onClick={() =>
               deleteList({
                 listId: list.id,
-                societyId: id,
+                societyId,
               })
             }
           >

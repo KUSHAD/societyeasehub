@@ -15,13 +15,16 @@ import { toast } from "~/components/ui/use-toast";
 import { type ChannelActionsProps } from "./ChannelActions";
 
 export default function EditChannel({ channelName }: ChannelActionsProps) {
-  const { channelId, id } = useParams<{ id: string; channelId: string }>();
+  const { channelId, societyId } = useParams<{
+    societyId: string;
+    channelId: string;
+  }>();
   const utils = api.useUtils();
   const { isLoading, mutate: editChannel } = api.channel.updateName.useMutation(
     {
       async onSuccess() {
-        await utils.channel.getBySociety.invalidate({ societyId: id });
-        await utils.channel.getName.invalidate({ channelId, societyId: id });
+        await utils.channel.getBySociety.invalidate({ societyId });
+        await utils.channel.getName.invalidate({ channelId, societyId });
         toast({
           title: "Message",
           description: "Channel Edited",
@@ -43,7 +46,7 @@ export default function EditChannel({ channelName }: ChannelActionsProps) {
           editChannel({
             name,
             channelId,
-            societyId: id,
+            societyId,
           })
         }
       >

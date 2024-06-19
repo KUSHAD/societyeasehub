@@ -43,7 +43,7 @@ interface PollViewerProps {
 }
 
 export default function PollViewer({ poll }: PollViewerProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const [ref, entry] = useIntersectionObserver({
     threshold: 0,
     root: null,
@@ -56,18 +56,18 @@ export default function PollViewer({ poll }: PollViewerProps) {
 
   const utils = api.useUtils();
   const { data: perms, isLoading } = api.perms.canCreatePolls.useQuery({
-    societyId: id,
+    societyId,
   });
 
   const { data: votePerms, isLoading: gettingVotePerms } =
     api.perms.canVote.useQuery({
-      societyId: id,
+      societyId,
     });
 
   const { mutate: deletePoll, isLoading: deleting } =
     api.poll.delete.useMutation({
       async onSuccess() {
-        await utils.poll.getBySociety.invalidate({ societyId: id });
+        await utils.poll.getBySociety.invalidate({ societyId });
 
         toast({
           title: "Message",
@@ -78,7 +78,7 @@ export default function PollViewer({ poll }: PollViewerProps) {
 
   const { mutate: castVote, isLoading: voting } = api.poll.vote.useMutation({
     async onSuccess() {
-      await utils.poll.getBySociety.invalidate({ societyId: id });
+      await utils.poll.getBySociety.invalidate({ societyId });
       setSelectedOptionID(null);
 
       toast({
@@ -91,7 +91,7 @@ export default function PollViewer({ poll }: PollViewerProps) {
   const { mutate: removeVote, isLoading: removing } =
     api.poll.removeVote.useMutation({
       async onSuccess() {
-        await utils.poll.getBySociety.invalidate({ societyId: id });
+        await utils.poll.getBySociety.invalidate({ societyId });
 
         toast({
           title: "Message",
@@ -114,7 +114,7 @@ export default function PollViewer({ poll }: PollViewerProps) {
                   }
                   name={poll.user.name ?? "User"}
                   userId={poll.user.id}
-                  societyId={id}
+                  societyId={societyId}
                 />
                 <small>
                   <em>{format(poll.createdAt, "dd/MM/yyyy  HH:mm")}</em>
@@ -141,7 +141,7 @@ export default function PollViewer({ poll }: PollViewerProps) {
                       onClick={() =>
                         deletePoll({
                           pollId: poll.id,
-                          societyId: id,
+                          societyId,
                         })
                       }
                     >
@@ -191,7 +191,7 @@ export default function PollViewer({ poll }: PollViewerProps) {
                     onClick={() => {
                       removeVote({
                         pollId: poll.id,
-                        societyId: id,
+                        societyId,
                       });
                     }}
                     disabled={
@@ -208,7 +208,7 @@ export default function PollViewer({ poll }: PollViewerProps) {
                       castVote({
                         optionId: selectedOptionID!,
                         pollId: poll.id,
-                        societyId: id,
+                        societyId,
                       });
                     }}
                     disabled={

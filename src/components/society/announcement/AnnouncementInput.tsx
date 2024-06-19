@@ -24,7 +24,7 @@ export default function AnnouncementInput() {
   const { data } = useSession();
   const announcementStore = useAnnouncementStore();
   const announcementAttachmentStore = useAnnouncementAttachmentStore();
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const { mutate: create, isLoading } = api.announcement.create.useMutation({
     async onSuccess() {
@@ -33,8 +33,8 @@ export default function AnnouncementInput() {
         description: "Announcement Created",
       });
       await utils.announcement.getBySociety.invalidate({});
-      announcementStore.updateBySociety(id, "");
-      announcementAttachmentStore.clearBySociety(id);
+      announcementStore.updateBySociety(societyId, "");
+      announcementAttachmentStore.clearBySociety(societyId);
     },
   });
   return (
@@ -57,15 +57,16 @@ export default function AnnouncementInput() {
               onSubmit={({ content }) =>
                 create({
                   content,
-                  societyId: id,
-                  attachments: announcementAttachmentStore.getBySociety(id),
+                  societyId,
+                  attachments:
+                    announcementAttachmentStore.getBySociety(societyId),
                 })
               }
               values={{
-                content: announcementStore.getBySociety(id) ?? "",
+                content: announcementStore.getBySociety(societyId) ?? "",
               }}
               onValuesChange={({ content }) =>
-                announcementStore.updateBySociety(id, content!)
+                announcementStore.updateBySociety(societyId, content!)
               }
               className="ml-2 w-full"
               formSchema={announcementSchema}

@@ -7,21 +7,26 @@ import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 export default function Contents() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const pathname = usePathname();
 
   const { data: accessSettings, isLoading: settingsLoading } =
     api.perms.canAccessSettings.useQuery({
-      societyId: id,
+      societyId,
+    });
+
+  const { data: accessFinance, isLoading: financeLoading } =
+    api.perms.canManageAccounts.useQuery({
+      societyId,
     });
 
   return (
     <>
       <Link
-        href={`/society/${id}/feed`}
+        href={`/society/${societyId}/feed`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname.includes(`/society/${id}/feed`)
+          pathname.includes(`/society/${societyId}/feed`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
@@ -29,24 +34,45 @@ export default function Contents() {
         <Rss className="mx-2" />
         <span className="hidden md:block">Feed</span>
       </Link>
-      <Link
-        href={`/society/${id}/accounts`}
-        className={cn(
-          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname.includes(`/society/${id}/accounts`)
-            ? "border-b-4 border-primary bg-muted"
-            : "hover:bg-muted",
-        )}
-      >
-        <Coins className="mx-2" />
-        <span className="hidden md:block">Accounts</span>
-      </Link>
+
+      {financeLoading ? (
+        <div className="flex flex-row rounded bg-inherit px-4 py-4 opacity-50 transition-colors ease-in-out ">
+          <Coins className="mx-2" />
+          <span className="hidden md:block">Finance</span>
+        </div>
+      ) : accessFinance ? (
+        <Link
+          href={`/society/${societyId}/finance/overview`}
+          className={cn(
+            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+            pathname.includes(`/society/${societyId}/finance`)
+              ? "border-b-4 border-primary bg-muted"
+              : "hover:bg-muted",
+          )}
+        >
+          <Coins className="mx-2" />
+          <span className="hidden md:block">Finance</span>
+        </Link>
+      ) : (
+        <Link
+          href={`/society/${societyId}/finance`}
+          className={cn(
+            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+            pathname.includes(`/society/${societyId}/finance`)
+              ? "border-b-4 border-primary bg-muted"
+              : "hover:bg-muted",
+          )}
+        >
+          <Coins className="mx-2" />
+          <span className="hidden md:block">Finance</span>
+        </Link>
+      )}
 
       <Link
-        href={`/society/${id}/roadmap`}
+        href={`/society/${societyId}/roadmap`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname === `/society/${id}/roadmap`
+          pathname === `/society/${societyId}/roadmap`
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
@@ -55,10 +81,10 @@ export default function Contents() {
         <span className="hidden md:block">Roadmap</span>
       </Link>
       <Link
-        href={`/society/${id}/meeting`}
+        href={`/society/${societyId}/meeting`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname.includes(`/society/${id}/meeting`)
+          pathname.includes(`/society/${societyId}/meeting`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
@@ -67,10 +93,10 @@ export default function Contents() {
         <span className="hidden md:block">Meetings</span>
       </Link>
       <Link
-        href={`/society/${id}/members`}
+        href={`/society/${societyId}/members`}
         className={cn(
           "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-          pathname === `/society/${id}/members`
+          pathname === `/society/${societyId}/members`
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
         )}
@@ -87,12 +113,12 @@ export default function Contents() {
         <Link
           href={
             accessSettings
-              ? `/society/${id}/settings/general`
-              : `/society/${id}/settings`
+              ? `/society/${societyId}/settings/general`
+              : `/society/${societyId}/settings`
           }
           className={cn(
             "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
-            pathname.includes(`/society/${id}/settings`)
+            pathname.includes(`/society/${societyId}/settings`)
               ? "border-b-4 border-primary bg-muted"
               : "hover:bg-muted",
           )}

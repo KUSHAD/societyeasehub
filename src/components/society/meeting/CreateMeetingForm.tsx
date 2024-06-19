@@ -19,12 +19,12 @@ import { createRoomSchema } from "~/lib/validators/createRoom";
 import { api } from "~/trpc/react";
 
 export default function CreateMeetingForm() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const { mutate: createMeeting, isLoading } =
     api.meetingRoom.create.useMutation({
       onSuccess: async () => {
-        await utils.meetingRoom.getBySociety.invalidate({ societyId: id });
+        await utils.meetingRoom.getBySociety.invalidate({ societyId });
         toast({
           title: "Success",
           description: "Meeting Created",
@@ -47,7 +47,7 @@ export default function CreateMeetingForm() {
           onSubmit={(data) => {
             createMeeting({
               ...data,
-              societyId: id,
+              societyId,
             });
           }}
           formSchema={createRoomSchema}

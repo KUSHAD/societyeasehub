@@ -28,7 +28,7 @@ import {
 } from "~/components/ui/card";
 
 export default function UpdateDetails() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const [open, setOpen] = useState(false);
   const { mutate: update, isLoading: updating } =
@@ -43,7 +43,7 @@ export default function UpdateDetails() {
       },
     });
   const { data: societyDetails, isLoading } = api.society.getInfo.useQuery({
-    id,
+    id: societyId,
   });
 
   return (
@@ -92,7 +92,7 @@ export default function UpdateDetails() {
                 onSubmit={(data) =>
                   update({
                     ...data,
-                    id,
+                    id: societyId,
                   })
                 }
                 values={{

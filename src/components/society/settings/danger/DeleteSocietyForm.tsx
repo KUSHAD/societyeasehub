@@ -27,7 +27,7 @@ import { deleteSocietySchema } from "~/lib/validators/deleteSociety";
 import { api } from "~/trpc/react";
 
 export default function DeleteSocietyForm() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const router = useRouter();
 
   const utils = api.useUtils();
@@ -57,7 +57,7 @@ export default function DeleteSocietyForm() {
           onSubmit={(data) =>
             deleteSociety({
               ...data,
-              societyId: id,
+              societyId,
             })
           }
           fieldConfig={{

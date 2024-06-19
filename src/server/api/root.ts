@@ -10,12 +10,14 @@ import { messageRouter } from "./routers/feed/channel/message";
 import { meetingRoomRouter } from "./routers/meetingRoom";
 import { roadmapListRouter } from "./routers/roadmap/roadmapList";
 import { roadmapCardRouter } from "./routers/roadmap/roadmapCard";
-import { transactionRouter } from "./routers/transaction/transaction";
-import { transactionDocsRouter } from "./routers/transaction/transactionDocs";
 import { announcementRouter } from "./routers/feed/announcement/announcement";
 import { announcementCommentRouter } from "./routers/feed/announcement/announcementComment";
 import { pollRouter } from "./routers/feed/poll";
 import { permsRouter } from "./routers/member/perms";
+import { financeAccountsRouter } from "./routers/finance/financeAccount";
+import { financeCategoriesRouter } from "./routers/finance/financeCategories";
+import { financeTransactionRouter } from "./routers/finance/financeTransaction";
+import { financePayeeRouter } from "./routers/finance/financePayee";
 
 /**
  * This is the primary router for your server.
@@ -35,11 +37,13 @@ export const appRouter = createTRPCRouter({
   meetingRoom: meetingRoomRouter,
   roadmapList: roadmapListRouter,
   roadmapCard: roadmapCardRouter,
-  transaction: transactionRouter,
-  transactionDocs: transactionDocsRouter,
   announcement: announcementRouter,
   announcementComment: announcementCommentRouter,
   poll: pollRouter,
+  financeAccounts: financeAccountsRouter,
+  financeCategories: financeCategoriesRouter,
+  financeTransaction: financeTransactionRouter,
+  financePayee: financePayeeRouter,
 });
 
 // export type definition of API

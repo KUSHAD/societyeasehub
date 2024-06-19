@@ -19,7 +19,7 @@ interface MeetingCardProps {
 }
 
 export default function MeetingCard({ meeting }: MeetingCardProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   return (
     <Card className="my-2">
       <CardHeader>
@@ -40,7 +40,7 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
         <div className="mr-auto" />
         {meeting.status === "ONGOING" ? (
           <Link
-            href={`/society/${id}/meeting/${meeting.id}`}
+            href={`/society/${societyId}/meeting/${meeting.id}`}
             className={buttonVariants()}
           >
             Join Meeting

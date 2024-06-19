@@ -15,16 +15,16 @@ interface AssignRoleProps {
 }
 
 export default function AssignRole({ userId }: AssignRoleProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
 
   const utils = api.useUtils();
 
   const { data: roles, isLoading } = api.role.getBySociety.useQuery({
-    societyId: id,
+    societyId,
   });
 
   const { data: roleId, isLoading: gettingRole } = api.member.getRole.useQuery({
-    societyId: id,
+    societyId,
     userId,
   });
 
@@ -49,7 +49,7 @@ export default function AssignRole({ userId }: AssignRoleProps) {
       onValueChange={(roleId) =>
         assignRole({
           roleId,
-          societyId: id,
+          societyId,
           userId,
         })
       }

@@ -12,11 +12,11 @@ import { createPollSchema } from "~/lib/validators/createPoll";
 import { api } from "~/trpc/react";
 
 export default function CreatePollInput() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const { mutate: create, isLoading } = api.poll.create.useMutation({
     async onSuccess() {
-      await utils.poll.getBySociety.invalidate({ societyId: id });
+      await utils.poll.getBySociety.invalidate({ societyId });
       toast({
         title: "Message",
         description: "Poll Created",
@@ -30,7 +30,7 @@ export default function CreatePollInput() {
         onSubmit={(data) =>
           create({
             ...data,
-            societyId: id,
+            societyId,
           })
         }
       >

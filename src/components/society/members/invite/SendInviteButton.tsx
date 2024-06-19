@@ -10,7 +10,7 @@ interface SendInviteButtonProps {
 }
 
 export default function SendInviteButton({ userId }: SendInviteButtonProps) {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const [sent, setSent] = useState(false);
 
   const { mutate: create, isLoading } = api.invite.create.useMutation({
@@ -24,7 +24,7 @@ export default function SendInviteButton({ userId }: SendInviteButtonProps) {
       disabled={isLoading || sent}
       onClick={() =>
         create({
-          societyId: id,
+          societyId,
           userId,
         })
       }

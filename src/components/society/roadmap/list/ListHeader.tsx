@@ -24,12 +24,12 @@ interface ListHeaderProps {
 
 export default function ListHeader({ list }: ListHeaderProps) {
   const utils = api.useUtils();
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
 
   const { isLoading, mutate: updateListTitle } =
     api.roadmapList.updateTitle.useMutation({
       async onSuccess() {
-        await utils.roadmapList.getBySociety.invalidate({ societyId: id });
+        await utils.roadmapList.getBySociety.invalidate({ societyId });
         toast({
           title: "Message",
           description: "Title Updated",
@@ -54,7 +54,7 @@ export default function ListHeader({ list }: ListHeaderProps) {
           onSubmit={(data) =>
             updateListTitle({
               ...data,
-              societyId: id,
+              societyId,
               listId: list.id,
             })
           }

@@ -6,9 +6,9 @@ import ListContainer from "./list/ListContainer";
 import Skeleton from "react-loading-skeleton";
 
 export default function KanbanBoard() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { isLoading, data: lists } = api.roadmapList.getBySociety.useQuery({
-    societyId: id,
+    societyId,
   });
   return isLoading ? (
     <Skeleton className="h-[100px] w-[273px]" />

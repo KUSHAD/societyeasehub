@@ -7,9 +7,9 @@ import RoleViewer from "./RoleViewer";
 import NotFound from "~/components/NotFound";
 
 export default function ViewRoles() {
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { isLoading, data: roles } = api.role.getBySociety.useQuery({
-    societyId: id,
+    societyId,
   });
   return isLoading ? (
     <Skeleton className="my-2 h-12 w-full" count={10} />

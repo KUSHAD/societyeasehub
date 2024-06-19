@@ -11,8 +11,6 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 
-export const revalidate = 0;
-
 export default async function Page() {
   const subscription = await getUserSubscription();
 

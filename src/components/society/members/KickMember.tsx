@@ -19,7 +19,7 @@ interface KickMemberProps {
 
 export default function KickMember({ userId }: KickMemberProps) {
   const utils = api.useUtils();
-  const { id } = useParams<{ id: string }>();
+  const { societyId } = useParams<{ societyId: string }>();
   const { mutate: kick, isLoading } = api.member.kick.useMutation({
     onSuccess: async () => {
       await utils.member.getBySociety.invalidate();
@@ -43,7 +43,7 @@ export default function KickMember({ userId }: KickMemberProps) {
         <Button
           onClick={() =>
             kick({
-              societyId: id,
+              societyId,
               userId,
             })
           }
