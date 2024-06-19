@@ -20,6 +20,7 @@ export default function GlobalError({
     <html>
       <body>
         <NotFound message="Something Went Wrong" description={error.message}>
+          <span>{error.digest}</span>
           <Button onClick={reset}>Retry</Button>
         </NotFound>
       </body>
