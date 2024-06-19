@@ -7,14 +7,12 @@ export async function POST(req: Request) {
 
   const { data, error } = await resend.emails.send({
     from: "SocietyEaseHub Support <onboarding@resend.dev>",
-    to: [email, "kushad.chakraborty@gmail.com"],
-    reply_to: ["kushad.chakraborty@gmail.com", email],
+    to: ["kushad.chakraborty@gmail.com"],
+    reply_to: [email],
     subject: "Society Easehub Support",
     html: `
-     <p>${name} Thanks for contacting support</p>
+     <p>${name}</p>
     <p>${message}</p>
-    <br />
-    <p>For further Contact pls reply to this email</p>
     `,
   });
 
