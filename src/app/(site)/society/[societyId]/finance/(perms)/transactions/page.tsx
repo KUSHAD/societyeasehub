@@ -8,6 +8,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
 import { columns } from "./columns";
 import NewTransactionSheet from "~/components/society/finance/transactions/NewTransactionSheet";
+import ExportTransactionButton from "~/components/society/finance/transactions/ExportTransactionButton";
 
 export default function Page() {
   const { societyId } = useParams<{ societyId: string }>();
@@ -42,7 +43,10 @@ export default function Page() {
     <Card>
       <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
         <CardTitle className="line-clamp-1 text-xl">Transactions</CardTitle>
-        <NewTransactionSheet />
+        <div className="flex flex-row justify-between">
+          <ExportTransactionButton />
+          <NewTransactionSheet />
+        </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (

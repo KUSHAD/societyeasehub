@@ -41,7 +41,7 @@ export default function NewAccountSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="sm">
+        <Button>
           <Plus className="mr-2 size-4" /> Add New
         </Button>
       </SheetTrigger>
