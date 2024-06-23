@@ -2,9 +2,8 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { env } from "~/env";
 import countries from "world-countries";
-import { type HomeFeature } from "./types";
-import { type ActiveDaysData } from "~/server/api/routers/finance/financeSummary";
-import { eachDayOfInterval, isSameDay } from "date-fns";
+import { type HomeFeature, type ActiveDaysData, type Period } from "./types";
+import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -183,4 +182,17 @@ export function fillMissingDays(
   });
 
   return transactionsByDate;
+}
+
+export function formatDateRange(period?: Period) {
+  const defaultTo = new Date();
+  const defaultFrom = subDays(defaultTo, 30);
+
+  if (!period?.from)
+    return `${format(defaultFrom, "LLL dd")} - ${format(defaultTo, "LLL dd, y")}`;
+
+  if (period.to)
+    return `${format(period.from as Date, "LLL dd")} - ${format(period.to as Date, "LLL dd, y")}`;
+
+  return format(period.from as Date, "LLL  dd, y");
 }

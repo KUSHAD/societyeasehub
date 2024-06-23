@@ -41,6 +41,10 @@ export default function EditCategorySheet(props: {
           societyId,
         });
 
+        await utils.financeSummary.get.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Category Updated",

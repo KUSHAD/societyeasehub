@@ -41,6 +41,10 @@ export default function EditPayeeSheet(props: {
           societyId,
         });
 
+        await utils.financeSummary.get.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Payee Updated",

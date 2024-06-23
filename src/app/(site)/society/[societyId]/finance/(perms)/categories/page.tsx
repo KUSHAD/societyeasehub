@@ -25,6 +25,14 @@ export default function Page() {
           societyId,
         });
 
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+          societyId,
+        });
+
+        await utils.financeSummary.get.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Category Deleted",

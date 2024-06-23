@@ -50,6 +50,10 @@ export default function EditTransactionSheet(props: {
           societyId,
         });
 
+        await utils.financeSummary.get.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Transaction Updated",
@@ -138,6 +142,9 @@ export default function EditTransactionSheet(props: {
           societyId,
         });
 
+        await utils.financeSummary.get.invalidate({
+          societyId,
+        });
         toast({
           title: "Message",
           description: "Category Created",

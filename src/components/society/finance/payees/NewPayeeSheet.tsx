@@ -31,6 +31,9 @@ export default function NewPayeeSheet() {
         societyId,
       });
 
+      await utils.financeSummary.get.invalidate({
+        societyId,
+      });
       toast({
         title: "Message",
         description: "Payee Created",

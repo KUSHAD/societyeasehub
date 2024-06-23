@@ -1,9 +1,15 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../../trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "../../trpc";
 import { canManageAccounts } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 import { financeTransactionSchema } from "~/lib/validators/financeTransaction";
 import { parse, subDays } from "date-fns";
+import { seed } from "~/scripts/seed";
+import { env } from "~/env";
 
 export const financeTransactionRouter = createTRPCRouter({
   getBySocietyAndAccounts: protectedProcedure
@@ -152,5 +158,17 @@ export const financeTransactionRouter = createTRPCRouter({
       if (!data) throw new TRPCError({ code: "NOT_FOUND" });
 
       return data;
+    }),
+  seed: publicProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      if (env.NODE_ENV !== "development")
+        throw new TRPCError({ code: "FORBIDDEN" });
+
+      await seed(input.societyId);
     }),
 });

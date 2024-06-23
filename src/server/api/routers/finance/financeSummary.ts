@@ -1,19 +1,13 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../../trpc";
 import { differenceInDays, parse, subDays } from "date-fns";
-import { fetchFinancialData } from "~/actions/fetchFinancialData";
+import {
+  fetchFinancialData,
+  getActiveDaysFinancialReport,
+  getCategoryReport,
+  getPayeesReport,
+} from "~/actions/fetchFinancialData";
 import { calculatePercentageChange, fillMissingDays } from "~/lib/utils";
-
-type RawGroupData = {
-  name: string;
-  value: number;
-};
-
-export type ActiveDaysData = {
-  date: Date;
-  income: string;
-  expense: string;
-};
 
 export const financeSummaryRouter = createTRPCRouter({
   get: protectedProcedure
@@ -34,7 +28,7 @@ export const financeSummaryRouter = createTRPCRouter({
           }),
         ),
     )
-    .query(async ({ ctx: { db }, input }) => {
+    .query(async ({ input }) => {
       const defaultTo = new Date();
       const defaultFrom = subDays(defaultTo, 30);
 
@@ -80,103 +74,36 @@ export const financeSummaryRouter = createTRPCRouter({
         lastPeriod.remaining,
       );
 
-      const category = await db.$queryRaw<RawGroupData[]>`
-      SELECT
-        c.name AS name,
-        SUM(ABS(t.amount)) AS value
-      FROM
-        "FinanceTransaction" t
-      INNER JOIN
-        "FinanceAccount" a ON t."accountId" = a.id
-      INNER JOIN
-        "FinanceCategory" c ON t."categoryId" = c.id
-      WHERE
-        t.societyId = ${input.societyId}
-        ${input.accountId.length !== 0 ? `AND t."accountId" = ${input.accountId}` : ""}
-        AND t.amount < 0
-        AND t.date >= ${startDate}
-        AND t.date <= ${endDate}
-      GROUP BY
-        c.name
-      ORDER BY 
-        SUM(ABS(t.amount)) DESC; 
-      `;
-
-      const payee = await db.$queryRaw<RawGroupData[]>`
-      SELECT
-        p.name AS name,
-        SUM(ABS(t.amount)) AS value
-      FROM
-        "FinanceTransaction" t
-      INNER JOIN
-        "FinanceAccount" a ON t."accountId" = a.id
-      INNER JOIN
-        "FinancePayee" p ON t."categoryId" = p.id
-      WHERE
-        t.societyId = ${input.societyId}
-        ${input.accountId.length !== 0 ? `AND t."accountId" = ${input.accountId}` : ""}
-        AND t.amount < 0
-        AND t.date >= ${startDate}
-        AND t.date <= ${endDate}
-      GROUP BY
-        p.name
-      ORDER BY 
-        SUM(ABS(t.amount)) DESC; 
-      `;
-
-      const topCategories = category.splice(0, 3);
-      const otherCategories = category.splice(3);
-
-      const otherCategorySum = otherCategories.reduce(
-        (sum, current) => sum + current.value,
-        0,
+      const payees = await getPayeesReport(
+        input.societyId,
+        input.accountId,
+        startDate,
+        endDate,
       );
 
-      const finalCategories = topCategories;
-      if (otherCategories.length > 0) {
-        finalCategories.push({
-          name: "Other",
-          value: otherCategorySum,
-        });
-      }
-
-      const topPayees = payee.splice(0, 3);
-      const otherPayees = payee.splice(3);
-
-      const otherPayeeSum = otherPayees.reduce(
-        (sum, current) => sum + current.value,
-        0,
+      const categories = await getCategoryReport(
+        input.societyId,
+        input.accountId,
+        startDate,
+        endDate,
       );
 
-      const finalPayees = topPayees;
-      if (otherPayees.length > 0) {
-        finalCategories.push({
-          name: "Other",
-          value: otherPayeeSum,
-        });
-      }
-
-      const activeDays = (await db.$executeRaw<ActiveDaysData[]>`
-      SELECT
-        t.date as date,
-        SUM(CASE WHEN t.amount >= 0 THEN t.amount ELSE 0 END) AS income,
-        SUM(CASE WHEN t.amount < 0 THEN t.amount ELSE 0 END) AS expense,
-      FROM
-        "FinanceTransaction" t
-      INNER JOIN
-        "FinanceAccount" a ON t."accountId" = a.id
-      WHERE
-        t.societyId = ${input.societyId}
-        ${input.accountId.length !== 0 ? `AND t."accountId" = ${input.accountId}` : ""}
-        AND t.date >= ${startDate}
-        AND t.date <= ${endDate}
-      GROUP BY
-        t.date
-      ORDER BY
-        t.date
-      `) as unknown as ActiveDaysData[];
+      const activeDays = await getActiveDaysFinancialReport(
+        input.societyId,
+        input.accountId,
+        startDate,
+        endDate,
+      );
 
       const days = fillMissingDays(activeDays, startDate, endDate);
+
+      console.log({
+        activeDays,
+        payees,
+        categories,
+        currentPeriod,
+        lastPeriod,
+      });
 
       return {
         currentPeriod,
@@ -184,9 +111,9 @@ export const financeSummaryRouter = createTRPCRouter({
         incomeChange,
         expenseChange,
         remainingChange,
-        finalCategories,
-        finalPayees,
         days,
+        payees,
+        categories,
       };
     }),
 });

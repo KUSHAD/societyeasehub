@@ -117,3 +117,25 @@ export type SafeMeeting = Omit<MeetingRoom, "societyId" | "userId"> & {
 export type CardWithList = RoadmapCard & { list: RoadmapList };
 
 export type ListWithCards = RoadmapList & { cards: RoadmapCard[] };
+
+export type RawGroupData = {
+  name: string;
+  value: number;
+};
+
+export type ActiveDaysData = {
+  date: Date;
+  income: number;
+  expense: number;
+};
+
+export type FinancialData = {
+  income: number;
+  expense: number;
+  remaining: number;
+};
+
+export type Period = {
+  from: string | Date | undefined;
+  to: string | Date | undefined;
+};

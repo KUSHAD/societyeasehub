@@ -41,6 +41,10 @@ export default function EditAccountSheet(props: {
           societyId,
         });
 
+        await utils.financeSummary.get.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Account Updated",

@@ -107,6 +107,10 @@ export default function NewTransactionSheet() {
           societyId,
         });
 
+        await utils.financeSummary.get.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Category Created",
