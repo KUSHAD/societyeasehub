@@ -3,8 +3,8 @@
 import { useParams, useSearchParams } from "next/navigation";
 import { formatDateRange } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import OverviewDataCard from "./OverviewDataCard";
-import { FaPiggyBank } from "react-icons/fa6";
+import OverviewDataCard, { OverviewDataCardLoading } from "./OverviewDataCard";
+import { FaArrowTrendDown, FaArrowTrendUp, FaPiggyBank } from "react-icons/fa6";
 
 export default function OverviewDataGrid() {
   const searchParams = useSearchParams();
@@ -14,7 +14,7 @@ export default function OverviewDataGrid() {
 
   const { societyId } = useParams<{ societyId: string }>();
 
-  const { data } = api.financeSummary.get.useQuery({
+  const { data, isLoading } = api.financeSummary.get.useQuery({
     societyId,
     from: from ?? "",
     accountId: searchParams.get("accountId") ?? "",
@@ -22,6 +22,15 @@ export default function OverviewDataGrid() {
   });
 
   const dateRangeLabel = formatDateRange({ from, to });
+
+  if (isLoading)
+    return (
+      <div className="mb-8 grid grid-cols-1 gap-8 pb-2 lg:grid-cols-2">
+        <OverviewDataCardLoading />
+        <OverviewDataCardLoading />
+        <OverviewDataCardLoading />
+      </div>
+    );
 
   return (
     <div className="mb-8 grid grid-cols-1 gap-8 pb-2 lg:grid-cols-2">
@@ -31,6 +40,22 @@ export default function OverviewDataGrid() {
         icon={FaPiggyBank}
         dateRange={dateRangeLabel}
         percentageChange={data?.remainingChange}
+        variant="default"
+      />
+      <OverviewDataCard
+        title="Income"
+        value={data?.currentPeriod.income}
+        icon={FaArrowTrendUp}
+        dateRange={dateRangeLabel}
+        percentageChange={data?.incomeChange}
+        variant="default"
+      />
+      <OverviewDataCard
+        title="Expenses"
+        value={data?.currentPeriod.expense}
+        icon={FaArrowTrendDown}
+        dateRange={dateRangeLabel}
+        percentageChange={data?.expenseChange}
         variant="default"
       />
     </div>

@@ -151,6 +151,19 @@ export function formatCurrency(amount: number) {
   }).format(amount);
 }
 
+export function formatPercentage(
+  value: number,
+  options: { addPrefix?: boolean } = { addPrefix: false },
+) {
+  const formattedPercentage = new Intl.NumberFormat("en-US", {
+    style: "percent",
+  }).format(value / 100);
+
+  if (options.addPrefix && value > 0) return `+${formattedPercentage}`;
+
+  return formattedPercentage;
+}
+
 export function calculatePercentageChange(current: number, previous: number) {
   if (previous === 0) return previous === current ? 0 : 100;
 
