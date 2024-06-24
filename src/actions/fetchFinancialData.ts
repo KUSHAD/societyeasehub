@@ -47,7 +47,7 @@ export async function getActiveDaysFinancialReport(
   accountId: string,
   startDate: Date,
   endDate: Date,
-) {
+): Promise<ActiveDaysData[]> {
   let activeDaysQuery = Prisma.sql`
   SELECT
     t."date" as date,
@@ -146,7 +146,7 @@ export async function getCategoryReport(
   accountId: string,
   startDate: Date,
   endDate: Date,
-) {
+): Promise<RawGroupData[]> {
   let categoryQuery = Prisma.sql`
    SELECT
     c."name" AS name,

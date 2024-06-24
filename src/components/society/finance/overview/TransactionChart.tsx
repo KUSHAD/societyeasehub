@@ -16,11 +16,11 @@ import {
 } from "~/components/ui/select";
 import { AreaChart, BarChart, LineChart } from "lucide-react";
 
-type OverviewChartProps = {
+type TransactionChartProps = {
   data?: ActiveDaysData[];
 };
 
-export default function OverviewChart({ data = [] }: OverviewChartProps) {
+export default function TransactionChart({ data = [] }: TransactionChartProps) {
   const [chartType, setChartType] = useState<"Area" | "Bar" | "Line">("Area");
 
   function onChartTypeChange(type: "Area" | "Bar" | "Line") {
