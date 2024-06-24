@@ -35,7 +35,7 @@ export default function OverviewDataGrid() {
   return (
     <div className="mb-8 grid grid-cols-1 gap-8 pb-2 lg:grid-cols-2">
       <OverviewDataCard
-        title="Remaining"
+        title="Net Balance"
         value={data?.currentPeriod.remaining}
         icon={FaPiggyBank}
         dateRange={dateRangeLabel}
@@ -48,7 +48,7 @@ export default function OverviewDataGrid() {
         icon={FaArrowTrendUp}
         dateRange={dateRangeLabel}
         percentageChange={data?.incomeChange}
-        variant="default"
+        variant="success"
       />
       <OverviewDataCard
         title="Expenses"
@@ -56,7 +56,7 @@ export default function OverviewDataGrid() {
         icon={FaArrowTrendDown}
         dateRange={dateRangeLabel}
         percentageChange={data?.expenseChange}
-        variant="default"
+        variant="danger"
       />
     </div>
   );

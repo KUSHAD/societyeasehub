@@ -105,6 +105,8 @@ export async function seed(SEED_SOCIETY_ID: string) {
     for (let i = 0; i < numTransactions; i++) {
       const category =
         SEED_CATEGORIES[Math.floor(Math.random() * SEED_CATEGORIES.length)];
+      const account =
+        SEED_ACCOUNTS[Math.floor(Math.random() * SEED_ACCOUNTS.length)];
       const payee = SEED_PAYEES[Math.floor(Math.random() * SEED_PAYEES.length)];
       const isExpense = Math.random() > 0.6;
 
@@ -115,10 +117,10 @@ export async function seed(SEED_SOCIETY_ID: string) {
       );
 
       SEED_TRANSACTIONS.push({
-        accountId: SEED_ACCOUNTS[0]?.id ?? "clxo1eo6200003b71yub9se00",
+        accountId: account?.id ?? "clxo1eo6200003b71yub9se00",
         amount: formattedAmount,
         date: day,
-        categoryId: category?.id ?? "clxo1w5x300003b70a8715htc",
+        categoryId: category?.id ?? "clxowrsv7m00003b70och18034",
         payeeId: payee?.id ?? "clxo1zv3o00003b703rt7m2u5",
         societyId: SEED_SOCIETY_ID,
         notes: "Random Transaction",

@@ -52,7 +52,7 @@ export async function getActiveDaysFinancialReport(
   SELECT
     t."date" as date,
     SUM(CASE WHEN t."amount" >= 0 THEN t."amount" ELSE 0 END) AS income,
-    SUM(CASE WHEN t."amount" < 0 THEN t."amount" ELSE 0 END) AS expense
+    SUM(CASE WHEN t."amount" < 0 THEN ABS(t."amount") ELSE 0 END) AS expense
   FROM
     "FinanceTransaction" t
   INNER JOIN

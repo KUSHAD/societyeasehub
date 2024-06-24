@@ -97,14 +97,6 @@ export const financeSummaryRouter = createTRPCRouter({
 
       const days = fillMissingDays(activeDays, startDate, endDate);
 
-      console.log({
-        activeDays,
-        payees,
-        categories,
-        currentPeriod,
-        lastPeriod,
-      });
-
       return {
         currentPeriod,
         lastPeriod,
