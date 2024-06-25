@@ -12,30 +12,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { PieChart } from "lucide-react";
+import { PieChart, Radar, Target } from "lucide-react";
 import RadialVariantChart from "./charts/RadialVariantChart";
-import DoughnutVariantChart from "./charts/DoughnutVariantChart";
 import PieVariantChart from "./charts/PieVariantChart";
-import RadialChart from "~/components/icons/RadialChart";
-import DoughnutChart from "~/components/icons/DoughnutChart";
+import RadarVariantChart from "./charts/RadarVariantCart";
 
 type PayeeChartProps = {
   data?: RawGroupData[];
 };
 
 export default function PayeeChart({ data = [] }: PayeeChartProps) {
-  const [chartType, setChartType] = useState<"Pie" | "Doughnut" | "Radial">(
-    "Pie",
-  );
+  const [chartType, setChartType] = useState<"Pie" | "Radar" | "Radial">("Pie");
 
-  function onChartTypeChange(type: "Pie" | "Doughnut" | "Radial") {
+  function onChartTypeChange(type: "Pie" | "Radar" | "Radial") {
     setChartType(type);
   }
 
   return (
     <Card className="border-none drop-shadow-sm">
       <CardHeader className="flex justify-between space-y-2 lg:flex-row lg:items-center lg:space-y-0">
-        <CardTitle className="line-clamp-1 text-xl">Payee</CardTitle>
+        <CardTitle className="line-clamp-1 text-xl">Top Payees</CardTitle>
         <Select defaultValue={chartType} onValueChange={onChartTypeChange}>
           <SelectTrigger className="h-9 rounded-md px-3 lg:w-auto">
             <SelectValue placeholder="Chart Type" />
@@ -47,15 +43,15 @@ export default function PayeeChart({ data = [] }: PayeeChartProps) {
                 <div className="line-clamp-1">Pie Chart</div>
               </div>
             </SelectItem>
-            <SelectItem value="Doughnut">
+            <SelectItem value="Radar">
               <div className="flex items-center">
-                <DoughnutChart className="mr-2 size-4 shrink-0" />
-                <div className="line-clamp-1">Doughnut Chart</div>
+                <Radar className="mr-2 size-4 shrink-0" />
+                <div className="line-clamp-1">Radar Chart</div>
               </div>
             </SelectItem>
             <SelectItem value="Radial">
               <div className="flex items-center">
-                <RadialChart className="mr-2 size-4 shrink-0" />
+                <Target className="mr-2 size-4 shrink-0" />
                 <div className="line-clamp-1">Radial Chart</div>
               </div>
             </SelectItem>
@@ -68,7 +64,7 @@ export default function PayeeChart({ data = [] }: PayeeChartProps) {
         ) : (
           <>
             {chartType === "Pie" && <PieVariantChart data={data} />}
-            {chartType === "Doughnut" && <DoughnutVariantChart data={data} />}
+            {chartType === "Radar" && <RadarVariantChart data={data} />}
             {chartType === "Radial" && <RadialVariantChart data={data} />}
           </>
         )}

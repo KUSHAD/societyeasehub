@@ -3,7 +3,13 @@ import { twMerge } from "tailwind-merge";
 import { env } from "~/env";
 import countries from "world-countries";
 import { type HomeFeature, type ActiveDaysData, type Period } from "./types";
-import { eachDayOfInterval, format, isSameDay, subDays } from "date-fns";
+import {
+  eachDayOfInterval,
+  format,
+  isSameDay,
+  subDays,
+  isValid,
+} from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -197,15 +203,20 @@ export function fillMissingDays(
   return transactionsByDate;
 }
 
-export function formatDateRange(period?: Period) {
+export function formatDateRange(period?: Period): string {
   const defaultTo = new Date();
   const defaultFrom = subDays(defaultTo, 30);
 
-  if (!period?.from)
+  const from = period?.from && isValid(period.from) ? period.from : defaultFrom;
+  const to = period?.to && isValid(period.to) ? period.to : defaultTo;
+
+  if (!period?.from) {
     return `${format(defaultFrom, "LLL dd")} - ${format(defaultTo, "LLL dd, y")}`;
+  }
 
-  if (period.to)
-    return `${format(period.from as Date, "LLL dd")} - ${format(period.to as Date, "LLL dd, y")}`;
+  if (period?.to) {
+    return `${format(from as Date, "LLL dd")} - ${format(to as Date, "LLL dd, y")}`;
+  }
 
-  return format(period.from as Date, "LLL  dd, y");
+  return format(from as Date, "LLL dd, y");
 }
