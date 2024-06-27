@@ -1,7 +1,6 @@
 "use client";
 
 import { useParams, useSearchParams } from "next/navigation";
-import { formatDateRange } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import OverviewDataCard, { OverviewDataCardLoading } from "./OverviewDataCard";
 import { FaArrowTrendDown, FaArrowTrendUp, FaPiggyBank } from "react-icons/fa6";
@@ -21,8 +20,6 @@ export default function OverviewDataGrid() {
     to: to ?? "",
   });
 
-  const dateRangeLabel = formatDateRange({ from, to });
-
   if (isLoading)
     return (
       <div className="mb-8 grid grid-cols-1 gap-8 pb-2 lg:grid-cols-3">
@@ -38,7 +35,6 @@ export default function OverviewDataGrid() {
         title="Net Balance"
         value={data?.currentPeriod.remaining}
         icon={FaPiggyBank}
-        dateRange={dateRangeLabel}
         percentageChange={data?.remainingChange}
         variant="default"
       />
@@ -46,7 +42,6 @@ export default function OverviewDataGrid() {
         title="Income"
         value={data?.currentPeriod.income}
         icon={FaArrowTrendUp}
-        dateRange={dateRangeLabel}
         percentageChange={data?.incomeChange}
         variant="success"
       />
@@ -54,7 +49,6 @@ export default function OverviewDataGrid() {
         title="Expenses"
         value={data?.currentPeriod.expense}
         icon={FaArrowTrendDown}
-        dateRange={dateRangeLabel}
         percentageChange={data?.expenseChange}
         variant="danger"
       />

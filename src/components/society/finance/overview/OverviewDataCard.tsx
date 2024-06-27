@@ -2,13 +2,7 @@
 
 import { type VariantProps, cva } from "class-variance-authority";
 import { type IconType } from "react-icons";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 import { CountUp } from "~/components/ui/count-up";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -50,12 +44,10 @@ interface OverviewDataCardProps extends BoxVariants, IconVariants {
   title: string;
   value?: number;
   percentageChange?: number;
-  dateRange: string;
   icon: IconType;
 }
 
 export default function OverviewDataCard({
-  dateRange,
   icon: Icon,
   title,
   percentageChange = 0,
@@ -67,9 +59,6 @@ export default function OverviewDataCard({
       <CardHeader className="flex flex-row items-center justify-between gap-x-4">
         <div className="space-y-2">
           <CardTitle className="line-clamp-1 text-2xl">{title}</CardTitle>
-          <CardDescription className="line-clamp-1">
-            {dateRange}
-          </CardDescription>
         </div>
         <div className={cn(boxVariant({ variant }))}>
           <Icon className={cn(iconVariant({ variant }))} />
@@ -106,7 +95,6 @@ export function OverviewDataCardLoading() {
       <CardHeader className="flex flex-row items-center justify-between gap-x-4">
         <div className="space-y-2">
           <Skeleton className="h-6 w-24" />
-          <Skeleton className="h-4 w-40" />
         </div>
 
         <Skeleton className="size-12" />
