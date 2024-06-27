@@ -2,7 +2,14 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { env } from "~/env";
 import countries from "world-countries";
-import { type HomeFeature } from "./types";
+import { type HomeFeature, type ActiveDaysData, type Period } from "./types";
+import {
+  eachDayOfInterval,
+  format,
+  isSameDay,
+  subDays,
+  isValid,
+} from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -148,4 +155,68 @@ export function formatCurrency(amount: number) {
     currency: "INR",
     minimumFractionDigits: 2,
   }).format(amount);
+}
+
+export function formatPercentage(
+  value: number,
+  options: { addPrefix?: boolean } = { addPrefix: false },
+) {
+  const formattedPercentage = new Intl.NumberFormat("en-US", {
+    style: "percent",
+  }).format(value / 100);
+
+  if (options.addPrefix && value > 0) return `+${formattedPercentage}`;
+
+  return formattedPercentage;
+}
+
+export function calculatePercentageChange(current: number, previous: number) {
+  if (previous === 0) return previous === current ? 0 : 100;
+
+  return ((current - previous) / previous) * 100;
+}
+
+export function fillMissingDays(
+  activeDays: ActiveDaysData[],
+  startDate: Date,
+  endDate: Date,
+) {
+  if (activeDays.length === 0) return [];
+
+  const allDays = eachDayOfInterval({
+    start: startDate,
+    end: endDate,
+  });
+
+  const transactionsByDate = allDays.map((day) => {
+    const found = activeDays.find((d) => isSameDay(d.date, day));
+
+    if (found) return found;
+    else
+      return {
+        date: day,
+        income: 0,
+        expense: 0,
+      };
+  });
+
+  return transactionsByDate;
+}
+
+export function formatDateRange(period?: Period): string {
+  const defaultTo = new Date();
+  const defaultFrom = subDays(defaultTo, 30);
+
+  const from = period?.from && isValid(period.from) ? period.from : defaultFrom;
+  const to = period?.to && isValid(period.to) ? period.to : defaultTo;
+
+  if (!period?.from) {
+    return `${format(defaultFrom, "LLL dd")} - ${format(defaultTo, "LLL dd, y")}`;
+  }
+
+  if (period?.to) {
+    return `${format(from as Date, "LLL dd")} - ${format(to as Date, "LLL dd, y")}`;
+  }
+
+  return format(from as Date, "LLL dd, y");
 }

@@ -36,6 +36,10 @@ export default function TransactionActions({
           societyId,
         });
 
+        await utils.financeSummary.get.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Category Deleted",

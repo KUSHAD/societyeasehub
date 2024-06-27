@@ -31,6 +31,10 @@ export default function NewAccountSheet() {
         societyId,
       });
 
+      await utils.financeSummary.get.invalidate({
+        societyId,
+      });
+
       toast({
         title: "Message",
         description: "Account Created",
@@ -41,7 +45,7 @@ export default function NewAccountSheet() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button size="sm">
+        <Button>
           <Plus className="mr-2 size-4" /> Add New
         </Button>
       </SheetTrigger>

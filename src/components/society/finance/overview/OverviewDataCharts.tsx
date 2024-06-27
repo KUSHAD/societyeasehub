@@ -1,15 +1,29 @@
-import { OverviewDataCardLoading } from "~/components/society/finance/overview/OverviewDataCard";
+"use client";
+
+import { useParams, useSearchParams } from "next/navigation";
+import { api } from "~/trpc/react";
+import TransactionChart from "./TransactionChart";
+import SpendChart from "./SpendChart";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 
-export default function Loading() {
-  return (
-    <>
-      <div className="mb-8 grid grid-cols-1 gap-8 pb-2 lg:grid-cols-3">
-        <OverviewDataCardLoading />
-        <OverviewDataCardLoading />
-        <OverviewDataCardLoading />
-      </div>
+export default function OverviewDataCharts() {
+  const searchParams = useSearchParams();
+
+  const to = searchParams.get("to") ?? undefined;
+  const from = searchParams.get("from") ?? undefined;
+
+  const { societyId } = useParams<{ societyId: string }>();
+
+  const { data, isLoading } = api.financeSummary.get.useQuery({
+    societyId,
+    from: from ?? "",
+    accountId: searchParams.get("accountId") ?? "",
+    to: to ?? "",
+  });
+
+  if (isLoading)
+    return (
       <div className="flex flex-col">
         <div className="my-2">
           <Card className="border-none drop-shadow-sm">
@@ -44,6 +58,14 @@ export default function Loading() {
           </div>
         </div>
       </div>
-    </>
+    );
+
+  return (
+    <div className="flex flex-col">
+      <TransactionChart data={data?.days} />
+      <div className="my-2">
+        <SpendChart categoryData={data?.categories} payeeData={data?.payees} />
+      </div>
+    </div>
   );
 }

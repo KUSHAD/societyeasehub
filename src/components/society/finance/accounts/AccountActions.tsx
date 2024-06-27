@@ -32,6 +32,14 @@ export default function AccountActions({ accountId }: { accountId: string }) {
           societyId,
         });
 
+        await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
+          societyId,
+        });
+
+        await utils.financeSummary.get.invalidate({
+          societyId,
+        });
+
         toast({
           title: "Message",
           description: "Account Deleted",

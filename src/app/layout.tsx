@@ -52,8 +52,8 @@ export default async function RootLayout({
           inter.variable,
         )}
       >
-        <NextTopLoader color="#18181b" />
-        <div className="m-auto w-full max-w-screen-lg">
+        <NextTopLoader color="#18181b" showSpinner={false} />
+        <div className="m-auto w-full">
           <TRPCReactProvider cookies={cookies().toString()}>
             <NextAuthReactProvider>
               <NextSSRPlugin
