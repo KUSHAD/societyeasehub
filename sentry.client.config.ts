@@ -31,6 +31,7 @@ Sentry.init({
       colorScheme: "system",
       isNameRequired: true,
       isEmailRequired: true,
+      autoInject: false,
     }),
   ],
 });

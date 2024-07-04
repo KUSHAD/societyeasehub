@@ -77,9 +77,6 @@ export const rolesRouter = createTRPCRouter({
             },
           },
         },
-        orderBy: {
-          name: "asc",
-        },
       });
 
       return societyRoles;
@@ -167,5 +164,51 @@ export const rolesRouter = createTRPCRouter({
         },
       });
       return deletedRole;
+    }),
+  assignAutoRole: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+        roleId: z.string().cuid(),
+      }),
+    )
+    .mutation(async ({ ctx: { db }, input: { roleId, societyId } }) => {
+      const canCreate = await canAccessSettings(societyId);
+
+      if (!canCreate) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const autoRole = await db.autoRole.upsert({
+        create: {
+          roleId,
+          societyId,
+        },
+        update: {
+          roleId,
+        },
+        where: {
+          societyId,
+        },
+      });
+
+      return autoRole;
+    }),
+  getAutoRole: protectedProcedure
+    .input(
+      z.object({
+        societyId: z.string().cuid(),
+      }),
+    )
+    .query(async ({ ctx: { db }, input: { societyId } }) => {
+      const canCreate = await canAccessSettings(societyId);
+
+      if (!canCreate) throw new TRPCError({ code: "FORBIDDEN" });
+
+      const autoRole = await db.autoRole.findUnique({
+        where: { societyId },
+      });
+
+      if (!autoRole) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return autoRole.roleId;
     }),
 });

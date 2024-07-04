@@ -15,6 +15,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/react";
 import { type Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
+import SentryFeedbackWidget from "~/sentry/SentryFeedback";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -61,6 +62,7 @@ export default async function RootLayout({
               />
               {children}
               <Toaster />
+              <SentryFeedbackWidget />
               <SpeedInsights debug />
               <Analytics />
             </NextAuthReactProvider>

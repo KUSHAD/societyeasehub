@@ -60,7 +60,7 @@ export const inviteRouter = createTRPCRouter({
 
       const updatedInvite = await db.invite.update({
         where: {
-          inviteId: { societyId, userId },
+          id: { societyId, userId },
         },
         data: {
           status: "PENDING",
@@ -113,7 +113,7 @@ export const inviteRouter = createTRPCRouter({
     .mutation(async ({ ctx: { db, session }, input: { societyId } }) => {
       const rejectedInvite = await db.invite.update({
         where: {
-          inviteId: {
+          id: {
             societyId,
             userId: session.user.id,
           },
@@ -141,16 +141,21 @@ export const inviteRouter = createTRPCRouter({
           code: "NOT_FOUND",
         });
 
+      const autoRole = await db.autoRole.findFirst({
+        where: { societyId },
+      });
+
       const newMember = await db.member.create({
         data: {
           userId: session.user.id,
           societyId,
+          roleId: autoRole?.roleId,
         },
       });
 
       await db.invite.update({
         where: {
-          inviteId: {
+          id: {
             societyId,
             userId: session.user.id,
           },
