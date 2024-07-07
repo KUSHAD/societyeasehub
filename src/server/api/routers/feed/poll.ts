@@ -187,7 +187,7 @@ export const pollRouter = createTRPCRouter({
 
         const voteExists = await db.vote.findUnique({
           where: {
-            voteId: {
+            id: {
               optionId,
               pollId,
               userId: user.id,

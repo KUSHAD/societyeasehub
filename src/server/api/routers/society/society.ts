@@ -35,6 +35,12 @@ export const societyRouter = createTRPCRouter({
         },
       });
 
+      await db.autoRole.create({
+        data: {
+          societyId: newSociety.id,
+        },
+      });
+
       return newSociety;
     }),
   getUserMemberships: protectedProcedure.query(

@@ -76,6 +76,7 @@ Table Society {
   financeCategories FinanceCategory [not null]
   financeTransactions FinanceTransaction [not null]
   financePayees FinancePayee [not null]
+  autoRoles AutoRole [not null]
 }
 
 Table SocietyMedia {
@@ -87,7 +88,7 @@ Table SocietyMedia {
 
 Table Member {
   societyId String [not null]
-  userId String [unique, not null]
+  userId String [not null]
   roleId String
   society Society [not null]
   user User [not null]
@@ -95,7 +96,6 @@ Table Member {
 
   indexes {
     (societyId, userId) [pk]
-    (societyId, userId) [unique]
   }
 }
 
@@ -118,6 +118,7 @@ Table Role {
   societyId String [not null]
   society Society [not null]
   members Member [not null]
+  autoRole AutoRole [not null]
 }
 
 Table Invite {
@@ -299,6 +300,13 @@ Table FinancePayee {
   transactions FinanceTransaction [not null]
 }
 
+Table AutoRole {
+  societyId String [pk]
+  roleId String
+  society Society [not null]
+  role Role
+}
+
 Enum INVITE_STATUS {
   PENDING
   ACCEPTED
@@ -389,3 +397,7 @@ Ref: FinanceTransaction.categoryId > FinanceCategory.id [delete: Set Null]
 Ref: FinanceTransaction.payeeId > FinancePayee.id [delete: Cascade]
 
 Ref: FinancePayee.societyId > Society.id [delete: Cascade]
+
+Ref: AutoRole.societyId > Society.id [delete: Cascade]
+
+Ref: AutoRole.roleId > Role.id [delete: No Action]

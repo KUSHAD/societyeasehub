@@ -99,6 +99,7 @@ model Society {
     financeCategories   FinanceCategory[]
     financeTransactions FinanceTransaction[]
     financePayees       FinancePayee[]
+    autoRoles           AutoRole[]
 }
 
 model SocietyMedia {
@@ -113,7 +114,7 @@ model SocietyMedia {
 
 model Member {
     societyId String
-    userId    String   @unique
+    userId    String
     roleId    String?
     createdAt DateTime @default(now()) @ignore
     updatedAt DateTime @updatedAt @ignore
@@ -122,8 +123,7 @@ model Member {
     user    User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     role    Role?   @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-    @@id(name: "memberId", [societyId, userId])
-    @@unique([societyId, userId])
+    @@id(name: "id", [societyId, userId])
 }
 
 model Role {
@@ -146,8 +146,9 @@ model Role {
     createdAt      DateTime @default(now()) @ignore
     updatedAt      DateTime @updatedAt @ignore
 
-    society Society  @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    members Member[]
+    society  Society    @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    members  Member[]
+    autoRole AutoRole[]
 }
 
 model Invite {
@@ -160,7 +161,7 @@ model Invite {
     society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     to      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-    @@id(name: "inviteId", [societyId, userId])
+    @@id(name: "id", [societyId, userId])
 }
 
 enum INVITE_STATUS {
@@ -316,7 +317,7 @@ model Vote {
     user   User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     poll   Poll        @relation(fields: [pollId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-    @@id(name: "voteId", [userId, optionId, pollId])
+    @@id(name: "id", [userId, optionId, pollId])
     @@unique([userId, optionId])
 }
 
@@ -388,4 +389,14 @@ enum PAYEE_TYPE {
     EMPLOYEE
     CONTRACTOR
     FAMILY
+}
+
+model AutoRole {
+    societyId String   @id
+    roleId    String?
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
+
+    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    role    Role?   @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: Cascade)
 }

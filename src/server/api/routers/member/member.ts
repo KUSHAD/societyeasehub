@@ -55,7 +55,7 @@ export const memberRouter = createTRPCRouter({
 
       const userRole = await db.member.findUnique({
         where: {
-          memberId: {
+          id: {
             societyId,
             userId,
           },
@@ -85,7 +85,7 @@ export const memberRouter = createTRPCRouter({
 
       const newMember = await db.member.update({
         where: {
-          memberId: {
+          id: {
             societyId,
             userId,
           },
@@ -107,7 +107,7 @@ export const memberRouter = createTRPCRouter({
     .mutation(async ({ ctx: { db, session }, input: { societyId } }) => {
       const removedMember = await db.member.delete({
         where: {
-          memberId: {
+          id: {
             societyId,
             userId: session.user.id,
           },
@@ -134,7 +134,7 @@ export const memberRouter = createTRPCRouter({
 
       const removedMember = await db.member.delete({
         where: {
-          memberId: {
+          id: {
             societyId,
             userId,
           },
@@ -196,7 +196,7 @@ export const memberRouter = createTRPCRouter({
     .query(async ({ ctx: { db }, input: { societyId, userId } }) => {
       const member = await db.member.findUnique({
         where: {
-          memberId: {
+          id: {
             societyId,
             userId,
           },
