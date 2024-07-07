@@ -77,6 +77,7 @@ Table Society {
   financeTransactions FinanceTransaction [not null]
   financePayees FinancePayee [not null]
   autoRoles AutoRole [not null]
+  channelAllowedRoles ChannelAllowedRole [not null]
 }
 
 Table SocietyMedia {
@@ -119,6 +120,7 @@ Table Role {
   society Society [not null]
   members Member [not null]
   autoRole AutoRole [not null]
+  channelAllowedRoles ChannelAllowedRole [not null]
 }
 
 Table Invite {
@@ -139,6 +141,7 @@ Table Channel {
   societyId String [not null]
   society Society [not null]
   messages Message [not null]
+  allowedRoles ChannelAllowedRole [not null]
 }
 
 Table Message {
@@ -307,6 +310,19 @@ Table AutoRole {
   role Role
 }
 
+Table ChannelAllowedRole {
+  societyId String [not null]
+  roleId String [not null]
+  channelId String [not null]
+  society Society [not null]
+  role Role [not null]
+  channel Channel [not null]
+
+  indexes {
+    (societyId, roleId, channelId) [pk]
+  }
+}
+
 Enum INVITE_STATUS {
   PENDING
   ACCEPTED
@@ -400,4 +416,10 @@ Ref: FinancePayee.societyId > Society.id [delete: Cascade]
 
 Ref: AutoRole.societyId > Society.id [delete: Cascade]
 
-Ref: AutoRole.roleId > Role.id [delete: No Action]
+Ref: AutoRole.roleId > Role.id [delete: Cascade]
+
+Ref: ChannelAllowedRole.societyId > Society.id [delete: Cascade]
+
+Ref: ChannelAllowedRole.roleId > Role.id [delete: Cascade]
+
+Ref: ChannelAllowedRole.channelId > Channel.id [delete: Cascade]
