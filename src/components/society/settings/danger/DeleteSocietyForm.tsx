@@ -32,7 +32,7 @@ export default function DeleteSocietyForm() {
 
   const utils = api.useUtils();
 
-  const { mutate: deleteSociety, isLoading } = api.society.delete.useMutation({
+  const { mutate: deleteSociety, isPending } = api.society.delete.useMutation({
     onSuccess: async () => {
       await utils.society.getUserMemberships.invalidate();
 
@@ -91,9 +91,9 @@ export default function DeleteSocietyForm() {
           formSchema={deleteSocietySchema}
         >
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <AutoFormSubmit disabled={isLoading}>Delete</AutoFormSubmit>
+              <AutoFormSubmit disabled={isPending}>Delete</AutoFormSubmit>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>

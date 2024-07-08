@@ -55,16 +55,16 @@ export default function PollViewer({ poll }: PollViewerProps) {
   const [selectedOptionID, setSelectedOptionID] = useState<string | null>(null);
 
   const utils = api.useUtils();
-  const { data: perms, isLoading } = api.perms.canCreatePolls.useQuery({
+  const { data: perms, isPending } = api.perms.canCreatePolls.useQuery({
     societyId,
   });
 
-  const { data: votePerms, isLoading: gettingVotePerms } =
+  const { data: votePerms, isPending: gettingVotePerms } =
     api.perms.canVote.useQuery({
       societyId,
     });
 
-  const { mutate: deletePoll, isLoading: deleting } =
+  const { mutate: deletePoll, isPending: deleting } =
     api.poll.delete.useMutation({
       async onSuccess() {
         await utils.poll.getBySociety.invalidate({ societyId });
@@ -76,7 +76,7 @@ export default function PollViewer({ poll }: PollViewerProps) {
       },
     });
 
-  const { mutate: castVote, isLoading: voting } = api.poll.vote.useMutation({
+  const { mutate: castVote, isPending: voting } = api.poll.vote.useMutation({
     async onSuccess() {
       await utils.poll.getBySociety.invalidate({ societyId });
       setSelectedOptionID(null);
@@ -88,7 +88,7 @@ export default function PollViewer({ poll }: PollViewerProps) {
     },
   });
 
-  const { mutate: removeVote, isLoading: removing } =
+  const { mutate: removeVote, isPending: removing } =
     api.poll.removeVote.useMutation({
       async onSuccess() {
         await utils.poll.getBySociety.invalidate({ societyId });
@@ -120,7 +120,7 @@ export default function PollViewer({ poll }: PollViewerProps) {
                   <em>{format(poll.createdAt, "dd/MM/yyyy  HH:mm")}</em>
                 </small>
               </div>
-              {isLoading ? null : perms ? (
+              {isPending ? null : perms ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button

@@ -7,10 +7,10 @@ import Skeleton from "react-loading-skeleton";
 
 export default function KanbanBoard() {
   const { societyId } = useParams<{ societyId: string }>();
-  const { isLoading, data: lists } = api.roadmapList.getBySociety.useQuery({
+  const { isPending, data: lists } = api.roadmapList.getBySociety.useQuery({
     societyId,
   });
-  return isLoading ? (
+  return isPending ? (
     <Skeleton className="h-[100px] w-[273px]" />
   ) : (
     <ListContainer data={lists!} />

@@ -11,7 +11,7 @@ interface DeleteRoleProps {
 export default function DeleteRole({ roleId }: DeleteRoleProps) {
   const utils = api.useUtils();
 
-  const { mutate: deleteRole, isLoading } = api.role.delete.useMutation({
+  const { mutate: deleteRole, isPending } = api.role.delete.useMutation({
     onSuccess: async () => {
       await utils.role.getBySociety.invalidate();
 
@@ -26,7 +26,7 @@ export default function DeleteRole({ roleId }: DeleteRoleProps) {
       Are you sure you want delete this role ? Make sure to assign all your
       users different roles before deleting this role
       <Button
-        disabled={isLoading}
+        disabled={isPending}
         onClick={() => deleteRole({ id: roleId })}
         className="my-2 w-full"
         variant="destructive"

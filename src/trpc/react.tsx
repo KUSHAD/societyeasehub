@@ -1,6 +1,12 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  isServer,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+  MutationCache,
+} from "@tanstack/react-query";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { useState } from "react";
@@ -8,8 +14,51 @@ import { useState } from "react";
 import { type AppRouter } from "~/server/api/root";
 import { getUrl, transformer } from "./shared";
 import { toast } from "~/components/ui/use-toast";
-import { type TRPCClientErrorType } from "~/lib/types";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: (failureCount) => failureCount <= 3,
+        retryDelay: 500,
+        notifyOnChangeProps: "all",
+        networkMode: "online",
+      },
+      mutations: {
+        retry: (failureCount) => failureCount <= 3,
+        retryDelay: 500,
+        networkMode: "online",
+      },
+    },
+    queryCache: new QueryCache({}),
+    mutationCache: new MutationCache({
+      onError(error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
+    }),
+  });
+}
+
+let browserQueryClient: QueryClient | undefined = undefined;
+
+function getQueryClient() {
+  if (isServer) {
+    // Server: always make a new query client
+    return makeQueryClient();
+  } else {
+    // Browser: make a new query client if we don't already have one
+    // This is very important, so we don't re-make a new client if React
+    // suspends during the initial render. This may not be needed if we
+    // have a suspense boundary BELOW the creation of the query client
+    if (!browserQueryClient) browserQueryClient = makeQueryClient();
+    return browserQueryClient;
+  }
+}
 
 export const api = createTRPCReact<AppRouter>();
 
@@ -17,49 +66,8 @@ export function TRPCReactProvider(props: {
   children: React.ReactNode;
   cookies: string;
 }) {
-  const isProduction = process.env.NODE_ENV === "production";
-
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            abortOnUnmount: true,
-            staleTime: isProduction ? 5 * 1000 : undefined, // 5 seconds for production
-            refetchInterval: isProduction ? 5 * 1000 : undefined, // 5 seconds for production
-            retry: (failureCount) => failureCount <= 3,
-            retryDelay: 500,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            onError(err: TRPCClientErrorType) {
-              toast({
-                title: "Error",
-                description: err.message,
-                variant: "destructive",
-              });
-            },
-          },
-          mutations: {
-            retry: (failureCount) => failureCount <= 3,
-            retryDelay: 500,
-            abortOnUnmount: false,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            onError(err: TRPCClientErrorType) {
-              toast({
-                title: "Error",
-                description: err.message,
-                variant: "destructive",
-              });
-            },
-          },
-        },
-      }),
-  );
-
   const [trpcClient] = useState(() =>
     api.createClient({
-      transformer,
       links: [
         loggerLink({
           enabled: (op) =>
@@ -67,6 +75,7 @@ export function TRPCReactProvider(props: {
             (op.direction === "down" && op.result instanceof Error),
         }),
         unstable_httpBatchStreamLink({
+          transformer,
           url: getUrl(),
           headers() {
             return {
@@ -78,6 +87,8 @@ export function TRPCReactProvider(props: {
       ],
     }),
   );
+
+  const queryClient = getQueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>

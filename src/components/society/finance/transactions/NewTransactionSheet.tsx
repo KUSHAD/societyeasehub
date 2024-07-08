@@ -31,7 +31,7 @@ export default function NewTransactionSheet() {
 
   const utils = api.useUtils();
 
-  const { mutate: create, isLoading } =
+  const { mutate: create, isPending } =
     api.financeTransaction.create.useMutation({
       async onSuccess() {
         await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
@@ -45,22 +45,22 @@ export default function NewTransactionSheet() {
       },
     });
 
-  const { data: categories, isLoading: gettingCategories } =
+  const { data: categories, isPending: gettingCategories } =
     api.financeCategories.getBySociety.useQuery({
       societyId,
     });
 
-  const { data: accounts, isLoading: gettingAccounts } =
+  const { data: accounts, isPending: gettingAccounts } =
     api.financeAccounts.getBySociety.useQuery({
       societyId,
     });
 
-  const { data: payees, isLoading: gettingPayees } =
+  const { data: payees, isPending: gettingPayees } =
     api.financePayee.getBySociety.useQuery({
       societyId,
     });
 
-  const { mutate: createPayee, isLoading: payeeCreating } =
+  const { mutate: createPayee, isPending: payeeCreating } =
     api.financePayee.create.useMutation({
       async onSuccess() {
         await utils.financePayee.getBySociety.invalidate({
@@ -78,7 +78,7 @@ export default function NewTransactionSheet() {
       },
     });
 
-  const { mutate: createAccount, isLoading: accountCreating } =
+  const { mutate: createAccount, isPending: accountCreating } =
     api.financeAccounts.create.useMutation({
       async onSuccess() {
         await utils.financeAccounts.getBySociety.invalidate({
@@ -96,7 +96,7 @@ export default function NewTransactionSheet() {
       },
     });
 
-  const { mutate: createCategory, isLoading: categoryCreating } =
+  const { mutate: createCategory, isPending: categoryCreating } =
     api.financeCategories.create.useMutation({
       async onSuccess() {
         await utils.financeCategories.getBySociety.invalidate({
@@ -290,7 +290,7 @@ export default function NewTransactionSheet() {
           <AutoFormSubmit
             className="w-full"
             disabled={
-              isLoading ||
+              isPending ||
               gettingCategories ||
               gettingAccounts ||
               accountCreating ||

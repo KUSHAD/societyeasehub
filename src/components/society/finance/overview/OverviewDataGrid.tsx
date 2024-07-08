@@ -13,14 +13,14 @@ export default function OverviewDataGrid() {
 
   const { societyId } = useParams<{ societyId: string }>();
 
-  const { data, isLoading } = api.financeSummary.get.useQuery({
+  const { data, isPending } = api.financeSummary.get.useQuery({
     societyId,
     from: from ?? "",
     accountId: searchParams.get("accountId") ?? "",
     to: to ?? "",
   });
 
-  if (isLoading)
+  if (isPending)
     return (
       <div className="mb-8 grid grid-cols-1 gap-8 pb-2 lg:grid-cols-3">
         <OverviewDataCardLoading />

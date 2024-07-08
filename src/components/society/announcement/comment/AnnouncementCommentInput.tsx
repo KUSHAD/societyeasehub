@@ -11,7 +11,7 @@ export default function AnnouncementCommentInput(props: {
 }) {
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
-  const { isLoading, mutate: create } =
+  const { isPending, mutate: create } =
     api.announcementComment.create.useMutation({
       async onSuccess() {
         await utils.announcementComment.getByAnnouncement.invalidate({
@@ -50,7 +50,7 @@ export default function AnnouncementCommentInput(props: {
     >
       <div className="flex flex-row">
         <div className="mr-auto" />
-        <AutoFormSubmit disabled={isLoading}>Comment</AutoFormSubmit>
+        <AutoFormSubmit disabled={isPending}>Comment</AutoFormSubmit>
       </div>
     </AutoForm>
   );

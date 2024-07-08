@@ -19,10 +19,10 @@ import ChannelButton from "~/components/society/channel/ChannelButton";
 export default function FeedDrawer() {
   const { societyId } = useParams<{ societyId: string }>();
   const pathname = usePathname();
-  const { data: manageChannels, isLoading: gettingPerms } =
+  const { data: manageChannels, isPending: gettingPerms } =
     api.perms.canManageChannels.useQuery({ societyId });
 
-  const { data: channels, isLoading } = api.channel.getBySociety.useQuery({
+  const { data: channels, isPending } = api.channel.getBySociety.useQuery({
     societyId,
   });
 
@@ -64,7 +64,7 @@ export default function FeedDrawer() {
         <AccordionItem value="channels">
           <AccordionTrigger>Channels</AccordionTrigger>
           <AccordionContent>
-            {isLoading ? (
+            {isPending ? (
               <LoadingSkeleton className="my-2 h-[40px] w-full" count={5} />
             ) : channels && channels.length === 0 ? (
               <Button className="my-2 w-full" variant="ghost" disabled>

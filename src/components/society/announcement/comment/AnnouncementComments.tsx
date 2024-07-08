@@ -13,18 +13,18 @@ export default function AnnouncementComments(props: {
 }) {
   const { societyId } = useParams<{ societyId: string }>();
 
-  const { data: perms, isLoading: gettingPerms } =
+  const { data: perms, isPending: gettingPerms } =
     api.perms.canComment.useQuery({
       societyId,
     });
 
-  const { data: comments, isLoading } =
+  const { data: comments, isPending } =
     api.announcementComment.getByAnnouncement.useQuery({
       announcementId: props.announcementId,
     });
   return (
     <>
-      {isLoading ? (
+      {isPending ? (
         <Skeleton className="w-100 my-2 h-[40px]" count={props.commentCount} />
       ) : comments && comments.length !== 0 ? (
         comments.map((_comment) => (

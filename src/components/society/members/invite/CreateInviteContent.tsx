@@ -14,7 +14,7 @@ export default function CreateInviteContent() {
   const [searchString, setSearchString] = useState("");
   const debouncedSearchSring = useDebounce(searchString, 500);
 
-  const { data: users, isLoading } = api.invite.search.useQuery(
+  const { data: users, isPending } = api.invite.search.useQuery(
     {
       searchString: debouncedSearchSring,
       societyId,
@@ -30,7 +30,7 @@ export default function CreateInviteContent() {
         placeholder="Search user by name or email ..."
         onChange={(e) => setSearchString(e.target.value)}
       />
-      {isLoading && Boolean(debouncedSearchSring) ? (
+      {isPending && Boolean(debouncedSearchSring) ? (
         <Skeleton className="my-2 h-12 w-full scale-95" count={9} />
       ) : users && users.length !== 0 ? (
         users.map((_user) => <UserInviteCard user={_user} />)

@@ -32,6 +32,7 @@ Sentry.init({
       isNameRequired: true,
       isEmailRequired: true,
       autoInject: false,
+      showBranding: false,
     }),
   ],
 });

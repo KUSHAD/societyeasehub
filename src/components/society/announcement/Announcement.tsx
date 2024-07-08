@@ -37,12 +37,12 @@ interface AnnouncementProps {
 
 export default function Announcement({ announcement }: AnnouncementProps) {
   const { societyId } = useParams<{ societyId: string }>();
-  const { isLoading, data } = api.perms.canAnnounce.useQuery({
+  const { isPending, data } = api.perms.canAnnounce.useQuery({
     societyId,
   });
   const utils = api.useUtils();
 
-  const { isLoading: deleting, mutate: deleteAnnouncement } =
+  const { isPending: deleting, mutate: deleteAnnouncement } =
     api.announcement.delete.useMutation({
       async onSuccess() {
         await utils.announcement.getBySociety.invalidate({
@@ -81,7 +81,7 @@ export default function Announcement({ announcement }: AnnouncementProps) {
                 <em>{format(announcement.createdAt, "dd/MM/yyyy  HH:mm")}</em>
               </small>
             </div>
-            {isLoading ? null : data ? (
+            {isPending ? null : data ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button disabled={deleting} size="icon" variant="ghost">

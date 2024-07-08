@@ -8,10 +8,10 @@ import PollViewer from "./PollViewer";
 
 export default function PollsViewContainer() {
   const { societyId } = useParams<{ societyId: string }>();
-  const { data: polls, isLoading } = api.poll.getBySociety.useQuery({
+  const { data: polls, isPending } = api.poll.getBySociety.useQuery({
     societyId,
   });
-  return isLoading ? (
+  return isPending ? (
     <Skeleton className="my-2 h-[200px] w-full" count={5} />
   ) : polls && polls.length !== 0 ? (
     polls.map((_poll) => <PollViewer key={_poll.id} poll={_poll} />)

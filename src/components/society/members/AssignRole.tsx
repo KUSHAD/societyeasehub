@@ -19,16 +19,16 @@ export default function AssignRole({ userId }: AssignRoleProps) {
 
   const utils = api.useUtils();
 
-  const { data: roles, isLoading } = api.role.getBySociety.useQuery({
+  const { data: roles, isPending } = api.role.getBySociety.useQuery({
     societyId,
   });
 
-  const { data: roleId, isLoading: gettingRole } = api.member.getRole.useQuery({
+  const { data: roleId, isPending: gettingRole } = api.member.getRole.useQuery({
     societyId,
     userId,
   });
 
-  const { mutate: assignRole, isLoading: assigningRole } =
+  const { mutate: assignRole, isPending: assigningRole } =
     api.member.assignRole.useMutation({
       onSuccess: async () => {
         await utils.member.getBySociety.invalidate();
@@ -38,7 +38,7 @@ export default function AssignRole({ userId }: AssignRoleProps) {
         });
       },
     });
-  return isLoading || gettingRole ? (
+  return isPending || gettingRole ? (
     <DropdownMenuItem disabled>
       <RefreshCcw className="mx-2 animate-spin" /> Fetching Roles
     </DropdownMenuItem>

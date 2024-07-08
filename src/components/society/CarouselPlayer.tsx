@@ -28,7 +28,7 @@ export default function CarouselPlayer({
 
   const utils = api.useUtils();
 
-  const { mutate: deleteMedia, isLoading } =
+  const { mutate: deleteMedia, isPending } =
     api.societyMedia.delete.useMutation({
       onSuccess: async () => {
         await utils.societyMedia.getBySociety.invalidate();
@@ -58,7 +58,7 @@ export default function CarouselPlayer({
                 </AspectRatio>
                 {isDelete && (
                   <Button
-                    disabled={isLoading}
+                    disabled={isPending}
                     onClick={() => deleteMedia({ id: _media.id })}
                     className="my-2 w-full"
                     variant="destructive"

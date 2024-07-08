@@ -34,13 +34,13 @@ interface CardItemProps {
 export default function CardItem({ card, index }: CardItemProps) {
   const { societyId } = useParams<{ societyId: string }>();
 
-  const { isLoading, data: canAccess } = api.perms.canManageRoadmaps.useQuery({
+  const { isPending, data: canAccess } = api.perms.canManageRoadmaps.useQuery({
     societyId,
   });
 
   const utils = api.useUtils();
 
-  const { mutate: deleteCard, isLoading: deleting } =
+  const { mutate: deleteCard, isPending: deleting } =
     api.roadmapCard.delete.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({
@@ -53,7 +53,7 @@ export default function CardItem({ card, index }: CardItemProps) {
       },
     });
 
-  const { mutate: copyCard, isLoading: copying } =
+  const { mutate: copyCard, isPending: copying } =
     api.roadmapCard.copy.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({
@@ -88,7 +88,7 @@ export default function CardItem({ card, index }: CardItemProps) {
               </SheetHeader>
               <CardDetails cardId={card.id} />
               <SheetFooter>
-                {isLoading ? (
+                {isPending ? (
                   <Skeleton className="my-2 h-[40px] w-full rounded" />
                 ) : (
                   canAccess && (

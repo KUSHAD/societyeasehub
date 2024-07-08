@@ -30,7 +30,7 @@ export default function EditAccountSheet(props: {
 
   const utils = api.useUtils();
 
-  const { mutate: update, isLoading: updating } =
+  const { mutate: update, isPending: updating } =
     api.financeAccounts.update.useMutation({
       async onSuccess() {
         await utils.financeAccounts.getBySociety.invalidate({
@@ -52,7 +52,7 @@ export default function EditAccountSheet(props: {
       },
     });
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financeAccounts.delete.useMutation({
       async onSuccess() {
         await utils.financeAccounts.getBySociety.invalidate({
@@ -66,7 +66,7 @@ export default function EditAccountSheet(props: {
       },
     });
 
-  const { data, isLoading: getting } = api.financeAccounts.getById.useQuery({
+  const { data, isPending: getting } = api.financeAccounts.getById.useQuery({
     accountId: props.id,
     societyId,
   });

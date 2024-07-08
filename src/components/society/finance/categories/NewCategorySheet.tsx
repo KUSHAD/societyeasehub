@@ -21,7 +21,7 @@ export default function NewCategorySheet() {
 
   const utils = api.useUtils();
 
-  const { mutate: create, isLoading } =
+  const { mutate: create, isPending } =
     api.financeCategories.create.useMutation({
       async onSuccess() {
         await utils.financeCategories.getBySociety.invalidate({
@@ -76,7 +76,7 @@ export default function NewCategorySheet() {
             },
           }}
         >
-          <AutoFormSubmit className="w-full" disabled={isLoading}>
+          <AutoFormSubmit className="w-full" disabled={isPending}>
             Create
           </AutoFormSubmit>
         </AutoForm>

@@ -21,7 +21,7 @@ export default function NewPayeeSheet() {
 
   const utils = api.useUtils();
 
-  const { mutate: create, isLoading } = api.financePayee.create.useMutation({
+  const { mutate: create, isPending } = api.financePayee.create.useMutation({
     async onSuccess() {
       await utils.financePayee.getBySociety.invalidate({
         societyId,
@@ -87,7 +87,7 @@ export default function NewPayeeSheet() {
             },
           }}
         >
-          <AutoFormSubmit className="w-full" disabled={isLoading}>
+          <AutoFormSubmit className="w-full" disabled={isPending}>
             Create
           </AutoFormSubmit>
         </AutoForm>

@@ -25,7 +25,7 @@ export default function AccountActions({ accountId }: { accountId: string }) {
   );
   const utils = api.useUtils();
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financeAccounts.delete.useMutation({
       async onSuccess() {
         await utils.financeAccounts.getBySociety.invalidate({

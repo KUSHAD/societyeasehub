@@ -26,7 +26,7 @@ export default function ListHeader({ list }: ListHeaderProps) {
   const utils = api.useUtils();
   const { societyId } = useParams<{ societyId: string }>();
 
-  const { isLoading, mutate: updateListTitle } =
+  const { isPending, mutate: updateListTitle } =
     api.roadmapList.updateTitle.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({ societyId });
@@ -64,9 +64,9 @@ export default function ListHeader({ list }: ListHeaderProps) {
           }}
         >
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <AutoFormSubmit disabled={isLoading}>Update</AutoFormSubmit>
+              <AutoFormSubmit disabled={isPending}>Update</AutoFormSubmit>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>

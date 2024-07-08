@@ -25,7 +25,7 @@ export default function DeleteChannel() {
   const messageStore = useMessageStore();
   const messageAttachmentStore = useMessageAttachmentStore();
 
-  const { isLoading, mutate: deleteChannel } = api.channel.delete.useMutation({
+  const { isPending, mutate: deleteChannel } = api.channel.delete.useMutation({
     onMutate() {
       router.push(`/society/${societyId}/feed/announcement`);
     },
@@ -53,10 +53,10 @@ export default function DeleteChannel() {
         undone
       </AlertDialogDescription>
       <AlertDialogFooter>
-        <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+        <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
         <AlertDialogAction asChild>
           <Button
-            disabled={isLoading}
+            disabled={isPending}
             onClick={() =>
               deleteChannel({
                 channelId,

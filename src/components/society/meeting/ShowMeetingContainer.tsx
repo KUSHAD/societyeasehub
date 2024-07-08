@@ -8,12 +8,12 @@ import MeetingCard from "./MeetingCard";
 
 export default function ShowMeetingContainer() {
   const { societyId } = useParams<{ societyId: string }>();
-  const { data: meetings, isLoading } = api.meetingRoom.getBySociety.useQuery({
+  const { data: meetings, isPending } = api.meetingRoom.getBySociety.useQuery({
     societyId,
   });
   return (
     <>
-      {isLoading ? (
+      {isPending ? (
         <Skeleton className="my-2 h-[200px] w-full" count={10} />
       ) : meetings && meetings.length === 0 ? (
         <NotFound

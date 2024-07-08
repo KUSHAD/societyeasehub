@@ -22,7 +22,7 @@ export default function ChatInput() {
     channelId: string;
     societyId: string;
   }>();
-  const { mutate: create, isLoading: isSending } =
+  const { mutate: create, isPending: isSending } =
     api.message.create.useMutation({
       onSuccess: async () => {
         await utils.message.getByChannel.invalidate({ channelId });

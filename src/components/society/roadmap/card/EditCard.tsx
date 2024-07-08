@@ -20,7 +20,7 @@ export default function EditCard({ card }: EditCardProps) {
   const { societyId } = useParams<{ societyId: string }>();
 
   const utils = api.useUtils();
-  const { mutate: edit, isLoading } = api.roadmapCard.edit.useMutation({
+  const { mutate: edit, isPending } = api.roadmapCard.edit.useMutation({
     async onSuccess() {
       await utils.roadmapList.getBySociety.invalidate({
         societyId,
@@ -60,9 +60,9 @@ export default function EditCard({ card }: EditCardProps) {
         formSchema={updateCardSchema}
       >
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <AutoFormSubmit disabled={isLoading}>Update</AutoFormSubmit>
+            <AutoFormSubmit disabled={isPending}>Update</AutoFormSubmit>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AutoForm>

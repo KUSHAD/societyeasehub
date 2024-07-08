@@ -23,10 +23,10 @@ import { toast } from "../../../ui/use-toast";
 export default function ListForm() {
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
-  const { isLoading, data } = api.perms.canManageRoadmaps.useQuery({
+  const { isPending, data } = api.perms.canManageRoadmaps.useQuery({
     societyId,
   });
-  const { isLoading: creating, mutate: createList } =
+  const { isPending: creating, mutate: createList } =
     api.roadmapList.createList.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({ societyId });
@@ -37,7 +37,7 @@ export default function ListForm() {
         });
       },
     });
-  return isLoading ? (
+  return isPending ? (
     <Skeleton className="h-10 w-[150px]" />
   ) : (
     data && (

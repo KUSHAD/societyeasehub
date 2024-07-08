@@ -20,7 +20,7 @@ export default function EditChannel({ channelName }: ChannelActionsProps) {
     channelId: string;
   }>();
   const utils = api.useUtils();
-  const { isLoading, mutate: editChannel } = api.channel.updateName.useMutation(
+  const { isPending, mutate: editChannel } = api.channel.updateName.useMutation(
     {
       async onSuccess() {
         await utils.channel.getBySociety.invalidate({ societyId });
@@ -51,9 +51,9 @@ export default function EditChannel({ channelName }: ChannelActionsProps) {
         }
       >
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction>
-            <AutoFormSubmit disabled={isLoading}>Update</AutoFormSubmit>
+            <AutoFormSubmit disabled={isPending}>Update</AutoFormSubmit>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AutoForm>

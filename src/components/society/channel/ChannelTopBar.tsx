@@ -11,7 +11,7 @@ export default function ChannelTopBar() {
     channelId: string;
   }>();
 
-  const { isLoading, data: name } = api.channel.getName.useQuery({
+  const { isPending, data: name } = api.channel.getName.useQuery({
     channelId,
     societyId,
   });
@@ -19,13 +19,13 @@ export default function ChannelTopBar() {
     <div className="w-full bg-muted">
       <div className="flex flex-row px-2 py-4">
         <span className="my-2 mr-auto select-none font-bold">
-          {isLoading ? (
+          {isPending ? (
             <Skeleton className="h-4 w-[50px]" />
           ) : (
             name && `#${name}`
           )}
         </span>
-        {isLoading ? (
+        {isPending ? (
           <Skeleton className="h-[40px] w-6" />
         ) : (
           name && <ChannelActions channelName={name} />

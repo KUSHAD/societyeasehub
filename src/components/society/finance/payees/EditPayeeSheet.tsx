@@ -30,7 +30,7 @@ export default function EditPayeeSheet(props: {
 
   const utils = api.useUtils();
 
-  const { mutate: update, isLoading: updating } =
+  const { mutate: update, isPending: updating } =
     api.financePayee.update.useMutation({
       async onSuccess() {
         await utils.financePayee.getBySociety.invalidate({
@@ -52,7 +52,7 @@ export default function EditPayeeSheet(props: {
       },
     });
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financePayee.delete.useMutation({
       async onSuccess() {
         await utils.financePayee.getBySociety.invalidate({
@@ -66,7 +66,7 @@ export default function EditPayeeSheet(props: {
       },
     });
 
-  const { data, isLoading: getting } = api.financePayee.getById.useQuery({
+  const { data, isPending: getting } = api.financePayee.getById.useQuery({
     payeeId: props.id,
     societyId,
   });

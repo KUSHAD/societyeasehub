@@ -29,7 +29,7 @@ export default function TransactionActions({
   );
   const utils = api.useUtils();
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financeTransaction.delete.useMutation({
       async onSuccess() {
         await utils.financeTransaction.getBySocietyAndAccounts.invalidate({

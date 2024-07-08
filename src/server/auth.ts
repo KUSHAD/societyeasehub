@@ -44,7 +44,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     strategy: "jwt",
   },
   theme: {
-    colorScheme: "auto",
+    colorScheme: "light",
     logo: "/favicon.png",
     brandColor: "#18181b",
   },

@@ -14,7 +14,7 @@ import { api } from "~/trpc/react";
 export default function CreatePollInput() {
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
-  const { mutate: create, isLoading } = api.poll.create.useMutation({
+  const { mutate: create, isPending } = api.poll.create.useMutation({
     async onSuccess() {
       await utils.poll.getBySociety.invalidate({ societyId });
       toast({
@@ -35,9 +35,9 @@ export default function CreatePollInput() {
         }
       >
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>Close</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <AutoFormSubmit disabled={isLoading}>Create Poll</AutoFormSubmit>
+            <AutoFormSubmit disabled={isPending}>Create Poll</AutoFormSubmit>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AutoForm>

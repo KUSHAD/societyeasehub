@@ -8,11 +8,11 @@ import NotFound from "~/components/NotFound";
 
 export default function AnnouncementContainer() {
   const { societyId } = useParams<{ societyId: string }>();
-  const { data, isLoading } = api.announcement.getBySociety.useQuery({
+  const { data, isPending } = api.announcement.getBySociety.useQuery({
     societyId,
   });
 
-  return isLoading ? (
+  return isPending ? (
     <AnnouncementSkeleton />
   ) : data && data.length !== 0 ? (
     data.map((_announcement) => (

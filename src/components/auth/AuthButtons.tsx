@@ -2,7 +2,7 @@
 
 import { Button } from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
-import { signIn } from "next-auth/react";
+import { signIn } from "next-auth/webauthn";
 
 export default function AuthButtons() {
   return (
@@ -14,7 +14,7 @@ export default function AuthButtons() {
         }
       >
         <FcGoogle className="mx-2" />
-        Sign In With Google
+        Sign in with Google
       </Button>
     </div>
   );

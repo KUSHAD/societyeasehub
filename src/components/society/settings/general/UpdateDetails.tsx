@@ -31,7 +31,7 @@ export default function UpdateDetails() {
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const [open, setOpen] = useState(false);
-  const { mutate: update, isLoading: updating } =
+  const { mutate: update, isPending: updating } =
     api.society.update.useMutation({
       onSuccess: async () => {
         toast({
@@ -42,13 +42,13 @@ export default function UpdateDetails() {
         await utils.society.getInfo.invalidate();
       },
     });
-  const { data: societyDetails, isLoading } = api.society.getInfo.useQuery({
+  const { data: societyDetails, isPending } = api.society.getInfo.useQuery({
     id: societyId,
   });
 
   return (
     <>
-      {isLoading ? (
+      {isPending ? (
         <Card>
           <CardHeader className="flex flex-row">
             <CardTitle>Details</CardTitle>
@@ -84,7 +84,7 @@ export default function UpdateDetails() {
           <AlertDialogHeader>
             <AlertDialogTitle>Update Details</AlertDialogTitle>
           </AlertDialogHeader>
-          {isLoading ? (
+          {isPending ? (
             <Skeleton className="my-4 h-5 w-full" count={7} />
           ) : (
             societyDetails && (

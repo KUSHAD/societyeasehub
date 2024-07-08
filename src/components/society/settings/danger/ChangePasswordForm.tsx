@@ -31,7 +31,7 @@ import { api } from "~/trpc/react";
 export default function ChangePasswordForm() {
   const [isOpen, setIsOpen] = useState(false);
   const { societyId } = useParams<{ societyId: string }>();
-  const { mutate: changePassword, isLoading } =
+  const { mutate: changePassword, isPending } =
     api.society.changePassword.useMutation({
       onSuccess() {
         toast({ title: "Success", description: "Password Updated" });
@@ -135,10 +135,10 @@ export default function ChangePasswordForm() {
           }}
         >
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Close</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <AutoFormSubmit disabled={isLoading}>
-                {isLoading ? "Updating ..." : "Update Password"}
+              <AutoFormSubmit disabled={isPending}>
+                {isPending ? "Updating ..." : "Update Password"}
               </AutoFormSubmit>
             </AlertDialogAction>
           </AlertDialogFooter>

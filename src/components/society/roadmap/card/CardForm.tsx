@@ -19,7 +19,7 @@ export default function CardForm({ listId }: CardFormProps) {
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
 
-  const { isLoading, mutate: create } = api.roadmapCard.create.useMutation({
+  const { isPending, mutate: create } = api.roadmapCard.create.useMutation({
     async onSuccess() {
       await utils.roadmapList.getBySociety.invalidate({ societyId });
       toast({
@@ -41,9 +41,9 @@ export default function CardForm({ listId }: CardFormProps) {
         }
       >
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild>
-            <AutoFormSubmit disabled={isLoading} />
+            <AutoFormSubmit disabled={isPending} />
           </AlertDialogAction>
         </AlertDialogFooter>
       </AutoForm>

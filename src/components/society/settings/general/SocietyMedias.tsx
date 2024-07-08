@@ -9,7 +9,7 @@ import NotFound from "~/components/NotFound";
 
 export default function SocietyMedias() {
   const { societyId } = useParams<{ societyId: string }>();
-  const { data: medias, isLoading } = api.societyMedia.getBySociety.useQuery({
+  const { data: medias, isPending } = api.societyMedia.getBySociety.useQuery({
     societyId,
   });
   return (
@@ -19,7 +19,7 @@ export default function SocietyMedias() {
         <SocietyImageUploader />
       </CardHeader>
       <CardContent className="mx-auto my-4 w-full max-w-[400px]">
-        {isLoading ? (
+        {isPending ? (
           <CarouselPlayerSkeleton />
         ) : medias && medias.length !== 0 ? (
           <CarouselPlayer isDelete medias={medias} />

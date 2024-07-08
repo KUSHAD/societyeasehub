@@ -11,29 +11,28 @@ import { toast } from "../ui/use-toast";
 import Skeleton from "react-loading-skeleton";
 import { beautifyObjectName } from "../ui/auto-form/utils";
 import CarouselPlayer, { CarouselPlayerSkeleton } from "./CarouselPlayer";
+import { useEffect } from "react";
 
 export default function ShowSocietyDetail() {
   const { societyId } = useParams<{ societyId: string }>();
-  const { data: medias, isLoading: mediaLoading } =
+  const { data: medias, isPending: mediaLoading } =
     api.societyMedia.getBySociety.useQuery({
       societyId,
     });
 
-  const { data: societyDetails, isLoading } = api.society.getInfo.useQuery(
-    {
-      id: societyId,
-    },
-    {
-      onSuccess(data) {
-        if (!data)
-          return toast({
-            title: "Error",
-            description: "No Society Found",
-            variant: "destructive",
-          });
-      },
-    },
-  );
+  const { data: societyDetails, isPending } = api.society.getInfo.useQuery({
+    id: societyId,
+  });
+
+  useEffect(() => {
+    if (!societyDetails) {
+      toast({
+        title: "Error",
+        description: "No Society Found",
+        variant: "destructive",
+      });
+    }
+  }, [societyDetails]);
   return (
     <>
       <AlertDialogHeader>
@@ -41,7 +40,7 @@ export default function ShowSocietyDetail() {
       </AlertDialogHeader>
       <div className="flex flex-col border">
         <div className="px-4 py-2">
-          {isLoading ? (
+          {isPending ? (
             <Skeleton className="h-[16px] w-full" count={7} />
           ) : (
             <>
@@ -65,7 +64,7 @@ export default function ShowSocietyDetail() {
         medias && medias.length !== 0 && <CarouselPlayer medias={medias} />
       )}
       <AlertDialogFooter>
-        <AlertDialogCancel disabled={isLoading || mediaLoading}>
+        <AlertDialogCancel disabled={isPending || mediaLoading}>
           Close
         </AlertDialogCancel>
       </AlertDialogFooter>

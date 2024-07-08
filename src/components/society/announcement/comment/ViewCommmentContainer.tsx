@@ -32,7 +32,7 @@ export default function ViewCommmentContainer({
 }: ViewCommmentContainerProps) {
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
-  const { isLoading: deleting, mutate: deleteComment } =
+  const { isPending: deleting, mutate: deleteComment } =
     api.announcementComment.delete.useMutation({
       async onSuccess() {
         await utils.announcementComment.getByAnnouncement.invalidate({

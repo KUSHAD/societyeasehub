@@ -7,13 +7,14 @@
  * need to use are documented accordingly near the end.
  */
 
-import { initTRPC, TRPCError } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { getUserSubscription } from "~/actions/subscription";
 
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
+import { pusher } from "../pusher";
+import { getUserSubscription } from "~/actions/subscription";
 
 /**
  * 1. CONTEXT
@@ -34,6 +35,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     db,
     session,
     ...opts,
+    pusher,
   };
 };
 
@@ -44,7 +46,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-const t = initTRPC.context<typeof createTRPCContext>().create({
+export const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
     return {
@@ -96,6 +98,22 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
   });
 });
 
+/** Reusable middleware to initiate pusher */
+
+const makeRealtime = t.middleware(async ({ path, type, next, ctx }) => {
+  const result = await next();
+
+  if (type === "mutation") {
+    if (result.ok) {
+      await ctx.pusher.trigger("private-subs", "mutation-event", {
+        message: `Mutation ${path} executed`,
+      });
+    }
+  }
+
+  return result;
+});
+
 /**
  * Protected (authenticated) procedure
  *
@@ -104,4 +122,6 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
  *
  * @see https://trpc.io/docs/procedures
  */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const protectedProcedure = t.procedure
+  .use(enforceUserIsAuthed)
+  .use(makeRealtime);
