@@ -2,7 +2,7 @@
 
 import { Button } from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
-import { signIn } from "next-auth/webauthn";
+import { signIn } from "next-auth/react";
 
 export default function AuthButtons() {
   return (
