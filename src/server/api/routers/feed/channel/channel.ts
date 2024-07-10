@@ -5,6 +5,7 @@ import { canManageChannels } from "~/actions/checkUserRole";
 import { TRPCError } from "@trpc/server";
 import { utapi } from "~/server/storage";
 import { revalidatePath } from "next/cache";
+import { type SafeChannel } from "~/lib/types";
 
 export const channelRouter = createTRPCRouter({
   create: protectedProcedure
@@ -87,6 +88,7 @@ export const channelRouter = createTRPCRouter({
           select: {
             name: true,
             id: true,
+            creatorId: true,
           },
           orderBy: {
             name: "asc",
@@ -111,6 +113,7 @@ export const channelRouter = createTRPCRouter({
           select: {
             name: true,
             id: true,
+            creatorId: true,
           },
           orderBy: {
             name: "asc",
@@ -120,7 +123,7 @@ export const channelRouter = createTRPCRouter({
 
       const channels = await channelsQuery;
 
-      return channels;
+      return channels as SafeChannel[];
     }),
   updateName: protectedProcedure
     .input(
