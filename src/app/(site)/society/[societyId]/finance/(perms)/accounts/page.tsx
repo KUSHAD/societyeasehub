@@ -14,11 +14,11 @@ export default function Page() {
 
   const utils = api.useUtils();
 
-  const { data, isLoading } = api.financeAccounts.getBySociety.useQuery({
+  const { data, isPending } = api.financeAccounts.getBySociety.useQuery({
     societyId,
   });
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financeAccounts.delete.useMutation({
       async onSuccess() {
         await utils.financeAccounts.getBySociety.invalidate({
@@ -47,7 +47,7 @@ export default function Page() {
         <NewAccountSheet />
       </CardHeader>
       <CardContent>
-        {isLoading ? (
+        {isPending ? (
           <Skeleton className="my-2 h-[300px] w-full" />
         ) : (
           data && (

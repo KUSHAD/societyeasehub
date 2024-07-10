@@ -17,7 +17,7 @@ export default function ExitSociety() {
   const { societyId } = useParams<{ societyId: string }>();
   const router = useRouter();
   const utils = api.useUtils();
-  const { mutate: exitSociety, isLoading } = api.member.exitSociety.useMutation(
+  const { mutate: exitSociety, isPending } = api.member.exitSociety.useMutation(
     {
       onSuccess: async () => {
         await utils.society.getUserMemberships.invalidate();
@@ -39,11 +39,11 @@ export default function ExitSociety() {
       <CardFooter>
         <div className="mr-auto" />
         <Button
-          disabled={isLoading}
+          disabled={isPending}
           variant="destructive"
           onClick={() => exitSociety({ societyId })}
         >
-          {isLoading ? <RefreshCcw className="animate-spin" /> : "Exit"}
+          {isPending ? <RefreshCcw className="animate-spin" /> : "Exit"}
         </Button>
       </CardFooter>
     </Card>

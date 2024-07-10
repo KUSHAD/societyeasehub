@@ -13,11 +13,11 @@ export interface MembersProps {
 
 export default function Members({ canAssignRoles, canKick }: MembersProps) {
   const { societyId } = useParams<{ societyId: string }>();
-  const { isLoading, data: members } = api.member.getBySociety.useQuery({
+  const { isPending, data: members } = api.member.getBySociety.useQuery({
     societyId,
   });
 
-  return isLoading ? (
+  return isPending ? (
     <Skeleton className="my-2 h-12 w-full scale-95" count={30} />
   ) : members && members.length !== 0 ? (
     members.map((_member) => (

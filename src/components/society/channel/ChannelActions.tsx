@@ -19,6 +19,7 @@ import {
 import { api } from "~/trpc/react";
 import EditChannel from "./EditChannel";
 import DeleteChannel from "./DeleteChannel";
+import ShowRoles from "./roles/ShowRoles";
 
 export interface ChannelActionsProps {
   channelName: string;
@@ -26,11 +27,11 @@ export interface ChannelActionsProps {
 
 export default function ChannelActions({ channelName }: ChannelActionsProps) {
   const { societyId } = useParams<{ societyId: string }>();
-  const { isLoading, data: canManage } = api.perms.canManageChannels.useQuery({
+  const { isPending, data: canManage } = api.perms.canManageChannels.useQuery({
     societyId,
   });
-  const [modal, setModal] = useState<"EDIT" | "DELETE">("EDIT");
-  return isLoading ? null : canManage ? (
+  const [modal, setModal] = useState<"EDIT" | "DELETE" | "ROLE">("EDIT");
+  return isPending ? null : canManage ? (
     <AlertDialog>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -40,6 +41,11 @@ export default function ChannelActions({ channelName }: ChannelActionsProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Channel Actions</DropdownMenuLabel>
+          <AlertDialogTrigger asChild>
+            <DropdownMenuItem onClick={() => setModal("ROLE")}>
+              Manage Access
+            </DropdownMenuItem>
+          </AlertDialogTrigger>
           <AlertDialogTrigger asChild>
             <DropdownMenuItem onClick={() => setModal("EDIT")}>
               Edit Channel Name
@@ -55,8 +61,10 @@ export default function ChannelActions({ channelName }: ChannelActionsProps) {
       <AlertDialogContent>
         {modal === "EDIT" ? (
           <EditChannel channelName={channelName} />
-        ) : (
+        ) : modal === "DELETE" ? (
           <DeleteChannel />
+        ) : (
+          <ShowRoles />
         )}
       </AlertDialogContent>
     </AlertDialog>

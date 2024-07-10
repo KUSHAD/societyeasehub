@@ -1,5 +1,4 @@
 import "server-only";
-
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "./getCurrentUser";
 import { db } from "~/server/db";
@@ -12,16 +11,13 @@ export async function isSocietyOwner(societyId: string, userId: string) {
   const dbSociety = await db.society.findUnique({
     where: {
       id: societyId,
+      ownerId: userId,
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (!dbSociety) return false;
 
-  if (userId && dbSociety.ownerId === userId) return true;
-
-  if (userId === currentUser.id) return true;
-
-  return false;
+  return true;
 }
 
 export async function canCreateInvites(societyId: string) {
@@ -35,6 +31,10 @@ export async function canCreateInvites(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -45,11 +45,7 @@ export async function canCreateInvites(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
-
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
+  if (dbMemberShip) return true;
 
   return false;
 }
@@ -65,6 +61,10 @@ export async function canAccessSettings(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -75,13 +75,9 @@ export async function canAccessSettings(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canAssignRoles(societyId: string) {
@@ -95,6 +91,10 @@ export async function canAssignRoles(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -105,13 +105,9 @@ export async function canAssignRoles(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canKickMember(societyId: string) {
@@ -125,6 +121,10 @@ export async function canKickMember(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -135,13 +135,9 @@ export async function canKickMember(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canManageChannels(societyId: string) {
@@ -155,6 +151,10 @@ export async function canManageChannels(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -165,13 +165,9 @@ export async function canManageChannels(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canSendMessages(societyId: string) {
@@ -185,6 +181,10 @@ export async function canSendMessages(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -195,13 +195,9 @@ export async function canSendMessages(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canCreateMeetings(societyId: string) {
@@ -215,6 +211,10 @@ export async function canCreateMeetings(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -225,13 +225,9 @@ export async function canCreateMeetings(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canManageRoadmaps(societyId: string) {
@@ -245,6 +241,10 @@ export async function canManageRoadmaps(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -255,13 +255,9 @@ export async function canManageRoadmaps(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canManageAccounts(societyId: string) {
@@ -275,6 +271,10 @@ export async function canManageAccounts(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -285,13 +285,9 @@ export async function canManageAccounts(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canAnnounce(societyId: string) {
@@ -305,6 +301,10 @@ export async function canAnnounce(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -315,13 +315,9 @@ export async function canAnnounce(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canComment(societyId: string) {
@@ -335,6 +331,10 @@ export async function canComment(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -345,13 +345,9 @@ export async function canComment(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canCreatePolls(societyId: string) {
@@ -365,6 +361,10 @@ export async function canCreatePolls(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -375,13 +375,9 @@ export async function canCreatePolls(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }
 
 export async function canVote(societyId: string) {
@@ -395,6 +391,10 @@ export async function canVote(societyId: string) {
     },
   });
 
+  if (!dbSociety) redirect("/dashboard");
+
+  if (dbSociety.ownerId === currentUser.id) return true;
+
   const dbMemberShip = await db.member.findFirst({
     where: {
       societyId,
@@ -405,11 +405,7 @@ export async function canVote(societyId: string) {
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (dbMemberShip) return true;
 
-  if (dbSociety.ownerId === currentUser.id) return true;
-
-  if (!dbMemberShip) return false;
-
-  return true;
+  return false;
 }

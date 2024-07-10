@@ -10,11 +10,11 @@ interface CardDetailsProps {
 
 export default function CardDetails({ cardId }: CardDetailsProps) {
   const { societyId } = useParams<{ societyId: string }>();
-  const { isLoading, data: card } = api.roadmapCard.getById.useQuery({
+  const { isPending, data: card } = api.roadmapCard.getById.useQuery({
     cardId,
     societyId,
   });
-  return isLoading ? (
+  return isPending ? (
     <Skeleton className="my-2 h-[200px] w-full rounded" />
   ) : (
     card && (

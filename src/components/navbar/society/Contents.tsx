@@ -10,12 +10,12 @@ export default function Contents() {
   const { societyId } = useParams<{ societyId: string }>();
   const pathname = usePathname();
 
-  const { data: accessSettings, isLoading: settingsLoading } =
+  const { data: accessSettings, isPending: settingsLoading } =
     api.perms.canAccessSettings.useQuery({
       societyId,
     });
 
-  const { data: accessFinance, isLoading: financeLoading } =
+  const { data: accessFinance, isPending: financeLoading } =
     api.perms.canManageAccounts.useQuery({
       societyId,
     });
@@ -25,7 +25,7 @@ export default function Contents() {
       <Link
         href={`/society/${societyId}/feed`}
         className={cn(
-          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out",
           pathname.includes(`/society/${societyId}/feed`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
@@ -36,7 +36,7 @@ export default function Contents() {
       </Link>
 
       {financeLoading ? (
-        <div className="flex flex-row rounded bg-inherit px-4 py-4 opacity-50 transition-colors ease-in-out ">
+        <div className="flex flex-row rounded bg-inherit px-4 py-4 opacity-50 transition-colors ease-in-out">
           <Coins className="mx-2" />
           <span className="hidden md:block">Finance</span>
         </div>
@@ -44,7 +44,7 @@ export default function Contents() {
         <Link
           href={`/society/${societyId}/finance/overview`}
           className={cn(
-            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out",
             pathname.includes(`/society/${societyId}/finance`)
               ? "border-b-4 border-primary bg-muted"
               : "hover:bg-muted",
@@ -57,7 +57,7 @@ export default function Contents() {
         <Link
           href={`/society/${societyId}/finance`}
           className={cn(
-            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out",
             pathname.includes(`/society/${societyId}/finance`)
               ? "border-b-4 border-primary bg-muted"
               : "hover:bg-muted",
@@ -71,7 +71,7 @@ export default function Contents() {
       <Link
         href={`/society/${societyId}/roadmap`}
         className={cn(
-          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out",
           pathname === `/society/${societyId}/roadmap`
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
@@ -83,7 +83,7 @@ export default function Contents() {
       <Link
         href={`/society/${societyId}/meeting`}
         className={cn(
-          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out",
           pathname.includes(`/society/${societyId}/meeting`)
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
@@ -95,7 +95,7 @@ export default function Contents() {
       <Link
         href={`/society/${societyId}/members`}
         className={cn(
-          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+          "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out",
           pathname === `/society/${societyId}/members`
             ? "border-b-4 border-primary bg-muted"
             : "hover:bg-muted",
@@ -105,7 +105,7 @@ export default function Contents() {
         <span className="hidden md:block">Members</span>
       </Link>
       {settingsLoading ? (
-        <div className="flex flex-row rounded bg-inherit px-4 py-4 opacity-50 transition-colors ease-in-out ">
+        <div className="flex flex-row rounded bg-inherit px-4 py-4 opacity-50 transition-colors ease-in-out">
           <Settings className="mx-2" />
           <span className="hidden md:block">Settings</span>
         </div>
@@ -117,7 +117,7 @@ export default function Contents() {
               : `/society/${societyId}/settings`
           }
           className={cn(
-            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out ",
+            "flex flex-row rounded bg-inherit px-4 py-4 transition-colors ease-in-out",
             pathname.includes(`/society/${societyId}/settings`)
               ? "border-b-4 border-primary bg-muted"
               : "hover:bg-muted",

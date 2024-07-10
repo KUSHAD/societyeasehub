@@ -30,7 +30,7 @@ export default function EditCategorySheet(props: {
 
   const utils = api.useUtils();
 
-  const { mutate: update, isLoading: updating } =
+  const { mutate: update, isPending: updating } =
     api.financeCategories.update.useMutation({
       async onSuccess() {
         await utils.financeCategories.getBySociety.invalidate({
@@ -52,7 +52,7 @@ export default function EditCategorySheet(props: {
       },
     });
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financeCategories.delete.useMutation({
       async onSuccess() {
         await utils.financeCategories.getBySociety.invalidate({
@@ -70,7 +70,7 @@ export default function EditCategorySheet(props: {
       },
     });
 
-  const { data, isLoading: getting } = api.financeCategories.getById.useQuery({
+  const { data, isPending: getting } = api.financeCategories.getById.useQuery({
     categoryId: props.id,
     societyId,
   });

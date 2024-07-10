@@ -19,7 +19,7 @@ interface EditListProps {
 export default function EditList({ title, listId }: EditListProps) {
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
-  const { isLoading, mutate: updateTitle } =
+  const { isPending, mutate: updateTitle } =
     api.roadmapList.updateTitle.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({
@@ -46,9 +46,9 @@ export default function EditList({ title, listId }: EditListProps) {
       }}
     >
       <AlertDialogFooter>
-        <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+        <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
         <AlertDialogAction asChild>
-          <AutoFormSubmit disabled={isLoading}>Rename</AutoFormSubmit>
+          <AutoFormSubmit disabled={isPending}>Rename</AutoFormSubmit>
         </AlertDialogAction>
       </AlertDialogFooter>
     </AutoForm>

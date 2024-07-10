@@ -56,12 +56,12 @@ export default function TransferOwnershipForm() {
 
   const { societyId } = useParams<{ societyId: string }>();
 
-  const { data: members, isLoading: gettingMembers } =
+  const { data: members, isPending: gettingMembers } =
     api.member.getBySocietyWithoutOwner.useQuery({
       societyId,
     });
 
-  const { mutate: transferOwnership, isLoading: isTransferring } =
+  const { mutate: transferOwnership, isPending: isTransferring } =
     api.society.transferOwnership.useMutation({
       onSuccess: async () => {
         await utils.invalidate();

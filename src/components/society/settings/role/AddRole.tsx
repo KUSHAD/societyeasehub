@@ -22,7 +22,7 @@ export default function AddRole() {
   const [open, setOpen] = useState(false);
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
-  const { mutate, isLoading } = api.role.create.useMutation({
+  const { mutate, isPending } = api.role.create.useMutation({
     onSuccess: async () => {
       await utils.role.getBySociety.invalidate();
       setOpen(false);
@@ -105,9 +105,9 @@ export default function AddRole() {
           }}
         >
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Close</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
+              <AutoFormSubmit disabled={isPending}>Create</AutoFormSubmit>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>

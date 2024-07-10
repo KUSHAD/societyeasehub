@@ -26,7 +26,7 @@ export default function AnnouncementInput() {
   const announcementAttachmentStore = useAnnouncementAttachmentStore();
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
-  const { mutate: create, isLoading } = api.announcement.create.useMutation({
+  const { mutate: create, isPending } = api.announcement.create.useMutation({
     async onSuccess() {
       toast({
         title: "Success",
@@ -88,12 +88,12 @@ export default function AnnouncementInput() {
                   <Button
                     variant="secondary"
                     className="mx-2"
-                    disabled={isLoading}
+                    disabled={isPending}
                   >
                     Add Attachments
                   </Button>
                 </DrawerTrigger>
-                <AutoFormSubmit disabled={isLoading}>
+                <AutoFormSubmit disabled={isPending}>
                   Make Announcement
                 </AutoFormSubmit>
               </div>

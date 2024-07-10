@@ -23,11 +23,11 @@ export default function UpdateProfileName({ name }: { name: string }) {
   const [open, setIsOpen] = useState(false);
   const router = useRouter();
 
-  const { isLoading, mutate: updateName } = api.user.updateName.useMutation({
+  const { isPending, mutate: updateName } = api.user.updateName.useMutation({
     onSuccess() {
       toast({
         title: "Success",
-        description: "Profile Picture Updated",
+        description: "Name Updated",
       });
       setIsOpen(false);
       router.refresh();
@@ -64,9 +64,9 @@ export default function UpdateProfileName({ name }: { name: string }) {
           })}
         >
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>Close</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Close</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <AutoFormSubmit disabled={isLoading}>Update Name</AutoFormSubmit>
+              <AutoFormSubmit disabled={isPending}>Update Name</AutoFormSubmit>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>

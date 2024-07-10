@@ -7,10 +7,14 @@ import type {
   User,
 } from "@prisma/client";
 import { type TRPCClientErrorLike } from "@trpc/client";
-import { type BuildProcedure, type inferRouterOutputs } from "@trpc/server";
+import {
+  type inferTRPCClientTypes,
+  type inferRouterOutputs,
+} from "@trpc/server";
 import { type AppRouter } from "~/server/api/root";
 
 export type RouterOutput = inferRouterOutputs<AppRouter>;
+export type BuildProcedure = inferTRPCClientTypes<AppRouter>;
 
 export type SafeUser = Omit<User, "emailVerified">;
 
@@ -62,11 +66,7 @@ export interface PageProps {
   };
 }
 
-type TRPCClientErrorTypeParams = "query" | "mutation" | "subscription";
-
-export type TRPCClientErrorType = TRPCClientErrorLike<
-  BuildProcedure<TRPCClientErrorTypeParams, never, never>
->;
+export type TRPCClientErrorType = TRPCClientErrorLike<BuildProcedure>;
 
 export type SafeChannel = Omit<Channel, "societyId">;
 

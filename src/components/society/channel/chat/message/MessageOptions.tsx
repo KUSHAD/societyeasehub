@@ -27,7 +27,7 @@ export default function MessageOptions({
 
   const utils = api.useUtils();
 
-  const { isLoading: adminDeleting, mutate: adminDelete } =
+  const { isPending: adminDeleting, mutate: adminDelete } =
     api.message.adminDelete.useMutation({
       async onSuccess() {
         await utils.message.getByChannel.invalidate({ channelId });
@@ -38,7 +38,7 @@ export default function MessageOptions({
       },
     });
 
-  const { isLoading: userDeleting, mutate: userDelete } =
+  const { isPending: userDeleting, mutate: userDelete } =
     api.message.userDelete.useMutation({
       async onSuccess() {
         await utils.message.getByChannel.invalidate({ channelId });
@@ -60,7 +60,7 @@ export default function MessageOptions({
           <ChevronDown />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="absolute left-0  top-0">
+      <DropdownMenuContent className="absolute left-0 top-0">
         <DropdownMenuLabel>Options</DropdownMenuLabel>
         <DropdownMenuItem
           disabled={userDeleting || adminDeleting}

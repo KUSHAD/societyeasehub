@@ -39,6 +39,7 @@ Table User {
   polls Poll [not null]
   votes Vote [not null]
   subscriptions UserSubscription [not null]
+  channels Channel [not null]
 }
 
 Table UserSubscription {
@@ -77,6 +78,7 @@ Table Society {
   financeTransactions FinanceTransaction [not null]
   financePayees FinancePayee [not null]
   autoRoles AutoRole [not null]
+  channelAccessRoles ChannelAccessRole [not null]
 }
 
 Table SocietyMedia {
@@ -119,6 +121,7 @@ Table Role {
   society Society [not null]
   members Member [not null]
   autoRole AutoRole [not null]
+  channelAccessRoles ChannelAccessRole [not null]
 }
 
 Table Invite {
@@ -137,8 +140,11 @@ Table Channel {
   id String [pk]
   name String [not null]
   societyId String [not null]
+  creatorId String [not null]
   society Society [not null]
+  createdBy User [not null]
   messages Message [not null]
+  accessedRoles ChannelAccessRole [not null]
 }
 
 Table Message {
@@ -307,6 +313,19 @@ Table AutoRole {
   role Role
 }
 
+Table ChannelAccessRole {
+  societyId String [not null]
+  roleId String [not null]
+  channelId String [not null]
+  society Society [not null]
+  role Role [not null]
+  channel Channel [not null]
+
+  indexes {
+    (societyId, roleId, channelId) [pk]
+  }
+}
+
 Enum INVITE_STATUS {
   PENDING
   ACCEPTED
@@ -347,6 +366,8 @@ Ref: Invite.societyId > Society.id [delete: Cascade]
 Ref: Invite.userId > User.id [delete: Cascade]
 
 Ref: Channel.societyId > Society.id [delete: Cascade]
+
+Ref: Channel.creatorId > User.id [delete: Cascade]
 
 Ref: Message.channelId > Channel.id [delete: Cascade]
 
@@ -400,4 +421,10 @@ Ref: FinancePayee.societyId > Society.id [delete: Cascade]
 
 Ref: AutoRole.societyId > Society.id [delete: Cascade]
 
-Ref: AutoRole.roleId > Role.id [delete: No Action]
+Ref: AutoRole.roleId > Role.id [delete: Cascade]
+
+Ref: ChannelAccessRole.societyId > Society.id [delete: Cascade]
+
+Ref: ChannelAccessRole.roleId > Role.id [delete: Cascade]
+
+Ref: ChannelAccessRole.channelId > Channel.id [delete: Cascade]

@@ -17,7 +17,7 @@ import { PasswordInput } from "../ui/password-input";
 export default function NewSocietyForm() {
   const router = useRouter();
   const utils = api.useUtils();
-  const { isLoading, mutate: create } = api.society.create.useMutation({
+  const { isPending, mutate: create } = api.society.create.useMutation({
     onSuccess: async (data) => {
       await utils.society.getUserMemberships.invalidate();
       router.push(`/society/${data.id}/feed`);
@@ -77,7 +77,7 @@ export default function NewSocietyForm() {
         },
       }}
     >
-      <AutoFormSubmit className="w-full" disabled={isLoading} />
+      <AutoFormSubmit className="w-full" disabled={isPending} />
     </AutoForm>
   );
 }

@@ -3,6 +3,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
+import PusherReactClientProvider from "~/pusher/react";
+
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
@@ -57,6 +59,7 @@ export default async function RootLayout({
         <div className="m-auto w-full">
           <TRPCReactProvider cookies={cookies().toString()}>
             <NextAuthReactProvider>
+              <PusherReactClientProvider>
               <NextSSRPlugin
                 routerConfig={extractRouterConfig(ourFileRouter)}
               />
@@ -65,6 +68,7 @@ export default async function RootLayout({
               <SentryFeedbackWidget />
               <SpeedInsights debug />
               <Analytics />
+              </PusherReactClientProvider>
             </NextAuthReactProvider>
           </TRPCReactProvider>
         </div>

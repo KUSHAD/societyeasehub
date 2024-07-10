@@ -22,7 +22,7 @@ export default function MessageMemberCard({
   societyId,
   userId,
 }: MessageMemberCard) {
-  const { data: isMember, isLoading } = api.member.getDetails.useQuery({
+  const { data: isMember, isPending } = api.member.getDetails.useQuery({
     societyId,
     userId,
   });
@@ -38,7 +38,7 @@ export default function MessageMemberCard({
         </div>
       </HoverCardTrigger>
       <HoverCardContent>
-        {isLoading ? (
+        {isPending ? (
           <div className="flex flex-row">
             <RefreshCw className="animate-spin" />{" "}
             <span className="mx-2">Getting Member Status</span>

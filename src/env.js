@@ -34,6 +34,8 @@ export const env = createEnv({
     STRIPE_API_KEY: z.string(),
     STRIPE_WEBHOOK_SECRET: z.string(),
     STRIPE_PRICE_ID: z.string(),
+    PUSHER_APP_ID: z.string(),
+    PUSHER_SECRET: z.string(),
   },
 
   /**
@@ -44,6 +46,8 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_GETSTREAM_API_KEY: z.string(),
     NEXT_PUBLIC_ABSOLUTE_URL: z.string(),
+    NEXT_PUBLIC_PUSHER_CLUSTER: z.string(),
+    NEXT_PUBLIC_PUSHER_KEY: z.string(),
   },
 
   /**
@@ -67,6 +71,10 @@ export const env = createEnv({
     STRIPE_API_KEY: process.env.STRIPE_API_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
     STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
+    PUSHER_APP_ID: process.env.PUSHER_APP_ID,
+    PUSHER_SECRET: process.env.PUSHER_SECRET,
+    NEXT_PUBLIC_PUSHER_KEY: process.env.NEXT_PUBLIC_PUSHER_KEY,
+    NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
     NEXT_PUBLIC_ABSOLUTE_URL: process.env.NEXT_PUBLIC_ABSOLUTE_URL,
   },
 

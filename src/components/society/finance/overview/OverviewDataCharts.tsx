@@ -15,14 +15,14 @@ export default function OverviewDataCharts() {
 
   const { societyId } = useParams<{ societyId: string }>();
 
-  const { data, isLoading } = api.financeSummary.get.useQuery({
+  const { data, isPending } = api.financeSummary.get.useQuery({
     societyId,
     from: from ?? "",
     accountId: searchParams.get("accountId") ?? "",
     to: to ?? "",
   });
 
-  if (isLoading)
+  if (isPending)
     return (
       <div className="flex flex-col">
         <div className="my-2">

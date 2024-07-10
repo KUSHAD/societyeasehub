@@ -30,14 +30,14 @@ export default function AccountsFilter() {
 
   const { societyId } = useParams<{ societyId: string }>();
 
-  const { isLoading: gettingSummary } = api.financeSummary.get.useQuery({
+  const { isPending: gettingSummary } = api.financeSummary.get.useQuery({
     societyId,
     from,
     to,
     accountId: account,
   });
 
-  const { data, isLoading } = api.financeAccounts.getBySociety.useQuery({
+  const { data, isPending } = api.financeAccounts.getBySociety.useQuery({
     societyId,
   });
 
@@ -65,7 +65,7 @@ export default function AccountsFilter() {
 
   return (
     <Select
-      disabled={isLoading || gettingSummary}
+      disabled={isPending || gettingSummary}
       value={account}
       onValueChange={onChange}
     >

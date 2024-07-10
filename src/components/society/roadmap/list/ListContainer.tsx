@@ -49,7 +49,7 @@ export default function ListContainer({ data }: ListContainerProps) {
     },
   });
 
-  const { isLoading: gettingPerms, data: canManage } =
+  const { isPending: gettingPerms, data: canManage } =
     api.perms.canManageRoadmaps.useQuery({
       societyId,
     });

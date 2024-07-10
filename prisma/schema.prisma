@@ -54,6 +54,7 @@ model User {
     polls                Poll[]
     votes                Vote[]
     subscriptions        UserSubscription[]
+    channels             Channel[]
 }
 
 // App Models
@@ -100,6 +101,7 @@ model Society {
     financeTransactions FinanceTransaction[]
     financePayees       FinancePayee[]
     autoRoles           AutoRole[]
+    channelAccessRoles  ChannelAccessRole[]
 }
 
 model SocietyMedia {
@@ -146,9 +148,10 @@ model Role {
     createdAt      DateTime @default(now()) @ignore
     updatedAt      DateTime @updatedAt @ignore
 
-    society  Society    @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    members  Member[]
-    autoRole AutoRole[]
+    society            Society             @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    members            Member[]
+    autoRole           AutoRole[]
+    channelAccessRoles ChannelAccessRole[]
 }
 
 model Invite {
@@ -174,11 +177,14 @@ model Channel {
     id        String   @id @default(cuid())
     name      String   @db.VarChar(50)
     societyId String
+    creatorId String
     createdAt DateTime @default(now()) @ignore
     updatedAt DateTime @updatedAt @ignore
 
-    society  Society   @relation(fields: [societyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-    messages Message[]
+    society       Society             @relation(fields: [societyId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    createdBy     User                @relation(fields: [creatorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    messages      Message[]
+    accessedRoles ChannelAccessRole[]
 }
 
 model Message {
@@ -398,5 +404,19 @@ model AutoRole {
     updatedAt DateTime @updatedAt @ignore
 
     society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-    role    Role?   @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+    role    Role?   @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model ChannelAccessRole {
+    societyId String
+    roleId    String
+    channelId String
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
+
+    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    role    Role    @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+    @@id([societyId, roleId, channelId], name: "id")
 }

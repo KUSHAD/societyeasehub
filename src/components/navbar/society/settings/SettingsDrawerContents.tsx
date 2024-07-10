@@ -8,7 +8,7 @@ import { api } from "~/trpc/react";
 export default function SettingsDrawerContents() {
   const { societyId } = useParams<{ societyId: string }>();
   const pathname = usePathname();
-  const { data: isOwner, isLoading } = api.perms.isOwner.useQuery({
+  const { data: isOwner, isPending } = api.perms.isOwner.useQuery({
     societyId,
   });
   return (
@@ -39,7 +39,7 @@ export default function SettingsDrawerContents() {
         <UserCog className="mx-2 my-1" />
         Roles
       </Link>
-      {isLoading ? (
+      {isPending ? (
         <Button variant="destructive" disabled>
           <AlertCircle className="mx-2 my-1" />
           Danger

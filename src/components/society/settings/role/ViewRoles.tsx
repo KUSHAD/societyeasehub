@@ -21,7 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "~/components/ui/use-toast";
 
 export default function ViewRoles() {
@@ -30,20 +30,15 @@ export default function ViewRoles() {
 
   const utils = api.useUtils();
 
-  const { isLoading, data: roles } = api.role.getBySociety.useQuery({
+  const { isPending, data: roles } = api.role.getBySociety.useQuery({
     societyId,
   });
 
-  const { isLoading: gettingAutoRole } = api.role.getAutoRole.useQuery(
-    {
-      societyId,
-    },
-    {
-      onSuccess: (data) => setAutoRoleValue(data ?? ""),
-    },
-  );
+  const { isPending: gettingAutoRole, data } = api.role.getAutoRole.useQuery({
+    societyId,
+  });
 
-  const { isLoading: updating, mutate: assign } =
+  const { isPending: updating, mutate: assign } =
     api.role.assignAutoRole.useMutation({
       async onSuccess() {
         await utils.role.getAutoRole.invalidate({ societyId });
@@ -52,7 +47,13 @@ export default function ViewRoles() {
       },
     });
 
-  return isLoading ? (
+  useEffect(() => {
+    if (!gettingAutoRole && data) {
+      setAutoRoleValue(data);
+    }
+  }, [societyId]);
+
+  return isPending ? (
     <Skeleton className="my-2 h-12 w-full" count={10} />
   ) : roles && roles.length !== 0 ? (
     <>

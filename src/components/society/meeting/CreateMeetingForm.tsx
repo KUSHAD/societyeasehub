@@ -21,7 +21,7 @@ import { api } from "~/trpc/react";
 export default function CreateMeetingForm() {
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
-  const { mutate: createMeeting, isLoading } =
+  const { mutate: createMeeting, isPending } =
     api.meetingRoom.create.useMutation({
       onSuccess: async () => {
         await utils.meetingRoom.getBySociety.invalidate({ societyId });
@@ -68,9 +68,9 @@ export default function CreateMeetingForm() {
           }}
         >
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
+              <AutoFormSubmit disabled={isPending}>Create</AutoFormSubmit>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>

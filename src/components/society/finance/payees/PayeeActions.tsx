@@ -25,7 +25,7 @@ export default function PayeeActions({ payeeId }: { payeeId: string }) {
   );
   const utils = api.useUtils();
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financePayee.delete.useMutation({
       async onSuccess() {
         await utils.financePayee.getBySociety.invalidate({

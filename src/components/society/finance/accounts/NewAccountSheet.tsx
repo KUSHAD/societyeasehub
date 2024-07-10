@@ -21,7 +21,7 @@ export default function NewAccountSheet() {
 
   const utils = api.useUtils();
 
-  const { mutate: create, isLoading } = api.financeAccounts.create.useMutation({
+  const { mutate: create, isPending } = api.financeAccounts.create.useMutation({
     async onSuccess() {
       await utils.financeAccounts.getBySociety.invalidate({
         societyId,
@@ -74,7 +74,7 @@ export default function NewAccountSheet() {
             },
           }}
         >
-          <AutoFormSubmit className="w-full" disabled={isLoading}>
+          <AutoFormSubmit className="w-full" disabled={isPending}>
             Create
           </AutoFormSubmit>
         </AutoForm>

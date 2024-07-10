@@ -22,7 +22,7 @@ export default function CreateChannel() {
   const { societyId } = useParams<{ societyId: string }>();
   const utils = api.useUtils();
   const router = useRouter();
-  const { mutate: create, isLoading } = api.channel.create.useMutation({
+  const { mutate: create, isPending } = api.channel.create.useMutation({
     onSuccess: async (data) => {
       await utils.channel.getBySociety.invalidate();
       toast({
@@ -54,9 +54,9 @@ export default function CreateChannel() {
           formSchema={channelSchema}
         >
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <AutoFormSubmit disabled={isLoading}>Create</AutoFormSubmit>
+              <AutoFormSubmit disabled={isPending}>Create</AutoFormSubmit>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AutoForm>

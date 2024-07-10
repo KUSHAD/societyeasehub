@@ -11,9 +11,9 @@ import { api } from "~/trpc/react";
 import NotFound from "../NotFound";
 
 export default function UserMemberships() {
-  const { data: userMemberShips, isLoading } =
+  const { data: userMemberShips, isPending } =
     api.society.getUserMemberships.useQuery();
-  return isLoading ? (
+  return isPending ? (
     <Skeleton height={75} className="my-2" count={10} />
   ) : userMemberShips && userMemberShips.length !== 0 ? (
     <>

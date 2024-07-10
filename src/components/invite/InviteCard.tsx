@@ -20,7 +20,7 @@ interface InviteCardProps {
 export default function InviteCard({ invite: { society } }: InviteCardProps) {
   const utils = api.useUtils();
   const router = useRouter();
-  const { mutate: reject, isLoading: rejecting } =
+  const { mutate: reject, isPending: rejecting } =
     api.invite.reject.useMutation({
       onSuccess: async () => {
         await utils.invite.getPendingCount.invalidate();
@@ -28,7 +28,7 @@ export default function InviteCard({ invite: { society } }: InviteCardProps) {
       },
     });
 
-  const { mutate: accept, isLoading: accepting } =
+  const { mutate: accept, isPending: accepting } =
     api.invite.accept.useMutation({
       onSuccess: async (data) => {
         router.push(`/society/${data.societyId}/feed`);
@@ -41,7 +41,7 @@ export default function InviteCard({ invite: { society } }: InviteCardProps) {
       <div className="px-4 py-2">
         <div className="flex flex-row">
           <strong className="mr-auto">{society.name}</strong>
-          <em className="flex  flex-row">
+          <em className="flex flex-row">
             <PersonIcon className="my-1" /> {society._count.members} Members
           </em>
         </div>

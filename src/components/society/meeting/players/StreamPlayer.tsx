@@ -27,18 +27,15 @@ export default function StreamPlayer() {
 
   const session = useSession();
 
-  api.meetingRoom.checkExpiry.useQuery(
-    {
-      id: meetingId,
-    },
-    {
-      onSuccess(data) {
-        if (data.expired) {
-          window.location.href = `/society/${id}/meeting`;
-        }
-      },
-    },
-  );
+  const { data, isLoading } = api.meetingRoom.checkExpiry.useQuery({
+    id: meetingId,
+  });
+
+  useEffect(() => {
+    if (!isLoading && data?.expired) {
+      window.location.href = `/society/${id}/meeting`;
+    }
+  }, [isLoading, data?.expired]);
 
   const user: User = {
     id: session.data!.user.id,

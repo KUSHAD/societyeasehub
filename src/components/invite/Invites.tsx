@@ -6,9 +6,9 @@ import NotFound from "../NotFound";
 import InviteCard from "./InviteCard";
 
 export default function Invites() {
-  const { data: pendingInvites, isLoading } =
+  const { data: pendingInvites, isPending } =
     api.invite.getUserPending.useQuery(undefined);
-  return isLoading ? (
+  return isPending ? (
     <Skeleton className="my-2 h-[75px] w-full" count={10} />
   ) : pendingInvites && pendingInvites.length !== 0 ? (
     pendingInvites.map((_invite) => (

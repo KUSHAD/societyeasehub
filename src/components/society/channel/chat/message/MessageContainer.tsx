@@ -9,7 +9,7 @@ import MessageBox from "./MessageBox";
 export default function MessageContainer() {
   const { channelId } = useParams<{ channelId: string }>();
 
-  const { data: messages, isLoading } = api.message.getByChannel.useQuery(
+  const { data: messages, isPending } = api.message.getByChannel.useQuery(
     {
       channelId,
     },
@@ -20,7 +20,7 @@ export default function MessageContainer() {
 
   return (
     <div className="flex flex-col px-2">
-      {isLoading ? (
+      {isPending ? (
         <MessageSkeleton />
       ) : messages && messages.length === 0 ? (
         <NotFound

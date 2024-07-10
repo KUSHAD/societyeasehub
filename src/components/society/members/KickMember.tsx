@@ -20,7 +20,7 @@ interface KickMemberProps {
 export default function KickMember({ userId }: KickMemberProps) {
   const utils = api.useUtils();
   const { societyId } = useParams<{ societyId: string }>();
-  const { mutate: kick, isLoading } = api.member.kick.useMutation({
+  const { mutate: kick, isPending } = api.member.kick.useMutation({
     onSuccess: async () => {
       await utils.member.getBySociety.invalidate();
       toast({
@@ -47,11 +47,11 @@ export default function KickMember({ userId }: KickMemberProps) {
               userId,
             })
           }
-          disabled={isLoading}
+          disabled={isPending}
         >
-          {isLoading ? <RefreshCcw className="animate-spin" /> : "Kick"}
+          {isPending ? <RefreshCcw className="animate-spin" /> : "Kick"}
         </Button>
-        <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+        <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
       </AlertDialogFooter>
     </>
   );

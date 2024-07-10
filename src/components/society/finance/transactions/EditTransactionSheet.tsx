@@ -43,7 +43,7 @@ export default function EditTransactionSheet(props: {
 
   const utils = api.useUtils();
 
-  const { mutate: update, isLoading: updating } =
+  const { mutate: update, isPending: updating } =
     api.financeTransaction.update.useMutation({
       async onSuccess() {
         await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
@@ -61,12 +61,12 @@ export default function EditTransactionSheet(props: {
       },
     });
 
-  const { data: payees, isLoading: gettingPayees } =
+  const { data: payees, isPending: gettingPayees } =
     api.financePayee.getBySociety.useQuery({
       societyId,
     });
 
-  const { mutate: createPayee, isLoading: payeeCreating } =
+  const { mutate: createPayee, isPending: payeeCreating } =
     api.financePayee.create.useMutation({
       async onSuccess() {
         await utils.financePayee.getBySociety.invalidate({
@@ -84,7 +84,7 @@ export default function EditTransactionSheet(props: {
       },
     });
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financeTransaction.delete.useMutation({
       async onSuccess() {
         await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
@@ -98,22 +98,22 @@ export default function EditTransactionSheet(props: {
       },
     });
 
-  const { data, isLoading: getting } = api.financeTransaction.getById.useQuery({
+  const { data, isPending: getting } = api.financeTransaction.getById.useQuery({
     societyId,
     transactionId: props.id,
   });
 
-  const { data: categories, isLoading: gettingCategories } =
+  const { data: categories, isPending: gettingCategories } =
     api.financeCategories.getBySociety.useQuery({
       societyId,
     });
 
-  const { data: accounts, isLoading: gettingAccounts } =
+  const { data: accounts, isPending: gettingAccounts } =
     api.financeAccounts.getBySociety.useQuery({
       societyId,
     });
 
-  const { mutate: createAccount, isLoading: accountCreating } =
+  const { mutate: createAccount, isPending: accountCreating } =
     api.financeAccounts.create.useMutation({
       async onSuccess() {
         await utils.financeAccounts.getBySociety.invalidate({
@@ -131,7 +131,7 @@ export default function EditTransactionSheet(props: {
       },
     });
 
-  const { mutate: createCategory, isLoading: categoryCreating } =
+  const { mutate: createCategory, isPending: categoryCreating } =
     api.financeCategories.create.useMutation({
       async onSuccess() {
         await utils.financeCategories.getBySociety.invalidate({

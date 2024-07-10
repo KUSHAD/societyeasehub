@@ -29,7 +29,7 @@ export default function CategoryActions({
   );
   const utils = api.useUtils();
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financeCategories.delete.useMutation({
       async onSuccess() {
         await utils.financeCategories.getBySociety.invalidate({

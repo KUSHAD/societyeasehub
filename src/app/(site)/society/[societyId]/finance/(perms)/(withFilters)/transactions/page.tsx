@@ -20,7 +20,7 @@ export default function Page() {
 
   const searchParams = useSearchParams();
 
-  const { data, isLoading } =
+  const { data, isPending } =
     api.financeTransaction.getBySocietyAndAccounts.useQuery({
       societyId,
       from: searchParams.get("from") ?? "",
@@ -28,7 +28,7 @@ export default function Page() {
       to: searchParams.get("to") ?? "",
     });
 
-  const { mutate: remove, isLoading: deleting } =
+  const { mutate: remove, isPending: deleting } =
     api.financeTransaction.delete.useMutation({
       async onSuccess() {
         await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
@@ -42,7 +42,7 @@ export default function Page() {
       },
     });
 
-  const { isLoading: seeding, mutate: seed } =
+  const { isPending: seeding, mutate: seed } =
     api.financeTransaction.seed.useMutation({
       async onSuccess() {
         await utils.financeTransaction.getBySocietyAndAccounts.invalidate({
@@ -79,7 +79,7 @@ export default function Page() {
         </div>
       </CardHeader>
       <CardContent>
-        {isLoading ? (
+        {isPending ? (
           <Skeleton className="my-2 h-[300px] w-full" />
         ) : (
           data && (

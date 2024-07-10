@@ -34,11 +34,11 @@ export default function ListOptions({ list }: ListOptionsProps) {
 
   const utils = api.useUtils();
   const { societyId } = useParams<{ societyId: string }>();
-  const { isLoading: gettingPerms, data: canManage } =
+  const { isPending: gettingPerms, data: canManage } =
     api.perms.canManageRoadmaps.useQuery({
       societyId,
     });
-  const { isLoading: isDeleting, mutate: deleteList } =
+  const { isPending: isDeleting, mutate: deleteList } =
     api.roadmapList.delete.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({ societyId });
@@ -49,7 +49,7 @@ export default function ListOptions({ list }: ListOptionsProps) {
       },
     });
 
-  const { isLoading: copying, mutate: copyList } =
+  const { isPending: copying, mutate: copyList } =
     api.roadmapList.copy.useMutation({
       async onSuccess() {
         await utils.roadmapList.getBySociety.invalidate({ societyId });
