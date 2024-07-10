@@ -15,19 +15,28 @@ export const channelRouter = createTRPCRouter({
         }),
       ),
     )
-    .mutation(async ({ ctx: { db }, input: { name, societyId } }) => {
-      const canCreate = await canManageChannels(societyId);
-
-      if (!canCreate) throw new TRPCError({ code: "UNAUTHORIZED" });
-      const newChannel = await db.channel.create({
-        data: {
-          name,
-          societyId,
+    .mutation(
+      async ({
+        ctx: {
+          db,
+          session: { user },
         },
-      });
+        input: { name, societyId },
+      }) => {
+        const canCreate = await canManageChannels(societyId);
 
-      return newChannel;
-    }),
+        if (!canCreate) throw new TRPCError({ code: "UNAUTHORIZED" });
+        const newChannel = await db.channel.create({
+          data: {
+            name,
+            societyId,
+            creatorId: user.id,
+          },
+        });
+
+        return newChannel;
+      },
+    ),
   getBySociety: protectedProcedure
     .input(
       z.object({

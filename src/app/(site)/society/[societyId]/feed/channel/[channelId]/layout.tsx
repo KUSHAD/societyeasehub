@@ -1,6 +1,6 @@
 import React from "react";
 import { checkChannelExists } from "~/actions/checkChannelExists";
-import { canSendMessages } from "~/actions/checkUserRole";
+import { canManageChannels, canSendMessages } from "~/actions/checkUserRole";
 import ClientOnly from "~/components/ClientOnly";
 import ChannelTopBar from "~/components/society/channel/ChannelTopBar";
 import ChatInput from "~/components/society/channel/chat/ChatInput";
@@ -15,6 +15,7 @@ export default async function ChannelLayout({
 }) {
   await checkChannelExists(channelId, societyId);
   const canSend = await canSendMessages(societyId);
+  const canManage = await canManageChannels(societyId);
   return (
     <div className="overflow-hidden">
       <ClientOnly>
@@ -24,7 +25,7 @@ export default async function ChannelLayout({
         {children}
       </ScrollArea>
       <div className="m-2">
-        {canSend ? (
+        {canSend || canManage ? (
           <ClientOnly>
             <ChatInput />
           </ClientOnly>

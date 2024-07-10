@@ -19,7 +19,7 @@ import {
 import { api } from "~/trpc/react";
 import EditChannel from "./EditChannel";
 import DeleteChannel from "./DeleteChannel";
-import SocietyRoleCheckBox from "./SocietyRoleCheckBox";
+import ShowRoles from "./roles/ShowRoles";
 
 export interface ChannelActionsProps {
   channelName: string;
@@ -42,6 +42,11 @@ export default function ChannelActions({ channelName }: ChannelActionsProps) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Channel Actions</DropdownMenuLabel>
           <AlertDialogTrigger asChild>
+            <DropdownMenuItem onClick={() => setModal("ROLE")}>
+              Manage Access
+            </DropdownMenuItem>
+          </AlertDialogTrigger>
+          <AlertDialogTrigger asChild>
             <DropdownMenuItem onClick={() => setModal("EDIT")}>
               Edit Channel Name
             </DropdownMenuItem>
@@ -59,7 +64,7 @@ export default function ChannelActions({ channelName }: ChannelActionsProps) {
         ) : modal === "DELETE" ? (
           <DeleteChannel />
         ) : (
-          <SocietyRoleCheckBox />
+          <ShowRoles />
         )}
       </AlertDialogContent>
     </AlertDialog>

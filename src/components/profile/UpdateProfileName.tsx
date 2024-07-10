@@ -27,7 +27,7 @@ export default function UpdateProfileName({ name }: { name: string }) {
     onSuccess() {
       toast({
         title: "Success",
-        description: "Profile Picture Updated",
+        description: "Name Updated",
       });
       setIsOpen(false);
       router.refresh();

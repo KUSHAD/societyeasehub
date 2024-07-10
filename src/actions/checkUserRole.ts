@@ -11,15 +11,13 @@ export async function isSocietyOwner(societyId: string, userId: string) {
   const dbSociety = await db.society.findUnique({
     where: {
       id: societyId,
+      ownerId: userId,
     },
   });
 
-  if (!dbSociety) redirect("/dashboard");
+  if (!dbSociety) return false;
 
-  if (dbSociety.ownerId === userId || dbSociety.ownerId === currentUser.id)
-    return true;
-
-  return false;
+  return true;
 }
 
 export async function canCreateInvites(societyId: string) {
