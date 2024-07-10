@@ -43,19 +43,82 @@ export const channelRouter = createTRPCRouter({
         societyId: z.string().cuid(),
       }),
     )
-    .query(async ({ ctx: { db }, input: { societyId } }) => {
-      const channels = await db.channel.findMany({
+    .query(async ({ ctx: { db, session }, input: { societyId } }) => {
+      const userId = session.user.id;
+
+      // Get the user's role in the society
+      const userMember = await db.member.findUnique({
         where: {
-          societyId,
+          id: {
+            userId,
+            societyId,
+          },
         },
         select: {
-          name: true,
-          id: true,
-        },
-        orderBy: {
-          name: "asc",
+          roleId: true,
         },
       });
+
+      if (!userMember)
+        throw new TRPCError({
+          message: "User is not a member of this society",
+          code: "NOT_FOUND",
+        });
+
+      const { roleId } = userMember;
+
+      // Check if the user is the owner of the society
+      const isOwner = await db.society.findFirst({
+        where: {
+          id: societyId,
+          ownerId: userId,
+        },
+      });
+
+      // Define the channels query
+      let channelsQuery: unknown;
+
+      if (isOwner) {
+        // Owner can see all channels
+        channelsQuery = db.channel.findMany({
+          where: {
+            societyId,
+          },
+          select: {
+            name: true,
+            id: true,
+          },
+          orderBy: {
+            name: "asc",
+          },
+        });
+      } else {
+        // Check if the user is a channel creator or has access based on roles
+        channelsQuery = db.channel.findMany({
+          where: {
+            societyId,
+            OR: [
+              { creatorId: userId },
+              {
+                accessedRoles: {
+                  some: {
+                    roleId: roleId ?? undefined,
+                  },
+                },
+              },
+            ],
+          },
+          select: {
+            name: true,
+            id: true,
+          },
+          orderBy: {
+            name: "asc",
+          },
+        });
+      }
+
+      const channels = await channelsQuery;
 
       return channels;
     }),
