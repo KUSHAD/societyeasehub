@@ -5,9 +5,13 @@ import { Button } from "../ui/button";
 import { CheckCheck, Copy } from "lucide-react";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { toast } from "../ui/use-toast";
+import { useAPIKeyStore } from "~/store/apiKey";
+import { useParams } from "next/navigation";
 
 export default function IntegrateNextjs() {
-  const { apiKey, uri } = useShareModalStore();
+  const { uri } = useShareModalStore();
+  const { societyId } = useParams<{ societyId: string }>();
+  const { getAPIKey } = useAPIKeyStore();
 
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const hasCopiedText = Boolean(copiedText);
@@ -31,7 +35,7 @@ module.exports = {
   async rewrites() {
       return [
         source: '/your-route',
-        destination:'${uri}?apiKey=${apiKey}&res=embed'
+        destination:'${uri}?apiKey=${getAPIKey(societyId)}&res=embed'
       ]
   }
 }`;

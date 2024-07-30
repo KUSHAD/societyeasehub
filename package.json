@@ -69,6 +69,7 @@
     "date-fns": "^2.30.0",
     "embla-carousel-react": "^8.0.0-rc22",
     "fast-check": "^3.17.2",
+    "generate-api-key": "^1.0.2",
     "lodash": "^4.17.21",
     "lucide-react": "^0.295.0",
     "next": "^15.0.0-rc.0",

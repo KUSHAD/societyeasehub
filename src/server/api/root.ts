@@ -20,6 +20,7 @@ import { financeTransactionRouter } from "./routers/finance/financeTransaction";
 import { financePayeeRouter } from "./routers/finance/financePayee";
 import { financeSummaryRouter } from "./routers/finance/financeSummary";
 import { channelAccessRoleRouter } from "./routers/feed/channel/channelAccessRole";
+import { integrationsRouter } from "./routers/settings/integration";
 
 /**
  * This is the primary router for your server.
@@ -48,6 +49,7 @@ export const appRouter = createTRPCRouter({
   financePayee: financePayeeRouter,
   financeSummary: financeSummaryRouter,
   channelAccessRole: channelAccessRoleRouter,
+  integration: integrationsRouter,
 });
 
 // export type definition of API

@@ -73,18 +73,21 @@ model UserSubscription {
 }
 
 model Society {
-    id            String   @id @default(cuid())
-    name          String   @db.VarChar(100)
-    streetAddress String   @db.VarChar(255)
-    addressLine2  String?  @default("") @db.VarChar(150)
-    city          String   @db.VarChar(255)
-    province      String   @db.VarChar(255)
-    zipCode       String   @db.VarChar(15)
-    country       String   @db.VarChar(255)
-    password      String   @db.Text
-    ownerId       String
-    createdAt     DateTime @default(now()) @ignore
-    updatedAt     DateTime @updatedAt @ignore
+    id                     String   @id @default(cuid())
+    name                   String   @db.VarChar(100)
+    streetAddress          String   @db.VarChar(255)
+    addressLine2           String?  @default("") @db.VarChar(150)
+    city                   String   @db.VarChar(255)
+    province               String   @db.VarChar(255)
+    zipCode                String   @db.VarChar(15)
+    country                String   @db.VarChar(255)
+    integrateTransactions  Boolean? @default(false)
+    integrateAnnouncements Boolean? @default(false)
+    integrateRoadmaps      Boolean? @default(false)
+    password               String   @db.Text
+    ownerId                String
+    createdAt              DateTime @default(now()) @ignore
+    updatedAt              DateTime @updatedAt @ignore
 
     owner               User                 @relation(fields: [ownerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
     members             Member[]
@@ -102,6 +105,7 @@ model Society {
     financePayees       FinancePayee[]
     autoRoles           AutoRole[]
     channelAccessRoles  ChannelAccessRole[]
+    integrationAPIKeys  IntegrationAPIKey[]
 }
 
 model SocietyMedia {
@@ -419,4 +423,15 @@ model ChannelAccessRole {
     channel Channel @relation(fields: [channelId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
     @@id([societyId, roleId, channelId], name: "id")
+}
+
+model IntegrationAPIKey {
+    id        String @id @default(cuid())
+    key       String @unique @db.Text
+    societyId String
+
+    createdAt DateTime @default(now()) @ignore
+    updatedAt DateTime @updatedAt @ignore
+
+    society Society @relation(fields: [societyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }

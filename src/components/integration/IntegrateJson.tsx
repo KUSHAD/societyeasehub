@@ -5,15 +5,19 @@ import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 import { CheckCheck, Copy } from "lucide-react";
 import { useCopyToClipboard } from "@uidotdev/usehooks";
+import { useAPIKeyStore } from "~/store/apiKey";
+import { useParams } from "next/navigation";
 
 export default function IntegrateJson() {
-  const { apiKey, uri } = useShareModalStore();
+  const { uri } = useShareModalStore();
+  const { societyId } = useParams<{ societyId: string }>();
+  const { getAPIKey } = useAPIKeyStore();
 
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const hasCopiedText = Boolean(copiedText);
 
   const codeBlock = `function getData() {
-  const res = await fetch('${uri}?apiKey=${apiKey}&res=json')
+  const res = await fetch('${uri}?apiKey=${getAPIKey(societyId)}&res=json')
   const data = await res.json()
   return data
 }`;

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { UserCog, Cog, AlertCircle } from "lucide-react";
+import { UserCog, Cog, AlertCircle, Rocket } from "lucide-react";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 export default function SettingsDrawerContents() {
@@ -40,25 +40,47 @@ export default function SettingsDrawerContents() {
         Roles
       </Link>
       {isPending ? (
-        <Button variant="destructive" disabled>
-          <AlertCircle className="mx-2 my-1" />
-          Danger
-        </Button>
-      ) : (
-        isOwner && (
-          <Link
-            href={`/society/${societyId}/settings/danger`}
-            className={buttonVariants({
-              className: "my-2",
-              variant:
-                pathname === `/society/${societyId}/settings/danger`
-                  ? "destructive"
-                  : "ghost",
-            })}
-          >
+        <>
+          <Button variant="outline" disabled className="my-2">
+            <Rocket className="mx-2 my-1" />
+            Integrations
+          </Button>
+          <Button variant="destructive" disabled>
             <AlertCircle className="mx-2 my-1" />
             Danger
-          </Link>
+          </Button>
+        </>
+      ) : (
+        isOwner && (
+          <>
+            <Link
+              href={`/society/${societyId}/settings/integration`}
+              className={buttonVariants({
+                className: "my-2",
+                variant:
+                  pathname === `/society/${societyId}/settings/integration`
+                    ? "outline"
+                    : "ghost",
+              })}
+            >
+              <Rocket className="mx-2 my-1" />
+              Integrations
+            </Link>
+
+            <Link
+              href={`/society/${societyId}/settings/danger`}
+              className={buttonVariants({
+                className: "my-2",
+                variant:
+                  pathname === `/society/${societyId}/settings/danger`
+                    ? "destructive"
+                    : "ghost",
+              })}
+            >
+              <AlertCircle className="mx-2 my-1" />
+              Danger
+            </Link>
+          </>
         )
       )}
     </>

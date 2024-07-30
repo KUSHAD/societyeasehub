@@ -5,16 +5,20 @@ import { useShareModalStore } from "~/store/shareModal";
 import { toast } from "../ui/use-toast";
 import { Button } from "../ui/button";
 import { CheckCheck, Copy } from "lucide-react";
+import { useAPIKeyStore } from "~/store/apiKey";
+import { useParams } from "next/navigation";
 
 export default function IntegrateEmbed() {
-  const { apiKey, uri } = useShareModalStore();
+  const { societyId } = useParams<{ societyId: string }>();
+  const { uri } = useShareModalStore();
+  const { getAPIKey } = useAPIKeyStore();
 
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const hasCopiedText = Boolean(copiedText);
 
   const codeBlock = `<iframe
   className="w-full h-screen"
-  src="${uri}?apiKey=${apiKey}&res=embed"
+  src="${uri}?apiKey=${getAPIKey(societyId)}&res=embed"
 >`;
 
   return (
