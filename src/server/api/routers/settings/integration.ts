@@ -29,7 +29,6 @@ export const integrationsRouter = createTRPCRouter({
         },
         select: {
           key: true,
-          id: true,
         },
       });
 
@@ -52,7 +51,6 @@ export const integrationsRouter = createTRPCRouter({
         },
         select: {
           key: true,
-          id: true,
         },
       });
 
@@ -145,7 +143,6 @@ export const integrationsRouter = createTRPCRouter({
           },
           select: {
             key: true,
-            societyId: true,
           },
         });
 
