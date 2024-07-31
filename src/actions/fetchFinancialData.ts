@@ -14,7 +14,7 @@ export async function fetchFinancialData(
   let baseQuery = Prisma.sql`
   SELECT 
     SUM(CASE WHEN t.amount >= 0 THEN t.amount ELSE 0 END) AS income,
-    SUM(CASE WHEN t.amount < 0 THEN t.amount ELSE 0 END) AS expense,
+    SUM(CASE WHEN t.amount < 0 THEN ABS(t."amount") ELSE 0 END) AS expense,
     SUM(t.amount) AS remaining
   FROM
     "FinanceTransaction" t

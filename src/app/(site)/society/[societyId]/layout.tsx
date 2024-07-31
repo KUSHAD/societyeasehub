@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import React from "react";
 import { checkIsSocietyMember } from "~/actions/checkIsSocietyMember";
 import ClientOnly from "~/components/ClientOnly";
+import ShareModal from "~/components/ShareModal";
 import SocietyTabs from "~/components/navbar/society";
 import BackBar from "~/components/navbar/society/BackBar";
 
@@ -24,6 +25,9 @@ export default async function SocietyLayout({
       <div className="my-2">
         <SocietyTabs />
       </div>
+      <ClientOnly>
+        <ShareModal />
+      </ClientOnly>
       {children}
     </div>
   );

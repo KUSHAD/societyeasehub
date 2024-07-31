@@ -61,6 +61,9 @@ Table Society {
   province String [not null]
   zipCode String [not null]
   country String [not null]
+  integrateTransactions Boolean [default: false]
+  integrateAnnouncements Boolean [default: false]
+  integrateRoadmaps Boolean [default: false]
   password String [not null]
   ownerId String [not null]
   owner User [not null]
@@ -79,6 +82,7 @@ Table Society {
   financePayees FinancePayee [not null]
   autoRoles AutoRole [not null]
   channelAccessRoles ChannelAccessRole [not null]
+  integrationAPIKeys IntegrationAPIKey [not null]
 }
 
 Table SocietyMedia {
@@ -212,7 +216,7 @@ Table AnnouncementAttachments {
   uri String [unique, not null]
   name String [not null]
   announcementId String [not null]
-  transaction Announcement [not null]
+  announcement Announcement [not null]
 }
 
 Table AnnouncementComment {
@@ -326,6 +330,13 @@ Table ChannelAccessRole {
   }
 }
 
+Table IntegrationAPIKey {
+  id String [pk]
+  key String [unique, not null]
+  societyId String [not null]
+  society Society [not null]
+}
+
 Enum INVITE_STATUS {
   PENDING
   ACCEPTED
@@ -428,3 +439,5 @@ Ref: ChannelAccessRole.societyId > Society.id [delete: Cascade]
 Ref: ChannelAccessRole.roleId > Role.id [delete: Cascade]
 
 Ref: ChannelAccessRole.channelId > Channel.id [delete: Cascade]
+
+Ref: IntegrationAPIKey.societyId > Society.id [delete: Cascade]
