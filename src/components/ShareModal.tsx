@@ -14,6 +14,7 @@ import IntegrateJson from "./integration/IntegrateJson";
 import IntegrateEmbed from "./integration/IntegrateEmbed";
 import IntegrateNextjs from "./integration/IntegrateNextjs";
 import { useShareModalStore } from "~/store/shareModal";
+import APIKeyChooser from "./society/settings/integration/APIKeyChooser";
 
 export default function ShareModal() {
   const { isOpen, onClose } = useShareModalStore();
@@ -26,7 +27,8 @@ export default function ShareModal() {
             Choose your favorite integration method
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <Tabs defaultValue="embed" className="w-full">
+        <APIKeyChooser isModal />
+        <Tabs defaultValue="embed" className="w-fit">
           <TabsList className="w-full">
             <TabsTrigger value="embed">Embed</TabsTrigger>
             <TabsTrigger value="json">JSON - Data</TabsTrigger>

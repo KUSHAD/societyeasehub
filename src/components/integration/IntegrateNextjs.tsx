@@ -41,7 +41,7 @@ module.exports = {
 }`;
   return (
     <>
-      <div className="my-2 flex flex-row">
+      <div className="my-2 flex w-fit flex-row">
         <div className="mr-auto">
           <strong>Copy Code</strong>
         </div>

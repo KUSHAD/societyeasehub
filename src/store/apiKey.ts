@@ -18,8 +18,13 @@ export const useAPIKeyStore = create<APIKeyStore>()(
       (set, get) => ({
         apiKeys: [],
         setAPIKey: (key, societyId) => {
-          set((state) => ({
-            apiKeys: [...state.apiKeys, { key, societyId }],
+          const allKeys = get().apiKeys;
+
+          const requiredKey = allKeys.filter(
+            (_key) => _key.societyId !== societyId,
+          );
+          set(() => ({
+            apiKeys: [...requiredKey, { key, societyId }],
           }));
         },
         getAPIKey: (societyId) => {

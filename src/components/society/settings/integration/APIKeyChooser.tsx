@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -20,10 +21,13 @@ import {
 } from "~/components/ui/select";
 import { Skeleton } from "~/components/ui/skeleton";
 import { toast } from "~/components/ui/use-toast";
+import { cn } from "~/lib/utils";
 import { useAPIKeyStore } from "~/store/apiKey";
 import { api } from "~/trpc/react";
 
-export default function APIKeyChooser() {
+export default function APIKeyChooser(
+  props: { isModal?: boolean } = { isModal: false },
+) {
   const { societyId } = useParams<{ societyId: string }>();
   const { setAPIKey, getAPIKey } = useAPIKeyStore();
 
@@ -50,9 +54,12 @@ export default function APIKeyChooser() {
     });
 
   return (
-    <Card>
+    <Card className={cn(props.isModal ? "w-fit" : "w-full")}>
       <CardHeader>
         <CardTitle>API Keys</CardTitle>
+        <CardDescription>
+          API Keys allow you to restrict and protect your integrations
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {isPending ? (

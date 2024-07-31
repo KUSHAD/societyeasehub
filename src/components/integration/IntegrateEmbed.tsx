@@ -23,7 +23,7 @@ export default function IntegrateEmbed() {
 
   return (
     <>
-      <div className="my-2 flex flex-row">
+      <div className="my-2 flex w-fit flex-row">
         <div className="mr-auto">
           <strong>Copy Code</strong>
         </div>
@@ -43,7 +43,7 @@ export default function IntegrateEmbed() {
           {hasCopiedText ? <CheckCheck /> : <Copy />}
         </Button>
       </div>
-      <pre className="w-full overflow-auto rounded bg-primary text-white">
+      <pre className="w-fit overflow-auto rounded bg-primary text-white">
         <div className="p-2">
           <code>{codeBlock}</code>
         </div>
