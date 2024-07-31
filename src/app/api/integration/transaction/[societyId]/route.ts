@@ -3,6 +3,8 @@ import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { fetchFinancialData } from "~/actions/fetchFinancialData";
 import { db } from "~/server/db";
+import { ratelimit } from "~/server/rateLimiter";
+import { waitUntil } from "@vercel/functions";
 
 const schema = z.object({
   societyId: z.string().cuid(),
@@ -16,6 +18,19 @@ export async function GET(
   }: { params: { societyId: string } },
 ) {
   try {
+    const { success, pending } = await ratelimit.limit(_unsafeSocietyId);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    waitUntil(pending);
+
+    if (!success)
+      return Response.json(
+        {
+          message: `Too many requests`,
+        },
+        { status: 429 },
+      );
+
     const searchParams = request.nextUrl.searchParams;
     const _unsafeAPIKey = searchParams.get("apiKey");
 

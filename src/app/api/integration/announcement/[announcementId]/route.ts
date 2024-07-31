@@ -1,6 +1,8 @@
+import { waitUntil } from "@vercel/functions";
 import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { db } from "~/server/db";
+import { ratelimit } from "~/server/rateLimiter";
 
 const schema = z.object({
   announcementId: z.string().cuid(),
@@ -14,6 +16,18 @@ export async function GET(
   }: { params: { announcementId: string } },
 ) {
   try {
+    const { success, pending } = await ratelimit.limit(_unsafeAnnouncementId);
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    waitUntil(pending);
+
+    if (!success)
+      return Response.json(
+        {
+          message: `Too many requests`,
+        },
+        { status: 429 },
+      );
     const searchParams = request.nextUrl.searchParams;
     const _unsafeAPIKey = searchParams.get("apiKey");
 
