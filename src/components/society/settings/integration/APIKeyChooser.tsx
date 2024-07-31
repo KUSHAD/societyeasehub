@@ -46,6 +46,8 @@ export default function APIKeyChooser(
 
         await utils.integration.getAPIKeys.invalidate({ societyId });
 
+        setSelectedKey(data.key);
+
         toast({
           title: "Message",
           description: "Created New API Key",

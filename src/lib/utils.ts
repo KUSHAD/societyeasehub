@@ -60,6 +60,7 @@ export const pricingFeatures = [
   "Broadcast Announcements with Ease",
   "Conduct Engaging and Interactive Polls",
   "Utilize Dynamic Channel-Based Chat",
+  "Unlimited Integrations",
 ];
 
 export const homeFeatures: HomeFeature[] = [
@@ -117,6 +118,11 @@ export const homeFeatures: HomeFeature[] = [
     title: "Dynamic Channel-Based Chat",
     description:
       "Facilitate organized and vibrant communication with our dynamic channel-based chat, enhancing member interaction.",
+  },
+  {
+    title: "Integrations",
+    description:
+      "Integrate your announcements, roadmaps and transactions overview with our easy to use JSON API.",
   },
 ];
 

@@ -275,7 +275,7 @@ model AnnouncementAttachments {
     createdAt      DateTime @default(now()) @ignore
     updatedAt      DateTime @updatedAt @ignore
 
-    transaction Announcement @relation(fields: [announcementId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+    announcement Announcement @relation(fields: [announcementId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 }
 
 model AnnouncementComment {

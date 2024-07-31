@@ -24,6 +24,8 @@ import { api } from "~/trpc/react";
 import CardForm from "../card/CardForm";
 import { useState } from "react";
 import EditList from "./EditList";
+import { useShareModalStore } from "~/store/shareModal";
+import { absoluteUrl } from "~/lib/utils";
 
 interface ListOptionsProps {
   list: RoadmapList;
@@ -34,6 +36,7 @@ export default function ListOptions({ list }: ListOptionsProps) {
 
   const utils = api.useUtils();
   const { societyId } = useParams<{ societyId: string }>();
+  const { onOpen } = useShareModalStore();
   const { isPending: gettingPerms, data: canManage } =
     api.perms.canManageRoadmaps.useQuery({
       societyId,
@@ -96,6 +99,15 @@ export default function ListOptions({ list }: ListOptionsProps) {
             disabled={isDeleting || copying}
           >
             Copy this List
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() =>
+              onOpen(absoluteUrl(`/api/integration/roadmap/${list.id}`))
+            }
+            disabled={isDeleting || copying}
+          >
+            Integrate List
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem

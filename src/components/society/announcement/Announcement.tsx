@@ -30,6 +30,8 @@ import {
 import { format } from "date-fns";
 import { toast } from "~/components/ui/use-toast";
 import { useIntersectionObserver } from "@uidotdev/usehooks";
+import { useShareModalStore } from "~/store/shareModal";
+import { absoluteUrl } from "~/lib/utils";
 
 interface AnnouncementProps {
   announcement: AnnouncementsOutput;
@@ -41,6 +43,8 @@ export default function Announcement({ announcement }: AnnouncementProps) {
     societyId,
   });
   const utils = api.useUtils();
+
+  const { onOpen } = useShareModalStore();
 
   const { isPending: deleting, mutate: deleteAnnouncement } =
     api.announcement.delete.useMutation({
@@ -100,6 +104,16 @@ export default function Announcement({ announcement }: AnnouncementProps) {
                     }
                   >
                     Delete
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      onOpen(
+                        `${absoluteUrl(`/api/integration/announcement/${announcement.id}`)}`,
+                      )
+                    }
+                    disabled={deleting}
+                  >
+                    Integrate
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

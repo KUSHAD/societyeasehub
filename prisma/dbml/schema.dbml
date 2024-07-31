@@ -216,7 +216,7 @@ Table AnnouncementAttachments {
   uri String [unique, not null]
   name String [not null]
   announcementId String [not null]
-  transaction Announcement [not null]
+  announcement Announcement [not null]
 }
 
 Table AnnouncementComment {
