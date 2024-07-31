@@ -331,8 +331,7 @@ Table ChannelAccessRole {
 }
 
 Table IntegrationAPIKey {
-  id String [pk]
-  key String [unique, not null]
+  key String [pk]
   societyId String [not null]
   society Society [not null]
 }
