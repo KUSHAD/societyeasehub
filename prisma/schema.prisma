@@ -426,8 +426,7 @@ model ChannelAccessRole {
 }
 
 model IntegrationAPIKey {
-    id        String @id @default(cuid())
-    key       String @unique @db.Text
+    key       String @id @db.Text
     societyId String
 
     createdAt DateTime @default(now()) @ignore
