@@ -125,4 +125,31 @@ export const integrationsRouter = createTRPCRouter({
         return data;
       },
     ),
+  revokeAPIKey: protectedProcedure
+    .input(
+      z.object({
+        apiKey: z.string(),
+        societyId: z.string().cuid(),
+      }),
+    )
+    .mutation(
+      async ({ ctx: { db, session }, input: { societyId, apiKey } }) => {
+        const isOwner = await isSocietyOwner(societyId, session.user.id);
+
+        if (!isOwner) throw new TRPCError({ code: "FORBIDDEN" });
+
+        const data = await db.integrationAPIKey.delete({
+          where: {
+            societyId,
+            key: apiKey,
+          },
+          select: {
+            key: true,
+            societyId: true,
+          },
+        });
+
+        return data;
+      },
+    ),
 });
