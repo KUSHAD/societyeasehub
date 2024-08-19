@@ -39,6 +39,10 @@ export default function APIKeyChooser(
     societyId,
   });
 
+  const { data: owner, isPending: gettingPerms } = api.perms.isOwner.useQuery({
+    societyId,
+  });
+
   const { mutate: create, isPending: creating } =
     api.integration.createAPIKey.useMutation({
       async onSuccess(data) {
@@ -90,18 +94,24 @@ export default function APIKeyChooser(
       </CardContent>
       <CardFooter className="flx-row flex">
         <div className="mr-auto" />
-        <Button
-          onClick={() => {
-            create({
-              societyId,
-            });
-          }}
-          className="mx-2"
-          disabled={creating || isPending}
-          variant="outline"
-        >
-          Generate New API Key
-        </Button>
+        {gettingPerms ? (
+          <Skeleton className="h-10 w-40" />
+        ) : (
+          owner && (
+            <Button
+              onClick={() => {
+                create({
+                  societyId,
+                });
+              }}
+              className="mx-2"
+              disabled={creating || isPending}
+              variant="outline"
+            >
+              Generate New API Key
+            </Button>
+          )
+        )}
         <Button
           onClick={() => {
             setAPIKey(selectedKey, societyId);

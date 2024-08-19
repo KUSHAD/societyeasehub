@@ -20,7 +20,6 @@ export async function GET(
   try {
     const { success, pending } = await ratelimit.limit(_unsafeSocietyId);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     waitUntil(pending);
 
     if (!success)
