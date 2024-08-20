@@ -2,7 +2,9 @@ import { createSafeActionClient } from "next-safe-action";
 import { getCurrentUser } from "~/actions/getCurrentUser";
 import { getUserSubscription } from "~/actions/subscription";
 
-export const safeAction = createSafeActionClient({
+export const publicSafeAction = createSafeActionClient({});
+
+export const authSafeAction = createSafeActionClient({
   middleware: async () => {
     const currentUser = await getCurrentUser();
 
@@ -17,5 +19,3 @@ export const safeAction = createSafeActionClient({
     };
   },
 });
-
-export const publicSafeAction = createSafeActionClient({});

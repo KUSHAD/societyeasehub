@@ -1,14 +1,14 @@
 "use server";
 
 import { z } from "zod";
-import { safeAction } from "~/lib/safe-action";
+import { authSafeAction } from "~/lib/safe-action";
 import { utapi } from "~/server/storage";
 
-export const deleteDraftAttachment = safeAction(
+export const deleteDraftAttachment = authSafeAction(
   z.object({
     uri: z.string().url(),
   }),
-  async ({ uri }) => {
+  async ({ uri }: { uri: string }) => {
     try {
       const fileKey = uri.split("/f/")[1]!;
       await utapi.deleteFiles(fileKey);
