@@ -161,7 +161,7 @@ export async function GET(
           payeeAddress: transaction.payee.address ?? "Not Provided",
           notes: transaction.notes,
         };
-        acc[accountName]!.push(formattedTransaction);
+        acc[accountName].push(formattedTransaction);
         return acc;
       },
       {} as Record<string, Transaction[]>,
