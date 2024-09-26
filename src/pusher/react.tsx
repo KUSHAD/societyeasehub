@@ -2,6 +2,7 @@
 
 import type PusherJs from "pusher-js";
 import { createContext, useEffect, type ReactNode } from "react";
+import { subToChanges } from "~/actions/server-updates";
 import { pusher } from "~/lib/pusher";
 import { api } from "~/trpc/react";
 
@@ -23,6 +24,7 @@ export default function PusherReactClientProvider({
       .subscribe("private-subs")
       .bind("mutation-event", async () => {
         await utils.invalidate();
+        await subToChanges()
       });
 
     return () => {

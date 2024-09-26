@@ -10,6 +10,7 @@ import {
   canSendMessages,
 } from "~/actions/checkUserRole";
 import { getUserSubscription } from "~/actions/subscription";
+import { pusher } from "./pusher";
 
 const f = createUploadthing({
   errorFormatter: (err) => {
@@ -56,6 +57,8 @@ export const ourFileRouter = {
         await utapi.deleteFiles(imageKey);
       }
       revalidatePath("/profile", "page");
+
+      await pusher.trigger("private-subs", "mutation-event",{message:"Profile image updated"});
 
       return {
         profileURL: updatedUserImage.image!,
@@ -121,6 +124,10 @@ export const ourFileRouter = {
         },
       });
       revalidatePath(`/society/${metadata.societyId}/settings/general`, "page");
+
+      await pusher.trigger("private-subs", "mutation-event",{message:"Society Media Uploaded""});
+
+      
       return { id: newMedia.id, uri: newMedia.uri };
     }),
   messageAttachments: f({
@@ -153,6 +160,9 @@ export const ourFileRouter = {
       return {};
     })
     .onUploadComplete(({ file }) => {
+
+      
+      
       return file;
     }),
   announcementAttachments: f({
