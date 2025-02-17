@@ -6,13 +6,18 @@ import ShareModal from "~/components/ShareModal";
 import SocietyTabs from "~/components/navbar/society";
 import BackBar from "~/components/navbar/society/BackBar";
 
-export default async function SocietyLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { societyId: string };
-}) {
+export default async function SocietyLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ societyId: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const societyExists = await checkIsSocietyMember(params.societyId);
 
   if (!societyExists) redirect("/dashboard");

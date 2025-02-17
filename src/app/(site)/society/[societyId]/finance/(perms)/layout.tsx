@@ -6,13 +6,22 @@ import FinanceDrawer from "~/components/navbar/society/finance/FinanceDrawer";
 import FinanceMobileNav from "~/components/navbar/society/finance/FinanceMobileNav";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
-export default async function FinancePermsLayout({
-  children,
-  params: { societyId },
-}: {
-  children: ReactNode;
-  params: { societyId: string };
-}) {
+export default async function FinancePermsLayout(
+  props: {
+    children: ReactNode;
+    params: Promise<{ societyId: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    societyId
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const canManage = await canManageAccounts(societyId);
 
   if (!canManage) redirect(`/society/${societyId}/finance`);

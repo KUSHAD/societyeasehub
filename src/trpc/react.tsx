@@ -1,71 +1,45 @@
 "use client";
 
-import {
-  isServer,
-  QueryCache,
-  QueryClient,
-  QueryClientProvider,
-  MutationCache,
-} from "@tanstack/react-query";
+import { QueryClientProvider, type QueryClient } from "@tanstack/react-query";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
-import { useState } from "react";
-
-import { type AppRouter } from "~/server/api/root";
-import { getUrl, transformer } from "./shared";
-import { toast } from "~/components/ui/use-toast";
+import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
+import React, { useState } from "react";
+import SuperJSON from "superjson";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-function makeQueryClient() {
-  return new QueryClient({
-    defaultOptions: {
-      queries: {
-        retry: (failureCount) => failureCount <= 3,
-        retryDelay: 500,
-        notifyOnChangeProps: "all",
-        networkMode: "online",
-      },
-      mutations: {
-        retry: (failureCount) => failureCount <= 3,
-        retryDelay: 500,
-        networkMode: "online",
-      },
-    },
-    queryCache: new QueryCache({}),
-    mutationCache: new MutationCache({
-      onError(error) {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      },
-    }),
-  });
-}
+import { type AppRouter } from "~/server/api/root";
+import { createQueryClient } from "./query-client";
 
-let browserQueryClient: QueryClient | undefined = undefined;
-
-function getQueryClient() {
-  if (isServer) {
+let clientQueryClientSingleton: QueryClient | undefined = undefined;
+const getQueryClient = () => {
+  if (typeof window === "undefined") {
     // Server: always make a new query client
-    return makeQueryClient();
-  } else {
-    // Browser: make a new query client if we don't already have one
-    // This is very important, so we don't re-make a new client if React
-    // suspends during the initial render. This may not be needed if we
-    // have a suspense boundary BELOW the creation of the query client
-    if (!browserQueryClient) browserQueryClient = makeQueryClient();
-    return browserQueryClient;
+    return createQueryClient();
   }
-}
+  // Browser: use singleton pattern to keep the same query client
+  return (clientQueryClientSingleton ??= createQueryClient());
+};
 
 export const api = createTRPCReact<AppRouter>();
 
-export function TRPCReactProvider(props: {
-  children: React.ReactNode;
-  cookies: string;
-}) {
+/**
+ * Inference helper for inputs.
+ *
+ * @example type HelloInput = RouterInputs['example']['hello']
+ */
+export type RouterInputs = inferRouterInputs<AppRouter>;
+
+/**
+ * Inference helper for outputs.
+ *
+ * @example type HelloOutput = RouterOutputs['example']['hello']
+ */
+export type RouterOutputs = inferRouterOutputs<AppRouter>;
+
+export function TRPCReactProvider(props: { children: React.ReactNode }) {
+  const queryClient = getQueryClient();
+
   const [trpcClient] = useState(() =>
     api.createClient({
       links: [
@@ -75,33 +49,30 @@ export function TRPCReactProvider(props: {
             (op.direction === "down" && op.result instanceof Error),
         }),
         unstable_httpBatchStreamLink({
-          transformer,
-          url: getUrl(),
-          headers() {
-            return {
-              cookie: props.cookies,
-              "x-trpc-source": "react",
-            };
+          transformer: SuperJSON,
+          url: getBaseUrl() + "/api/trpc",
+          headers: () => {
+            const headers = new Headers();
+            headers.set("x-trpc-source", "nextjs-react");
+            return headers;
           },
         }),
       ],
     }),
   );
 
-  const queryClient = getQueryClient();
-
   return (
     <QueryClientProvider client={queryClient}>
       <api.Provider client={trpcClient} queryClient={queryClient}>
         {props.children}
-        {process.env.NODE_ENV === "development" && (
-          <ReactQueryDevtools
-            initialIsOpen
-            buttonPosition="bottom-left"
-            position="left"
-          />
-        )}
+        <ReactQueryDevtools initialIsOpen={false} position="right" />
       </api.Provider>
     </QueryClientProvider>
   );
+}
+
+function getBaseUrl() {
+  if (typeof window !== "undefined") return window.location.origin;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return `http://localhost:${process.env.PORT ?? 3000}`;
 }

@@ -6,7 +6,13 @@ import DeleteSocietyCard from "~/components/society/settings/danger/DeleteSociet
 import TransferOwnershipCard from "~/components/society/settings/danger/TransferOwnershipCard";
 import { type PageProps } from "~/lib/types";
 
-export default async function Page({ params: { societyId } }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    societyId
+  } = params;
+
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect("/api/auth/signin");
 

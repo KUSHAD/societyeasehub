@@ -4,7 +4,13 @@ import AnnouncementContainer from "~/components/society/announcement/Announcemen
 import AnnouncementInput from "~/components/society/announcement/AnnouncementInput";
 import { type PageProps } from "~/lib/types";
 
-export default async function Page({ params: { societyId } }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    societyId
+  } = params;
+
   const canAccess = await canAnnounce(societyId);
   return (
     <>

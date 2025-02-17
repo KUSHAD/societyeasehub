@@ -14,7 +14,7 @@ import { ZodError } from "zod";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { pusher } from "../pusher";
-import { getUserSubscription } from "~/actions/subscription";
+// import { getUserSubscription } from "~/actions/subscription";
 
 /**
  * 1. CONTEXT
@@ -75,6 +75,13 @@ export const t = initTRPC.context<typeof createTRPCContext>().create({
 export const createTRPCRouter = t.router;
 
 /**
+ * Create a server-side caller.
+ *
+ * @see https://trpc.io/docs/server/server-side-calls
+ */
+export const createCallerFactory = t.createCallerFactory;
+
+/**
  * Public (unauthenticated) procedure
  *
  * This is the base piece you use to build new queries and mutations on your tRPC API. It does not
@@ -85,9 +92,13 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
-  const subscription = await getUserSubscription();
+  // const subscription = await getUserSubscription();
 
-  if (!ctx.session?.user || !subscription || !subscription.isActive)
+  if (
+    !ctx.session?.user
+
+    // || !subscription || !subscription.isActive
+  )
     throw new TRPCError({ code: "UNAUTHORIZED" });
 
   return next({

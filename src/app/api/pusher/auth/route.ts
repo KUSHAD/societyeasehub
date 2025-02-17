@@ -1,5 +1,5 @@
 import { getCurrentUser } from "~/actions/getCurrentUser";
-import { getUserSubscription } from "~/actions/subscription";
+// import { getUserSubscription } from "~/actions/subscription";
 import { pusher } from "~/server/pusher";
 
 export async function POST(req: Request) {
@@ -12,9 +12,12 @@ export async function POST(req: Request) {
   // logic to check user permissions
 
   const currentUser = await getCurrentUser();
-  const userSubscription = await getUserSubscription();
+  // const userSubscription = await getUserSubscription();
 
-  if (!currentUser || !userSubscription)
+  if (
+    !currentUser
+    // || !userSubscription
+  )
     return new Response(JSON.stringify({ message: "Unauthorized" }), {
       status: 403,
     });

@@ -5,7 +5,13 @@ import AddRole from "~/components/society/settings/role/AddRole";
 import ViewRoles from "~/components/society/settings/role/ViewRoles";
 import { type PageProps } from "~/lib/types";
 
-export default async function Page({ params: { societyId } }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    societyId
+  } = params;
+
   const canAccess = await canAccessSettings(societyId);
 
   if (!canAccess) redirect(`/society/${societyId}/settings`);

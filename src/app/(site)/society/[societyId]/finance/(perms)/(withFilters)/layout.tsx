@@ -4,13 +4,22 @@ import { canManageAccounts } from "~/actions/checkUserRole";
 import ClientOnly from "~/components/ClientOnly";
 import FinanceFilters from "~/components/society/finance/overview/filters/FinanceFilters";
 
-export default async function FinanceWithFiltersLayout({
-  children,
-  params: { societyId },
-}: {
-  children: ReactNode;
-  params: { societyId: string };
-}) {
+export default async function FinanceWithFiltersLayout(
+  props: {
+    children: ReactNode;
+    params: Promise<{ societyId: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    societyId
+  } = params;
+
+  const {
+    children
+  } = props;
+
   const canManage = await canManageAccounts(societyId);
 
   if (!canManage) redirect(`/society/${societyId}/finance`);

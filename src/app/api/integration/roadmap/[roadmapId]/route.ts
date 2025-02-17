@@ -9,12 +9,13 @@ const schema = z.object({
   apiKey: z.string().cuid(),
 });
 
-export async function GET(
-  request: NextRequest,
-  {
-    params: { roadmapId: _unsafeRoadmapId },
-  }: { params: { roadmapId: string } },
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ roadmapId: string }> }) {
+  const params = await props.params;
+
+  const {
+    roadmapId: _unsafeRoadmapId
+  } = params;
+
   try {
     const { success, pending } = await ratelimit.limit(_unsafeRoadmapId);
 

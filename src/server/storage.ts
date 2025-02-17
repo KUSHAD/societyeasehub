@@ -9,7 +9,7 @@ import {
   canAnnounce,
   canSendMessages,
 } from "~/actions/checkUserRole";
-import { getUserSubscription } from "~/actions/subscription";
+// import { getUserSubscription } from "~/actions/subscription";
 import { pusher } from "./pusher";
 
 const f = createUploadthing({
@@ -31,9 +31,13 @@ export const ourFileRouter = {
     .middleware(async () => {
       const currentUser = await getCurrentUser();
 
-      const subscription = await getUserSubscription();
+      // const subscription = await getUserSubscription();
 
-      if (!currentUser || !subscription || !subscription.isActive)
+      if (
+        !currentUser
+
+        // || !subscription || !subscription.isActive
+      )
         throw new UploadThingError("Unauthorized");
 
       return { userId: currentUser.id, prevImage: currentUser.image! };
@@ -58,7 +62,9 @@ export const ourFileRouter = {
       }
       revalidatePath("/profile", "page");
 
-      await pusher.trigger("private-subs", "mutation-event",{message:"Profile image updated"});
+      await pusher.trigger("private-subs", "mutation-event", {
+        message: "Profile image updated",
+      });
 
       return {
         profileURL: updatedUserImage.image!,
@@ -80,11 +86,15 @@ export const ourFileRouter = {
     .middleware(async ({ input: { societyId }, files }) => {
       const currentUser = await getCurrentUser();
 
-      const subscription = await getUserSubscription();
+      // const subscription = await getUserSubscription();
 
       const canAccess = await canAccessSettings(societyId);
 
-      if (!currentUser || !canAccess || !subscription || !subscription.isActive)
+      if (
+        !currentUser
+
+        // || !canAccess || !subscription || !subscription.isActive
+      )
         throw new UploadThingError("Unauthorized");
 
       const dbSociety = await db.society.findUnique({
@@ -125,9 +135,10 @@ export const ourFileRouter = {
       });
       revalidatePath(`/society/${metadata.societyId}/settings/general`, "page");
 
-      await pusher.trigger("private-subs", "mutation-event",{message:"Society Media Uploaded""});
+      await pusher.trigger("private-subs", "mutation-event", {
+        message: "Society Media Uploaded",
+      });
 
-      
       return { id: newMedia.id, uri: newMedia.uri };
     }),
   messageAttachments: f({
@@ -150,19 +161,21 @@ export const ourFileRouter = {
         throw new UploadThingError("Max 5 attachments");
 
       const currentUser = await getCurrentUser();
-      const subscription = await getUserSubscription();
+      // const subscription = await getUserSubscription();
 
       const canAccess = await canSendMessages(societyId);
 
-      if (!currentUser || !canAccess || !subscription || !subscription.isActive)
+      if (
+        !currentUser ||
+        !canAccess
+
+        // || !subscription || !subscription.isActive
+      )
         throw new UploadThingError("Unauthorized");
 
       return {};
     })
     .onUploadComplete(({ file }) => {
-
-      
-      
       return file;
     }),
   announcementAttachments: f({
@@ -186,11 +199,15 @@ export const ourFileRouter = {
         throw new UploadThingError("Max 5 attachments");
       const currentUser = await getCurrentUser();
 
-      const subscription = await getUserSubscription();
+      // const subscription = await getUserSubscription();
 
       const canAccess = await canAnnounce(societyId);
 
-      if (!currentUser || !canAccess || !subscription || !subscription.isActive)
+      if (
+        !currentUser ||
+        !canAccess
+        // || !subscription || !subscription.isActive
+      )
         throw new UploadThingError("Unauthorized");
 
       return {};

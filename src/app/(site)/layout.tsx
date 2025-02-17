@@ -1,7 +1,7 @@
 import React from "react";
-import { getUserSubscription } from "~/actions/subscription";
+// import { getUserSubscription } from "~/actions/subscription";
 import ClientOnly from "~/components/ClientOnly";
-import PaymentModal from "~/components/PaymentModal";
+// import PaymentModal from "~/components/PaymentModal";
 import Navbar from "~/components/navbar/site";
 import Tab from "~/components/navbar/site/Tab";
 
@@ -10,9 +10,14 @@ export default async function AccountLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const subscription = await getUserSubscription();
-  return subscription && subscription.isActive ? (
-    <>
+  // const subscription = await getUserSubscription();
+  return (
+    // subscription && subscription.isActive ?
+    // ) : (
+    //   <ClientOnly>
+    //     <PaymentModal />
+    //   </ClientOnly>
+    (<>
       <Navbar />
       <div className="min-h-screen">
         <main className="mt-4 px-2">{children}</main>
@@ -20,10 +25,6 @@ export default async function AccountLayout({
       <ClientOnly>
         <Tab />
       </ClientOnly>
-    </>
-  ) : (
-    <ClientOnly>
-      <PaymentModal />
-    </ClientOnly>
+    </>)
   );
 }

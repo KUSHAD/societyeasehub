@@ -16,7 +16,7 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "postinstall": "prisma db push --accept-data-loss",
+    "postinstall": "prisma db push",
     "react-compiler-healthcheck": "react-compiler-healthcheck"
   },
   "dependencies": {
@@ -74,19 +74,19 @@
     "generate-api-key": "^1.0.2",
     "lodash": "^4.17.21",
     "lucide-react": "^0.295.0",
-    "next": "^15.0.0-rc.0",
+    "next": "15.2.0-canary.63",
     "next-auth": "^5.0.0-beta.19",
     "next-safe-action": "6.x.x",
     "nextjs-toploader": "^1.6.12",
     "pusher": "^5.2.0",
     "pusher-js": "^8.4.0-rc2",
     "query-string": "^9.0.0",
-    "react": "^19.0.0-rc-1434af3d22-20240618",
+    "react": "19.1.0-canary-4632e36a-20250216",
     "react-chartjs-2": "^5.2.0",
     "react-countup": "^6.5.3",
     "react-currency-input-field": "^3.8.0",
     "react-day-picker": "^8.10.1",
-    "react-dom": "^19.0.0-rc-1434af3d22-20240618",
+    "react-dom": "19.1.0-canary-4632e36a-20250216",
     "react-hook-form": "^7.48.2",
     "react-icons": "^5.2.1",
     "react-loading-skeleton": "^3.3.1",
@@ -131,6 +131,6 @@
   "ct3aMetadata": {
     "initVersion": "7.24.2"
   },
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "pnpm@9.14.4",
   "license": "AGPL-3.0-only"
 }

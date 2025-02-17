@@ -6,7 +6,13 @@ import OverviewDataGrid from "~/components/society/finance/overview/OverviewData
 import FinanceFilters from "~/components/society/finance/overview/filters/FinanceFilters";
 import { type PageProps } from "~/lib/types";
 
-export default async function Page({ params: { societyId } }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    societyId
+  } = params;
+
   const canManage = await canManageAccounts(societyId);
 
   if (canManage) redirect(`/society/${societyId}/finance/overview`);

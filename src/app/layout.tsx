@@ -48,7 +48,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    (<html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
@@ -57,7 +57,7 @@ export default async function RootLayout({
       >
         <NextTopLoader color="#18181b" showSpinner={false} />
         <div className="m-auto w-full">
-          <TRPCReactProvider cookies={cookies().toString()}>
+          <TRPCReactProvider cookies={(await cookies()).toString()}>
             <NextAuthReactProvider>
               <PusherReactClientProvider>
               <NextSSRPlugin
@@ -73,6 +73,6 @@ export default async function RootLayout({
           </TRPCReactProvider>
         </div>
       </body>
-    </html>
+    </html>)
   );
 }

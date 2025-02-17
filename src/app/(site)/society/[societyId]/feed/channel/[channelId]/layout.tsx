@@ -6,13 +6,23 @@ import ChannelTopBar from "~/components/society/channel/ChannelTopBar";
 import ChatInput from "~/components/society/channel/chat/ChatInput";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
-export default async function ChannelLayout({
-  children,
-  params: { societyId, channelId },
-}: {
-  children: React.ReactNode;
-  params: { societyId: string; channelId: string };
-}) {
+export default async function ChannelLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ societyId: string; channelId: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    societyId,
+    channelId
+  } = params;
+
+  const {
+    children
+  } = props;
+
   await checkChannelExists(channelId, societyId);
   const canSend = await canSendMessages(societyId);
   const canManage = await canManageChannels(societyId);

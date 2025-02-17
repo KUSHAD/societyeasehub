@@ -13,7 +13,7 @@ export default function Invites() {
   ) : pendingInvites && pendingInvites.length !== 0 ? (
     pendingInvites.map((_invite) => (
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-      <InviteCard invite={_invite} key={_invite.society.id} />
+      (<InviteCard invite={_invite} key={_invite.society.id} />)
     ))
   ) : (
     <NotFound message="You have no invites" />

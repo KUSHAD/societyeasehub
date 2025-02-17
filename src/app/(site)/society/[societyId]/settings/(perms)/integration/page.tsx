@@ -7,7 +7,13 @@ import RevokeAPIKey from "~/components/society/settings/integration/RevokeAPIKey
 import SocietyIntegrationPerms from "~/components/society/settings/integration/SocietyIntegrationPerms";
 import { type PageProps } from "~/lib/types";
 
-export default async function Page({ params: { societyId } }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    societyId
+  } = params;
+
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect("/api/auth/signin");
 

@@ -11,10 +11,14 @@ const schema = z.object({
 
 export async function GET(
   request: NextRequest,
-  {
-    params: { announcementId: _unsafeAnnouncementId },
-  }: { params: { announcementId: string } },
+  props: { params: Promise<{ announcementId: string }> }
 ) {
+  const params = await props.params;
+
+  const {
+    announcementId: _unsafeAnnouncementId
+  } = params;
+
   try {
     const { success, pending } = await ratelimit.limit(_unsafeAnnouncementId);
 

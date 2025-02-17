@@ -11,12 +11,13 @@ const schema = z.object({
   apiKey: z.string().cuid(),
 });
 
-export async function GET(
-  request: NextRequest,
-  {
-    params: { societyId: _unsafeSocietyId },
-  }: { params: { societyId: string } },
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ societyId: string }> }) {
+  const params = await props.params;
+
+  const {
+    societyId: _unsafeSocietyId
+  } = params;
+
   try {
     const { success, pending } = await ratelimit.limit(_unsafeSocietyId);
 

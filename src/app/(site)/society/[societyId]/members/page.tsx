@@ -8,7 +8,13 @@ import CreateInvite from "~/components/society/members/invite/CreateInvite";
 import Members from "~/components/society/members/Members";
 import { type PageProps } from "~/lib/types";
 
-export default async function Page({ params: { societyId } }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    societyId
+  } = params;
+
   const canCreate = await canCreateInvites(societyId);
   const canKick = await canKickMember(societyId);
   const assignRole = await canAssignRoles(societyId);

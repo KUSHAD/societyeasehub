@@ -4,7 +4,13 @@ import CreateMeetingForm from "~/components/society/meeting/CreateMeetingForm";
 import ShowMeetingContainer from "~/components/society/meeting/ShowMeetingContainer";
 import { type PageProps } from "~/lib/types";
 
-export default async function Page({ params: { societyId } }: PageProps) {
+export default async function Page(props: PageProps) {
+  const params = await props.params;
+
+  const {
+    societyId
+  } = params;
+
   const createMeetings = await canCreateMeetings(societyId);
   return (
     <>
