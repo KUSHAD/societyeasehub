@@ -10,14 +10,13 @@
 
 1. [Live Demo](#live-demo)
 2. [Features](#features)
-3. [Project Structure](#project-structure)
-4. [Getting Started](#getting-started)
-5. [Usage](#usage)
-6. [Scripts](#scripts)
-7. [Contributing](#contributing)
-8. [License](#license)
-9. [Author](#author)
-10. [Support](#support)
+3. [Getting Started](#getting-started)
+4. [Usage](#usage)
+5. [Scripts](#scripts)
+6. [Contributing](#contributing)
+7. [License](#license)
+8. [Author](#author)
+9. [Support](#support)
 
 ---
 
@@ -65,20 +64,6 @@ Try out the platform live and explore its powerful features firsthand.
 
 - **Third-Party Integrations**  
   Seamlessly connect with external services via our JSON API.
-
----
-
-## Project Structure
-
-```
-societyeasehub/
-├── components/        # Reusable UI components
-├── pages/             # Next.js pages
-├── prisma/            # Database schema and migrations
-├── public/            # Static assets
-├── styles/            # Global styles
-└── package.json       # Project configuration and scripts
-```
 
 ---
 
