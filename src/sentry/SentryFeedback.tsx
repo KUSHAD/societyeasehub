@@ -5,7 +5,9 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 function createWidget() {
-  return Sentry.getFeedback()?.createWidget();
+  return Sentry.getFeedback()?.createWidget({
+    showBranding: false,
+  });
 }
 
 function useFeedbackWidget(shouldMount: boolean) {

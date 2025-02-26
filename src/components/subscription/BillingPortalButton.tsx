@@ -13,7 +13,6 @@ export default function BillingPortalButton() {
       createStripeURL()
         .then((res) => {
           if (res.data) {
-            // eslint-disable-next-line react-compiler/react-compiler
             window.location.href = res.data;
           }
         })

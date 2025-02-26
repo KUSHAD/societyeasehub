@@ -22,7 +22,6 @@ export default function PaymentModal() {
       createStripeURL()
         .then((res) => {
           if (res.data) {
-            // eslint-disable-next-line react-compiler/react-compiler
             window.location.href = res.data;
           }
         })

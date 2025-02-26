@@ -1,9 +1,17 @@
 import "server-only";
 
-import { Prisma } from "@prisma/client";
-import type { FinancialData, ActiveDaysData, RawGroupData } from "~/lib/types";
 import { convertAmountFromMiliUnits } from "~/lib/utils";
 import { db } from "~/server/db";
+import {
+  financialReportWithoutAccount,
+  financialReportWithAccount,
+  activeDaysFinancialReportWithAccount,
+  activeDaysFinancialReportWithoutAccount,
+  categoryReportWithAccount,
+  categoryReportWithoutAccount,
+  payeeReportWithAccount,
+  payeeReportWithoutAccount,
+} from "@prisma/client/sql";
 
 export async function fetchFinancialData(
   societyId: string,
@@ -11,31 +19,17 @@ export async function fetchFinancialData(
   startDate: Date,
   endDate: Date,
 ) {
-  let baseQuery = Prisma.sql`
-  SELECT 
-    SUM(CASE WHEN t.amount >= 0 THEN t.amount ELSE 0 END) AS income,
-    SUM(CASE WHEN t.amount < 0 THEN ABS(t."amount") ELSE 0 END) AS expense,
-    SUM(t.amount) AS remaining
-  FROM
-    "FinanceTransaction" t
-  INNER JOIN
-    "FinanceAccount" a ON t."accountId" = a.id
-  WHERE
-    t."societyId" = ${societyId}
-    AND t."date" BETWEEN ${startDate} AND ${endDate}
-  `;
-
-  if (accountId) {
-    baseQuery = Prisma.sql`${baseQuery} AND t."accountId" = ${accountId}`;
-  }
-
-  const result = await db.$queryRaw<FinancialData[]>(baseQuery);
+  const result = await db.$queryRawTyped(
+    accountId
+      ? financialReportWithAccount(societyId, startDate, endDate, accountId)
+      : financialReportWithoutAccount(societyId, startDate, endDate),
+  );
 
   const { income, expense, remaining } = result[0]!;
 
-  const formattedIncome = Number(income || 0);
-  const formattedExpense = Number(expense || 0);
-  const formattedRemaining = Number(remaining || 0);
+  const formattedIncome = Number(income ?? 0);
+  const formattedExpense = Number(expense ?? 0);
+  const formattedRemaining = Number(remaining ?? 0);
 
   return {
     income: convertAmountFromMiliUnits(formattedIncome),
@@ -49,38 +43,22 @@ export async function getActiveDaysFinancialReport(
   accountId: string,
   startDate: Date,
   endDate: Date,
-): Promise<ActiveDaysData[]> {
-  let activeDaysQuery = Prisma.sql`
-  SELECT
-    t."date" as date,
-    SUM(CASE WHEN t."amount" >= 0 THEN t."amount" ELSE 0 END) AS income,
-    SUM(CASE WHEN t."amount" < 0 THEN ABS(t."amount") ELSE 0 END) AS expense
-  FROM
-    "FinanceTransaction" t
-  INNER JOIN
-    "FinanceAccount" a ON t."accountId" = a.id
-  WHERE
-    t."societyId" = ${societyId}
-    AND t."date" BETWEEN ${startDate} AND ${endDate}
-  `;
-
-  if (accountId) {
-    activeDaysQuery = Prisma.sql`${activeDaysQuery} AND t."accountId" = ${accountId}`;
-  }
-
-  activeDaysQuery = Prisma.sql`${activeDaysQuery}
-      GROUP BY
-        t."date"
-      ORDER BY
-        t."date";
-      `;
-
-  const result = await db.$queryRaw<ActiveDaysData[]>(activeDaysQuery);
+) {
+  const result = await db.$queryRawTyped(
+    accountId
+      ? activeDaysFinancialReportWithAccount(
+          societyId,
+          startDate,
+          endDate,
+          accountId,
+        )
+      : activeDaysFinancialReportWithoutAccount(societyId, startDate, endDate),
+  );
 
   return result.map(({ date, income, expense }) => ({
     date,
-    income: convertAmountFromMiliUnits(Number(income || 0)),
-    expense: convertAmountFromMiliUnits(Number(expense || 0)),
+    income: convertAmountFromMiliUnits(Number(income ?? 0)),
+    expense: convertAmountFromMiliUnits(Number(expense ?? 0)),
   }));
 }
 
@@ -89,38 +67,15 @@ export async function getPayeesReport(
   accountId: string | null,
   startDate: Date,
   endDate: Date,
-): Promise<RawGroupData[]> {
-  let payeeQuery = Prisma.sql`
-  SELECT
-    p."name" AS name,
-    SUM(ABS(t."amount")) AS value
-  FROM
-    "FinanceTransaction" t
-  INNER JOIN
-    "FinanceAccount" a ON t."accountId" = a.id
-  INNER JOIN
-    "FinancePayee" p ON t."payeeId" = p.id
-  WHERE
-    t."societyId" = ${societyId}
-    AND t."amount" < 0
-    AND t."date" BETWEEN ${startDate} AND ${endDate}
-  `;
+) {
+  const result = await db.$queryRawTyped(
+    accountId
+      ? payeeReportWithAccount(societyId, startDate, endDate, accountId)
+      : payeeReportWithoutAccount(societyId, startDate, endDate),
+  );
 
-  if (accountId) {
-    payeeQuery = Prisma.sql`${payeeQuery} AND t."accountId" = ${accountId}`;
-  }
-
-  payeeQuery = Prisma.sql`${payeeQuery}
-   GROUP BY
-      p."name"
-    ORDER BY
-      SUM(ABS(t."amount")) DESC;
-  `;
-
-  const payee = await db.$queryRaw<RawGroupData[]>(payeeQuery);
-
-  const topPayees = payee.splice(0, 3);
-  const otherPayees = payee.splice(3);
+  const topPayees = result.slice(0, 3);
+  const otherPayees = result.slice(3);
 
   const otherPayeeSum = otherPayees.reduce(
     (sum, current) =>
@@ -148,38 +103,14 @@ export async function getCategoryReport(
   accountId: string,
   startDate: Date,
   endDate: Date,
-): Promise<RawGroupData[]> {
-  let categoryQuery = Prisma.sql`
-   SELECT
-    c."name" AS name,
-    SUM(ABS(t."amount")) AS value
-  FROM
-    "FinanceTransaction" t
-  INNER JOIN
-    "FinanceAccount" a ON t."accountId" = a.id
-  INNER JOIN
-    "FinanceCategory" c ON t."categoryId" = c.id
-  WHERE
-    t."societyId" = ${societyId}
-    AND t."amount" < 0
-    AND t."date" BETWEEN ${startDate} AND ${endDate}
-  `;
-
-  if (accountId) {
-    categoryQuery = Prisma.sql`${categoryQuery} AND t."accountId" = ${accountId}`;
-  }
-
-  categoryQuery = Prisma.sql`${categoryQuery}
-   GROUP BY
-      c."name"
-    ORDER BY
-      SUM(ABS(t."amount")) DESC;
-  `;
-
-  const category = await db.$queryRaw<RawGroupData[]>(categoryQuery);
-
-  const topCategories = category.splice(0, 3);
-  const otherCategories = category.splice(3);
+) {
+  const result = await db.$queryRawTyped(
+    accountId
+      ? categoryReportWithAccount(societyId, startDate, endDate, accountId)
+      : categoryReportWithoutAccount(societyId, startDate, endDate),
+  );
+  const topCategories = result.slice(0, 3);
+  const otherCategories = result.slice(3);
   const otherCategorySum = otherCategories.reduce(
     (sum, current) => sum + convertAmountFromMiliUnits(Number(current.value)),
     0,

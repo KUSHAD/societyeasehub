@@ -7,13 +7,10 @@ import type {
   User,
 } from "@prisma/client";
 import { type TRPCClientErrorLike } from "@trpc/client";
-import {
-  type inferTRPCClientTypes,
-  type inferRouterOutputs,
-} from "@trpc/server";
+import { type inferTRPCClientTypes } from "@trpc/server";
 import { type AppRouter } from "~/server/api/root";
+import { type RouterOutputs } from "~/trpc/react";
 
-export type RouterOutput = inferRouterOutputs<AppRouter>;
 export type BuildProcedure = inferTRPCClientTypes<AppRouter>;
 
 export type SafeUser = Omit<User, "emailVerified">;
@@ -38,9 +35,9 @@ export type SafeMedia = {
 
 export type SafeRole = Omit<Role, "societyId">;
 
-export type SocietyUsersOutput = RouterOutput["member"]["getBySociety"][0];
+export type SocietyUsersOutput = RouterOutputs["member"]["getBySociety"][0];
 
-export type PollForSociety = RouterOutput["poll"]["getBySociety"][0];
+export type PollForSociety = RouterOutputs["poll"]["getBySociety"][0];
 
 export type AnnouncementsOutput = {
   member: {

@@ -14,6 +14,7 @@ import { ZodError } from "zod";
 import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { pusher } from "../pusher";
+import { env } from "~/env";
 // import { getUserSubscription } from "~/actions/subscription";
 
 /**
@@ -114,7 +115,7 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
 const makeRealtime = t.middleware(async ({ path, type, next, ctx }) => {
   const result = await next();
 
-  if (type === "mutation") {
+  if (type === "mutation" && env.NODE_ENV === "production") {
     if (result.ok) {
       await ctx.pusher.trigger("private-subs", "mutation-event", {
         message: `Mutation ${path} executed`,
