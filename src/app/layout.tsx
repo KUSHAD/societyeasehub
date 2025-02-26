@@ -1,11 +1,8 @@
 import "~/styles/globals.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
-import { Inter } from "next/font/google";
-import { cookies } from "next/headers";
+import { Geist } from "next/font/google";
 import PusherReactClientProvider from "~/pusher/react";
-
-
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "~/lib/utils";
 import { Toaster } from "~/components/ui/toaster";
@@ -19,7 +16,7 @@ import { type Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import SentryFeedbackWidget from "~/sentry/SentryFeedback";
 
-const inter = Inter({
+const geist = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -48,31 +45,31 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    (<html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          inter.variable,
+          geist.variable,
         )}
       >
         <NextTopLoader color="#18181b" showSpinner={false} />
         <div className="m-auto w-full">
-          <TRPCReactProvider cookies={(await cookies()).toString()}>
+          <TRPCReactProvider>
             <NextAuthReactProvider>
               <PusherReactClientProvider>
-              <NextSSRPlugin
-                routerConfig={extractRouterConfig(ourFileRouter)}
-              />
-              {children}
-              <Toaster />
-              <SentryFeedbackWidget />
-              <SpeedInsights debug />
-              <Analytics />
+                <NextSSRPlugin
+                  routerConfig={extractRouterConfig(ourFileRouter)}
+                />
+                {children}
+                <Toaster />
+                <SentryFeedbackWidget />
+                <SpeedInsights debug />
+                <Analytics />
               </PusherReactClientProvider>
             </NextAuthReactProvider>
           </TRPCReactProvider>
         </div>
       </body>
-    </html>)
+    </html>
   );
 }

@@ -1,0 +1,55 @@
+// Necessary for Next Auth
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+
+  accounts             Account[]
+  societies            Society[]
+  memberShips          Member[]
+  invites              Invite[]
+  messages             Message[]
+  rooms                MeetingRoom[]
+  announcements        Announcement[]
+  announcementComments AnnouncementComment[]
+  polls                Poll[]
+  votes                Vote[]
+  subscriptions        UserSubscription[]
+  channels             Channel[]
+}
+
+// App Models
+
+model UserSubscription {
+  id                     String   @id @default(cuid())
+  userId                 String
+  stripeCustomerId       String
+  stripeSubscriptionId   String
+  stripePriceId          String
+  stripeCurrentPeriodEnd DateTime
+  createdAt              DateTime @default(now()) @ignore
+  updatedAt              DateTime @updatedAt @ignore
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}

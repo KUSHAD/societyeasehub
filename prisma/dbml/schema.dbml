@@ -2,6 +2,11 @@
 //// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 //// ------------------------------------------------------
 
+Project "SocietyEaseHub" {
+  database_type: 'PostgreSQL'
+  Note: ''
+}
+
 Table Account {
   id String [pk]
   userId String [not null]
@@ -52,94 +57,6 @@ Table UserSubscription {
   user User [not null]
 }
 
-Table Society {
-  id String [pk]
-  name String [not null]
-  streetAddress String [not null]
-  addressLine2 String [default: '']
-  city String [not null]
-  province String [not null]
-  zipCode String [not null]
-  country String [not null]
-  integrateTransactions Boolean [default: false]
-  integrateAnnouncements Boolean [default: false]
-  integrateRoadmaps Boolean [default: false]
-  password String [not null]
-  ownerId String [not null]
-  owner User [not null]
-  members Member [not null]
-  images SocietyMedia [not null]
-  roles Role [not null]
-  invites Invite [not null]
-  channels Channel [not null]
-  rooms MeetingRoom [not null]
-  roadmaps RoadmapList [not null]
-  Announcement Announcement [not null]
-  polls Poll [not null]
-  financeAccounts FinanceAccount [not null]
-  financeCategories FinanceCategory [not null]
-  financeTransactions FinanceTransaction [not null]
-  financePayees FinancePayee [not null]
-  autoRoles AutoRole [not null]
-  channelAccessRoles ChannelAccessRole [not null]
-  integrationAPIKeys IntegrationAPIKey [not null]
-}
-
-Table SocietyMedia {
-  id String [pk]
-  uri String [unique, not null]
-  societyId String [not null]
-  society Society [not null]
-}
-
-Table Member {
-  societyId String [not null]
-  userId String [not null]
-  roleId String
-  society Society [not null]
-  user User [not null]
-  role Role
-
-  indexes {
-    (societyId, userId) [pk]
-  }
-}
-
-Table Role {
-  id String [pk]
-  name String [not null]
-  accessSettings Boolean [not null, default: false]
-  createInvite Boolean [not null, default: false]
-  assignRole Boolean [not null, default: false]
-  kickUser Boolean [not null, default: false]
-  manageChannel Boolean [not null, default: false]
-  sendMessage Boolean [not null, default: false]
-  createMeeting Boolean [not null, default: false]
-  manageRoadmap Boolean [not null, default: false]
-  manageAccounts Boolean [not null, default: false]
-  canCreatePolls Boolean [not null, default: false]
-  canVote Boolean [not null, default: false]
-  canAnnounce Boolean [not null, default: false]
-  canComment Boolean [not null, default: false]
-  societyId String [not null]
-  society Society [not null]
-  members Member [not null]
-  autoRole AutoRole [not null]
-  channelAccessRoles ChannelAccessRole [not null]
-}
-
-Table Invite {
-  societyId String [not null]
-  userId String [not null]
-  status INVITE_STATUS [not null, default: 'PENDING']
-  society Society [not null]
-  to User [not null]
-
-  indexes {
-    (societyId, userId) [pk]
-  }
-}
-
 Table Channel {
   id String [pk]
   name String [not null]
@@ -167,36 +84,6 @@ Table MessageAttachment {
   uri String [unique, not null]
   messageId String [not null]
   message Message [not null]
-}
-
-Table MeetingRoom {
-  id String [pk]
-  title String [not null]
-  description String [not null]
-  startTime DateTime [not null]
-  endTime DateTime [not null]
-  userId String [not null]
-  societyId String [not null]
-  society Society [not null]
-  user User [not null]
-}
-
-Table RoadmapList {
-  id String [pk]
-  title String [not null]
-  order Int [not null]
-  societyId String [not null]
-  society Society [not null]
-  cards RoadmapCard [not null]
-}
-
-Table RoadmapCard {
-  id String [pk]
-  title String [not null]
-  order Int [not null]
-  description String
-  listId String [not null]
-  list RoadmapList [not null]
 }
 
 Table Announcement {
@@ -310,13 +197,6 @@ Table FinancePayee {
   transactions FinanceTransaction [not null]
 }
 
-Table AutoRole {
-  societyId String [pk]
-  roleId String
-  society Society [not null]
-  role Role
-}
-
 Table ChannelAccessRole {
   societyId String [not null]
   roleId String [not null]
@@ -334,6 +214,131 @@ Table IntegrationAPIKey {
   key String [pk]
   societyId String [not null]
   society Society [not null]
+}
+
+Table MeetingRoom {
+  id String [pk]
+  title String [not null]
+  description String [not null]
+  startTime DateTime [not null]
+  endTime DateTime [not null]
+  userId String [not null]
+  societyId String [not null]
+  society Society [not null]
+  user User [not null]
+}
+
+Table RoadmapList {
+  id String [pk]
+  title String [not null]
+  order Int [not null]
+  societyId String [not null]
+  society Society [not null]
+  cards RoadmapCard [not null]
+}
+
+Table RoadmapCard {
+  id String [pk]
+  title String [not null]
+  order Int [not null]
+  description String
+  listId String [not null]
+  list RoadmapList [not null]
+}
+
+Table Society {
+  id String [pk]
+  name String [not null]
+  streetAddress String [not null]
+  addressLine2 String [default: '']
+  city String [not null]
+  province String [not null]
+  zipCode String [not null]
+  country String [not null]
+  integrateTransactions Boolean [default: false]
+  integrateAnnouncements Boolean [default: false]
+  integrateRoadmaps Boolean [default: false]
+  password String [not null]
+  ownerId String [not null]
+  owner User [not null]
+  members Member [not null]
+  images SocietyMedia [not null]
+  roles Role [not null]
+  invites Invite [not null]
+  channels Channel [not null]
+  rooms MeetingRoom [not null]
+  roadmaps RoadmapList [not null]
+  Announcement Announcement [not null]
+  polls Poll [not null]
+  financeAccounts FinanceAccount [not null]
+  financeCategories FinanceCategory [not null]
+  financeTransactions FinanceTransaction [not null]
+  financePayees FinancePayee [not null]
+  autoRoles AutoRole [not null]
+  channelAccessRoles ChannelAccessRole [not null]
+  integrationAPIKeys IntegrationAPIKey [not null]
+}
+
+Table SocietyMedia {
+  id String [pk]
+  uri String [unique, not null]
+  societyId String [not null]
+  society Society [not null]
+}
+
+Table Member {
+  societyId String [not null]
+  userId String [not null]
+  roleId String
+  society Society [not null]
+  user User [not null]
+  role Role
+
+  indexes {
+    (societyId, userId) [pk]
+  }
+}
+
+Table Role {
+  id String [pk]
+  name String [not null]
+  accessSettings Boolean [not null, default: false]
+  createInvite Boolean [not null, default: false]
+  assignRole Boolean [not null, default: false]
+  kickUser Boolean [not null, default: false]
+  manageChannel Boolean [not null, default: false]
+  sendMessage Boolean [not null, default: false]
+  createMeeting Boolean [not null, default: false]
+  manageRoadmap Boolean [not null, default: false]
+  manageAccounts Boolean [not null, default: false]
+  canCreatePolls Boolean [not null, default: false]
+  canVote Boolean [not null, default: false]
+  canAnnounce Boolean [not null, default: false]
+  canComment Boolean [not null, default: false]
+  societyId String [not null]
+  society Society [not null]
+  members Member [not null]
+  autoRole AutoRole [not null]
+  channelAccessRoles ChannelAccessRole [not null]
+}
+
+Table Invite {
+  societyId String [not null]
+  userId String [not null]
+  status INVITE_STATUS [not null, default: 'PENDING']
+  society Society [not null]
+  to User [not null]
+
+  indexes {
+    (societyId, userId) [pk]
+  }
+}
+
+Table AutoRole {
+  societyId String [pk]
+  roleId String
+  society Society [not null]
+  role Role
 }
 
 Enum INVITE_STATUS {
@@ -359,22 +364,6 @@ Ref: Account.userId > User.id [delete: Cascade]
 
 Ref: UserSubscription.userId > User.id [delete: Cascade]
 
-Ref: Society.ownerId > User.id [delete: Cascade]
-
-Ref: SocietyMedia.societyId > Society.id [delete: Cascade]
-
-Ref: Member.societyId > Society.id [delete: Cascade]
-
-Ref: Member.userId > User.id [delete: Cascade]
-
-Ref: Member.roleId > Role.id [delete: Cascade]
-
-Ref: Role.societyId > Society.id [delete: Cascade]
-
-Ref: Invite.societyId > Society.id [delete: Cascade]
-
-Ref: Invite.userId > User.id [delete: Cascade]
-
 Ref: Channel.societyId > Society.id [delete: Cascade]
 
 Ref: Channel.creatorId > User.id [delete: Cascade]
@@ -384,14 +373,6 @@ Ref: Message.channelId > Channel.id [delete: Cascade]
 Ref: Message.userId > User.id [delete: Cascade]
 
 Ref: MessageAttachment.messageId > Message.id [delete: Cascade]
-
-Ref: MeetingRoom.societyId > Society.id
-
-Ref: MeetingRoom.userId > User.id
-
-Ref: RoadmapList.societyId > Society.id [delete: Cascade]
-
-Ref: RoadmapCard.listId > RoadmapList.id [delete: Cascade]
 
 Ref: Announcement.userId > User.id [delete: No Action]
 
@@ -429,10 +410,6 @@ Ref: FinanceTransaction.payeeId > FinancePayee.id [delete: Cascade]
 
 Ref: FinancePayee.societyId > Society.id [delete: Cascade]
 
-Ref: AutoRole.societyId > Society.id [delete: Cascade]
-
-Ref: AutoRole.roleId > Role.id [delete: Cascade]
-
 Ref: ChannelAccessRole.societyId > Society.id [delete: Cascade]
 
 Ref: ChannelAccessRole.roleId > Role.id [delete: Cascade]
@@ -440,3 +417,31 @@ Ref: ChannelAccessRole.roleId > Role.id [delete: Cascade]
 Ref: ChannelAccessRole.channelId > Channel.id [delete: Cascade]
 
 Ref: IntegrationAPIKey.societyId > Society.id [delete: Cascade]
+
+Ref: MeetingRoom.societyId > Society.id
+
+Ref: MeetingRoom.userId > User.id
+
+Ref: RoadmapList.societyId > Society.id [delete: Cascade]
+
+Ref: RoadmapCard.listId > RoadmapList.id [delete: Cascade]
+
+Ref: Society.ownerId > User.id [delete: Cascade]
+
+Ref: SocietyMedia.societyId > Society.id [delete: Cascade]
+
+Ref: Member.societyId > Society.id [delete: Cascade]
+
+Ref: Member.userId > User.id [delete: Cascade]
+
+Ref: Member.roleId > Role.id [delete: Cascade]
+
+Ref: Role.societyId > Society.id [delete: Cascade]
+
+Ref: Invite.societyId > Society.id [delete: Cascade]
+
+Ref: Invite.userId > User.id [delete: Cascade]
+
+Ref: AutoRole.societyId > Society.id [delete: Cascade]
+
+Ref: AutoRole.roleId > Role.id [delete: Cascade]

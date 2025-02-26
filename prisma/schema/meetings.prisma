@@ -1,0 +1,38 @@
+model MeetingRoom {
+  id          String   @id @default(cuid())
+  title       String   @db.VarChar(100)
+  description String   @db.VarChar(250)
+  startTime   DateTime
+  endTime     DateTime
+  userId      String
+  societyId   String
+  createdAt   DateTime @default(now()) @ignore
+  updatedAt   DateTime @updatedAt @ignore
+
+  society Society @relation(fields: [societyId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+}
+
+model RoadmapList {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(50)
+  order     Int
+  societyId String
+  createdAt DateTime @default(now()) @ignore
+  updatedAt DateTime @updatedAt @ignore
+
+  society Society       @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  cards   RoadmapCard[]
+}
+
+model RoadmapCard {
+  id          String   @id @default(cuid())
+  title       String   @db.VarChar(50)
+  order       Int
+  description String?  @db.VarChar(150)
+  listId      String
+  createdAt   DateTime @default(now()) @ignore
+  updatedAt   DateTime @updatedAt @ignore
+
+  list RoadmapList @relation(fields: [listId], references: [id], onDelete: Cascade)
+}
