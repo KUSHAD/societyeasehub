@@ -51,9 +51,14 @@ Table UserSubscription {
   id String [pk]
   userId String [not null]
   stripeCustomerId String [not null]
-  stripeSubscriptionId String [not null]
-  stripePriceId String [not null]
-  stripeCurrentPeriodEnd DateTime [not null]
+  stripeSubscriptionId String
+  stripePriceId String
+  stripeStatus String [not null]
+  stripeCurrentPeriodStart Int
+  stripeCurrentPeriodEnd Int
+  cancelAtPeriodEnd Boolean [not null, default: false]
+  paymentBrand String
+  paymentLast4 String
   user User [not null]
 }
 
@@ -362,7 +367,7 @@ Enum PAYEE_TYPE {
 
 Ref: Account.userId > User.id [delete: Cascade]
 
-Ref: UserSubscription.userId > User.id [delete: Cascade]
+Ref: UserSubscription.userId > User.id
 
 Ref: Channel.societyId > Society.id [delete: Cascade]
 

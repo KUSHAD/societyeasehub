@@ -1,94 +1,55 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import type Stripe from "stripe";
+import { processStripeEvent } from "~/actions/subscription";
 import { env } from "~/env";
 import { stripe } from "~/lib/stripe";
-import { db } from "~/server/db";
+import { tryCatch } from "~/lib/utils";
+import { waitUntil, geolocation } from "@vercel/functions";
+import { redis } from "~/server/redis";
 
 export async function POST(req: Request) {
   const body = await req.text();
+  const signature = (await headers()).get("Stripe-Signature");
 
-  const signature = (await headers()).get("Stripe-Signature")!;
+  if (!signature) return NextResponse.json({}, { status: 400 });
 
-  let event: Stripe.Event;
+  async function doEventProcessing() {
+    if (typeof signature !== "string") {
+      throw new Error("[STRIPE HOOK] Header isn't a string???");
+    }
 
-  try {
-    event = stripe.webhooks.constructEvent(
+    const event = stripe.webhooks.constructEvent(
       body,
       signature,
       env.STRIPE_WEBHOOK_SECRET,
     );
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    return new NextResponse(`Webhook Error:- ${error.message}`, {
-      status: 400,
+    const locationDetails = geolocation(req);
+
+    console.log("[STRIPE HOOK] Event received", {
+      event: event.type,
+      location: locationDetails,
     });
+
+    await redis.lpush(
+      `stripe:event:logs:${event.type}`,
+      JSON.stringify({
+        type: event.type,
+        receivedAt: new Date().toISOString(),
+        location: locationDetails,
+        data: event.data,
+        eventId: event.id,
+      }),
+    );
+
+    waitUntil(processStripeEvent(event));
   }
 
-  const session = event.data.object as Stripe.Checkout.Session;
+  const { error } = await tryCatch(doEventProcessing());
 
-  switch (event.type) {
-    case "checkout.session.completed":
-      const subscription = await stripe.subscriptions.retrieve(
-        session.subscription as string,
-      );
-
-      if (!session?.metadata?.userId)
-        return new NextResponse("User Id is required", { status: 400 });
-
-      await db.userSubscription.create({
-        data: {
-          userId: session.metadata.userId,
-          stripeSubscriptionId: subscription.id,
-          stripeCustomerId: subscription.customer as string,
-          stripePriceId: subscription.items.data[0]!.price.id,
-          stripeCurrentPeriodEnd: new Date(
-            subscription.current_period_end * 1000,
-          ),
-        },
-      });
-      break;
-
-    case "invoice.payment_succeeded":
-      const _subscription = await stripe.subscriptions.retrieve(
-        session.subscription as string,
-      );
-
-      await db.userSubscription.updateMany({
-        where: {
-          stripeSubscriptionId: _subscription.id,
-        },
-        data: {
-          stripePriceId: _subscription.items.data[0]!.price.id,
-          stripeCurrentPeriodEnd: new Date(
-            _subscription.current_period_end * 1000,
-          ),
-        },
-      });
-      break;
-
-    case "customer.subscription.resumed":
-      const resumedSubscription = event.data.object;
-
-      await db.userSubscription.updateMany({
-        where: {
-          stripeSubscriptionId: resumedSubscription.id,
-        },
-        data: {
-          stripePriceId: resumedSubscription.items.data[0]!.price.id,
-          stripeCurrentPeriodEnd: new Date(
-            resumedSubscription.current_period_end * 1000,
-          ),
-        },
-      });
-
-    default:
-      break;
+  if (error) {
+    console.error("[STRIPE HOOK] Error processing event", error);
   }
 
-  return new NextResponse(null, {
-    status: 200,
-  });
+  return NextResponse.json({ received: true });
 }

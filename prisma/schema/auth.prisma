@@ -42,14 +42,20 @@ model User {
 // App Models
 
 model UserSubscription {
-  id                     String   @id @default(cuid())
-  userId                 String
-  stripeCustomerId       String
-  stripeSubscriptionId   String
-  stripePriceId          String
-  stripeCurrentPeriodEnd DateTime
-  createdAt              DateTime @default(now()) @ignore
-  updatedAt              DateTime @updatedAt @ignore
+  id                       String  @id @default(cuid())
+  userId                   String
+  stripeCustomerId         String
+  stripeSubscriptionId     String?
+  stripePriceId            String?
+  stripeStatus             String // should match Stripe.Subscription.Status or "none"
+  stripeCurrentPeriodStart Int?
+  stripeCurrentPeriodEnd   Int?
+  cancelAtPeriodEnd        Boolean @default(false)
+  paymentBrand             String?
+  paymentLast4             String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now()) @ignore
+  updatedAt DateTime @updatedAt @ignore
+
+  user User @relation(fields: [userId], references: [id])
 }

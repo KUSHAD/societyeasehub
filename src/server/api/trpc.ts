@@ -15,7 +15,7 @@ import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { pusher } from "../pusher";
 import { env } from "~/env";
-// import { getUserSubscription } from "~/actions/subscription";
+import { getUserSubscription } from "~/actions/subscription";
 
 /**
  * 1. CONTEXT
@@ -93,13 +93,9 @@ export const publicProcedure = t.procedure;
 
 /** Reusable middleware that enforces users are logged in before running the procedure. */
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
-  // const subscription = await getUserSubscription();
+  const subscription = await getUserSubscription();
 
-  if (
-    !ctx.session?.user
-
-    // || !subscription || !subscription.isActive
-  )
+  if (!ctx.session?.user || !subscription || !subscription.isActive)
     throw new TRPCError({ code: "UNAUTHORIZED" });
 
   return next({

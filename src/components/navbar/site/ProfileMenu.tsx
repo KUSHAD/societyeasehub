@@ -59,9 +59,9 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
           <Link href="/profile">
             <DropdownMenuItem>Profile</DropdownMenuItem>
           </Link>
-          {/* <Link href="/subscription">
+          <Link href="/subscription">
             <DropdownMenuItem>Subscription</DropdownMenuItem>
-          </Link> */}
+          </Link>
           <DropdownMenuSeparator />
           <Link href="/invite">
             <DropdownMenuItem>My Invites</DropdownMenuItem>
@@ -85,7 +85,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
     pathname !== "/refund" &&
     pathname !== "/support" ? null : (
     <div className="mt-4">
-      {/* <Link
+      <Link
         className={buttonVariants({
           className: "mx-2",
           variant: pathname === "/pricing" ? "outline" : "link",
@@ -93,7 +93,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ currentUser }) => {
         href="/pricing"
       >
         Pricing
-      </Link> */}
+      </Link>
       <Link
         className={buttonVariants({
           className: "mx-2",

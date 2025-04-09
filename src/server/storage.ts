@@ -9,7 +9,7 @@ import {
   canAnnounce,
   canSendMessages,
 } from "~/actions/checkUserRole";
-// import { getUserSubscription } from "~/actions/subscription";
+import { getUserSubscription } from "~/actions/subscription";
 import { pusher } from "./pusher";
 
 const f = createUploadthing({
@@ -31,7 +31,7 @@ export const ourFileRouter = {
     .middleware(async () => {
       const currentUser = await getCurrentUser();
 
-      // const subscription = await getUserSubscription();
+      const subscription = await getUserSubscription();
 
       if (
         !currentUser
@@ -86,7 +86,7 @@ export const ourFileRouter = {
     .middleware(async ({ input: { societyId }, files }) => {
       const currentUser = await getCurrentUser();
 
-      // const subscription = await getUserSubscription();
+      const subscription = await getUserSubscription();
 
       const canAccess = await canAccessSettings(societyId);
 
@@ -161,7 +161,7 @@ export const ourFileRouter = {
         throw new UploadThingError("Max 5 attachments");
 
       const currentUser = await getCurrentUser();
-      // const subscription = await getUserSubscription();
+      const subscription = await getUserSubscription();
 
       const canAccess = await canSendMessages(societyId);
 
@@ -199,7 +199,7 @@ export const ourFileRouter = {
         throw new UploadThingError("Max 5 attachments");
       const currentUser = await getCurrentUser();
 
-      // const subscription = await getUserSubscription();
+      const subscription = await getUserSubscription();
 
       const canAccess = await canAnnounce(societyId);
 
